@@ -3,7 +3,7 @@
 PATH=`pwd`/../bin:$PATH
 
 testDefaultOutput() {
-    assertEquals "dummy!" `hsenv`
+  assertEquals "dummy!" `hsenv`
 }
 
 . shunit2/src/shunit2
