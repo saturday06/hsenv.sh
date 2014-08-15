@@ -1,3 +1,3 @@
 #!/bin/sh
 
-echo dummy!
+. "`dirname $0`/../libexec/hsenv" $*
