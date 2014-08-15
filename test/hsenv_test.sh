@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PATH=`pwd`/../bin:$PATH
+. "`dirname $0`/init.sh"
 
 testDefaultOutput() {
   assertEquals "dummy!" `hsenv`
