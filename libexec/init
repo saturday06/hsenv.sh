@@ -4,3 +4,5 @@ export _hsenv_private_root_dir="`dirname $0`/.."
 export _hsenv_private_bin_dir="$_hsenv_private_root_dir/bin"
 export _hsenv_private_libexec_dir="$_hsenv_private_root_dir/libexec"
 export _hsenv_private_template_dir="$_hsenv_private_root_dir/template"
+
+. "$_hsenv_private_libexec_dir/log"
