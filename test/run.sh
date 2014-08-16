@@ -42,6 +42,14 @@ run_test() {
   fi
 }
 
+if [ "$HSENV_TEST_COLOR" = "" ]; then
+  if [ -t ]; then
+    HSENV_TEST_COLOR=yes
+  else
+    HSENV_TEST_COLOR=no
+  fi
+fi
+
 if [ "$1" = "all" ]; then
   for sh in ash bash dash ksh mksh posh zsh; do
     which $sh > /dev/null 2>&1
@@ -60,14 +68,6 @@ fi
 
 if [ "$HSENV_TEST_SHELL" = "" ]; then
   HSENV_TEST_SHELL=/bin/sh
-fi
-
-if [ "$HSENV_TEST_COLOR" = "" ]; then
-  if [ -t ]; then
-    HSENV_TEST_COLOR=yes
-  else
-    HSENV_TEST_COLOR=no
-  fi
 fi
 
 run_test
