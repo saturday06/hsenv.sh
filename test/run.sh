@@ -15,8 +15,8 @@ run_test() {
     rm -f $tmpdir/succeed
     if [ "$HSENV_TEST_COLOR" = "yes" ]; then
       ($HSENV_TEST_SHELL $t 2>&1 && touch $tmpdir/succeed) \
-        | sed -e "s/^\(${error_regexp1}\)/$esc[31;1m\1$esc[m/" \
-        | sed -e "s/^\(${error_regexp2}\)/$esc[31;1m\1$esc[m/" \
+        | sed -e "s/${error_regexp1}/$esc[31;1m\0$esc[m/" \
+        | sed -e "s/${error_regexp2}/$esc[31;1m\0$esc[m/" \
         | sed -e "s/^\(ASSERT:\)/$esc[31;1m\1$esc[m/" \
         | sed -e "s/^\(FAILED .*\)/$esc[31;1m\1$esc[m/" \
         | tee $tmpdir/test_result.txt
