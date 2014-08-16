@@ -29,17 +29,17 @@ run_test() {
     fi
     for r in "$error_regexp1" "$error_regexp2"; do
       if grep -E "$r" $tmpdir/test_result.txt > /dev/null; then
-        [ "$HSENV_TEST_COLOR" = "yes" ] && echo -e "$esc[31;1m"
+        [ "$HSENV_TEST_COLOR" = "yes" ] && echo "$esc[31;1m"
         echo "Error regexp: /$r/ found"
         echo "FAILED"
-        [ "$HSENV_TEST_COLOR" = "yes" ] && echo -e "$esc[m"
+        [ "$HSENV_TEST_COLOR" = "yes" ] && echo "$esc[m"
         exit 1
       fi
     done
   done
 
   if [ "$HSENV_TEST_COLOR" = "yes" ]; then
-    echo -e "\n$esc[32;1mSUCCEED$esc[m"
+    echo "$esc[32;1mSUCCEED$esc[m"
   else
     echo "SUCCEED"
   fi
