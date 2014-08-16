@@ -9,12 +9,14 @@ run_test() {
   echo HSENV_TEST_SHELL=$HSENV_TEST_SHELL
   for t in *_test.sh; do
     echo "[$t]"
-    error_regexp="shunit2:ERROR"
+    error_regexp1="shunit2:ERROR"
+    error_regexp2="Ran 0 tests\."
     esc=`echo -e "\033"`
     rm -f $tmpdir/succeed
     if [ "$HSENV_TEST_COLOR" = "yes" ]; then
       ($HSENV_TEST_SHELL $t 2>&1 && touch $tmpdir/succeed) \
-        | sed -e "s/^\(${error_regexp}\)/$esc[31;1m\1$esc[m/" \
+        | sed -e "s/^\(${error_regexp1}\)/$esc[31;1m\1$esc[m/" \
+        | sed -e "s/^\(${error_regexp2}\)/$esc[31;1m\1$esc[m/" \
         | sed -e "s/^\(ASSERT:\)/$esc[31;1m\1$esc[m/" \
         | sed -e "s/^\(FAILED .*\)/$esc[31;1m\1$esc[m/" \
         | tee $tmpdir/test_result.txt
@@ -25,14 +27,15 @@ run_test() {
     if [ ! -e $tmpdir/succeed ]; then
       exit 1
     fi
-    if grep -E "$error_regexp" $tmpdir/test_result.txt > /dev/null; then
-      if [ "$HSENV_TEST_COLOR" = "yes" ]; then
-        echo -e "\n$esc[31;1mFAILED$esc[m"
-      else
+    for r in "$error_regexp1" "$error_regexp2"; do
+      if grep -E "$r" $tmpdir/test_result.txt > /dev/null; then
+        [ "$HSENV_TEST_COLOR" = "yes" ] && echo -e "$esc[31;1m"
+        echo "Error regexp: /$r/ found"
         echo "FAILED"
+        [ "$HSENV_TEST_COLOR" = "yes" ] && echo -e "$esc[m"
+        exit 1
       fi
-      exit 1
-    fi
+    done
   done
 
   if [ "$HSENV_TEST_COLOR" = "yes" ]; then
