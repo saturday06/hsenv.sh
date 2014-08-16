@@ -1,6 +1,7 @@
 #!/bin/sh
 
-. "`dirname $0`/init.sh"
+SHUNIT_PARENT=$0
+. `dirname $0`/init.sh
 
 testDefaultOutput() {
   assertEquals "dummy!" `hsenv`
