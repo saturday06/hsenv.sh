@@ -11,7 +11,6 @@ run_test() {
     echo "[$t]"
     error_regexp1="shunit2:ERROR"
     error_regexp2="Ran 0 tests\."
-    esc=`echo -e "\033"`
     rm -f $tmpdir/succeed
     if [ "$HSENV_TEST_COLOR" = "yes" ]; then
       ($HSENV_TEST_SHELL $t 2>&1 && touch $tmpdir/succeed) \
@@ -48,6 +47,14 @@ run_test() {
 if [ "$HSENV_TEST_COLOR" = "" ]; then
   if [ -t ]; then
     HSENV_TEST_COLOR=yes
+  else
+    HSENV_TEST_COLOR=no
+  fi
+fi
+
+if [ "$HSENV_TEST_COLOR" = "yes" ]; then
+  if [ "`echo -e`" = "" ]; then
+    esc=`echo -e "\033"`
   else
     HSENV_TEST_COLOR=no
   fi
