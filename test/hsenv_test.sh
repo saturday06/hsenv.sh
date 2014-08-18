@@ -3,7 +3,7 @@
 SHUNIT_PARENT=$0
 . `dirname $0`/init.sh
 
-testDefaultOutput() {
+test_default_output() {
   assertEquals "dummy!" `hsenv`
 }
 
