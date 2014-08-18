@@ -53,9 +53,8 @@ if [ "$HSENV_TEST_COLOR" = "" ]; then
 fi
 
 if [ "$HSENV_TEST_COLOR" = "yes" ]; then
-  if [ "`echo -e`" = "" ]; then
-    esc=`echo -e "\033"`
-  else
+  esc=`bash -c 'echo -ne "\033"'`
+  if [ "$esc" = "" ]; then
     HSENV_TEST_COLOR=no
   fi
 fi
