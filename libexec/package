@@ -1,0 +1,45 @@
+#!/bin/sh
+
+dependency_to_package_name() {
+  dependency_to_package_name_and_space_and_version $1 | awk '{print $1}'
+}
+
+dependency_to_package_version() {
+  dependency_to_package_name_and_space_and_version $1 | awk '{print $2}'
+}
+
+dependency_to_package_name_and_version() {
+  dependency_to_package_name_and_space_and_version $1 | awk '{if ($2) { print $1"-"$2} else { print $1 }}'
+}
+
+dependency_to_package_name_and_space_and_version() {
+  awk 'BEGIN {
+    dep = ARGV[1]
+    sub(/^builtin_/, "", dep)
+    len = split(dep, dep_words, "-")
+    if (len == 1) {
+      print dep_words[1]
+      exit 0
+    }
+    name_and_version = dep_words[1]
+    for (a = 2; a <= len; a++) {
+      dep_word = dep_words[a]
+      split(dep_word, nums, ".")
+      is_version = 1
+      for (b = 1; b <= length(nums); b++) {
+        num = nums[b]
+        if (!match(num, /^[0-9]+$/)) {
+          is_version = 0
+          break
+        }
+      }
+      if (is_version) {
+        name_and_version = name_and_version " " dep_word
+        break
+      } else {
+        name_and_version = name_and_version "-" dep_word
+      }
+    }
+    print name_and_version
+  }' $1
+}
