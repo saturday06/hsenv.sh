@@ -4,6 +4,7 @@ cd `dirname $0`
 
 run_test() {
   tmpdir=../tmp/run_test
+  esc=`awk 'BEGIN { printf("%c", 27) }'`
   rm -fr $tmpdir
   mkdir -p $tmpdir
   echo HSENV_TEST_SHELL=$HSENV_TEST_SHELL
@@ -48,13 +49,6 @@ if [ "$HSENV_TEST_COLOR" = "" ]; then
   if [ -t ]; then
     HSENV_TEST_COLOR=yes
   else
-    HSENV_TEST_COLOR=no
-  fi
-fi
-
-if [ "$HSENV_TEST_COLOR" = "yes" ]; then
-  esc=`bash -c 'echo -ne "\033"'`
-  if [ "$esc" = "" ]; then
     HSENV_TEST_COLOR=no
   fi
 fi
