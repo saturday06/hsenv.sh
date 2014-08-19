@@ -4,6 +4,29 @@ SHUNIT_PARENT=$0
 . `dirname $0`/init.sh
 . `dirname $0`/../libexec/package
 
+test_max_package_version() {
+  versions="1 2 3 2"
+  assertEquals 3 "`max_package_version $versions`"
+
+  versions="12 2 3 2"
+  assertEquals 12 "`max_package_version $versions`"
+
+  versions="1.2 1.2.0 1.1"
+  assertEquals 1.2.0 "`max_package_version $versions`"
+
+  versions="2.9 3"
+  assertEquals 3 "`max_package_version $versions`"
+
+  versions="0.2.9 0.3"
+  assertEquals 0.3 "`max_package_version $versions`"
+
+  versions="version: 0.3 version: 0.2"
+  assertEquals 0.3 "`max_package_version $versions`"
+
+  versions="aa bb cc"
+  assertEquals "" "`max_package_version $versions`"
+}
+
 test_dependencies_to_package_name_and_version() {
   deps=`cat <<DEPS
 depends: ghc-prim-0.3.1.0-95dc0c72a075ab56f8cdd74470fc7c3d

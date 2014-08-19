@@ -52,3 +52,35 @@ dependencies_to_package_name_and_version() {
   done
   echo $output
 }
+
+max_package_version() {
+  awk 'BEGIN {
+    for (a = 1; a <= ARGC; a++) {
+      str = ARGV[a]
+
+      values_length = split(str, values, ".")
+      is_version = 1
+      for (b = 1; b <= values_length; b++) {
+        value = values[b]
+        if (!match(value, /^[0-9]+$/)) {
+          is_version = 0
+          break
+        }
+      }
+      if (!is_version) {
+        continue
+      }
+
+      max_values_length = split(max_str, max_values, ".")
+      for (b = 1; b <= values_length; b++) {
+        if (b > max_values_length || values[b] > max_values[b] + 0) {
+          max_str = str
+          break
+        } else if (values[b] + 0 < max_values[b] + 0) {
+          break
+        }
+      }
+    }
+    printf max_str
+  }' $*
+}
