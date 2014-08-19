@@ -41,3 +41,14 @@ dependency_to_package_name_and_space_and_version() {
     }
   }' $1
 }
+
+dependencies_to_package_name_and_version() {
+  if [ $1 = "depends:" ]; then
+    shift
+  fi
+  output=
+  for dep in $*; do
+    output="$output `dependency_to_package_name_and_version $dep`"
+  done
+  echo $output
+}
