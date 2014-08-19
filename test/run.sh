@@ -54,18 +54,23 @@ if [ "$HSENV_TEST_COLOR" = "" ]; then
 fi
 
 if [ "$1" = "all" ]; then
+  tested_shells=
+  ignored_shells=
   for sh in ash bash dash ksh mksh posh zsh; do
     which $sh > /dev/null 2>&1
     if [ $? -ne 0 ]; then
-      echo $sh not found
+      ignored_shells="$ignored_shells $sh"
       continue
     fi
+    tested_shells="$tested_shells $sh"
     HSENV_TEST_SHELL=$sh
     run_test
     if [ $? -ne 0 ]; then
       exit 1
     fi
   done
+  echo tested shells: $tested_shells
+  echo ignored shells:$ignored_shells
   exit
 fi
 
