@@ -17,11 +17,10 @@ dependency_to_package_name_and_space_and_version() {
     dep = ARGV[1]
     sub(/^builtin_/, "", dep)
     len = split(dep, dep_words, "-")
+    printf dep_words[1]
     if (len == 1) {
-      print dep_words[1]
-      exit 0
+      exit
     }
-    name_and_version = dep_words[1]
     for (a = 2; a <= len; a++) {
       dep_word = dep_words[a]
       split(dep_word, nums, ".")
@@ -34,12 +33,11 @@ dependency_to_package_name_and_space_and_version() {
         }
       }
       if (is_version) {
-        name_and_version = name_and_version " " dep_word
-        break
+        printf " " dep_word
+        exit
       } else {
-        name_and_version = name_and_version "-" dep_word
+        printf "-" dep_word
       }
     }
-    print name_and_version
   }' $1
 }
