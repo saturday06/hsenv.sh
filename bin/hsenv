@@ -5,4 +5,4 @@ if [ -z "$HSENV_SH_ROOT" ]; then
   export HSENV_SH_ROOT=`cd "$rel_root"; pwd`
 fi
 
-. "$HSENV_SH_ROOT/libexec/hsenv" $*
+exec "$HSENV_SH_ROOT/libexec/hsenv" $*
