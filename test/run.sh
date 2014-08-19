@@ -8,7 +8,7 @@ run_test() {
   rm -fr $tmpdir
   mkdir -p $tmpdir
   echo HSENV_TEST_SHELL=$HSENV_TEST_SHELL
-  for t in *_test.sh; do
+  for t in test_*.sh; do
     echo "[$t]"
     error_regexp1="shunit2:ERROR"
     error_regexp2="Ran 0 tests\."
