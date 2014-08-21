@@ -1,8 +1,3 @@
 #!/bin/sh
 
-if [ -z "$HSENV_SH_ROOT" ]; then
-  rel_root="`dirname $0`/.."
-  export HSENV_SH_ROOT=`cd "$rel_root"; pwd`
-fi
-
-exec "$HSENV_SH_ROOT/libexec/hsenv" $*
+exec "$(dirname $0)/../libexec/hsenv" $*

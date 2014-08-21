@@ -1,12 +1,8 @@
 #!/bin/sh
 
-if [ -z "$HSENV_SH_ROOT" ]; then
-  rel_root="`dirname $0`/.."
-  export HSENV_SH_ROOT=`cd "$rel_root"; pwd`
-fi
-
-export _hsenv_private_libexec_dir="${HSENV_SH_ROOT}/libexec"
-export _hsenv_private_template_dir="${HSENV_SH_ROOT}/template"
+export _hsenv_private_root_dir=`cd "$(dirname $0)/.."; pwd`
+export _hsenv_private_libexec_dir="${_hsenv_private_root_dir}/libexec"
+export _hsenv_private_template_dir="${_hsenv_private_root_dir}/template"
 
 . "$_hsenv_private_libexec_dir/log"
 . "$_hsenv_private_libexec_dir/host"
