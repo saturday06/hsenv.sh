@@ -23,16 +23,7 @@ dependency_to_package_name_and_space_and_version() {
     }
     for (a = 2; a <= len; a++) {
       dep_word = dep_words[a]
-      values_length = split(dep_word, values, ".")
-      is_version = 1
-      for (b = 1; b <= values_length; b++) {
-        value = values[b]
-        if (!match(value, /^[0-9]+$/)) {
-          is_version = 0
-          break
-        }
-      }
-      if (is_version) {
+      if (match(dep_word, /^[0-9]+(\.[0-9]+)*$/)) {
         printf " " dep_word
         exit
       } else {
@@ -57,20 +48,10 @@ max_package_version() {
   awk 'BEGIN {
     for (a = 1; a <= ARGC; a++) {
       str = ARGV[a]
-
       values_length = split(str, values, ".")
-      is_version = 1
-      for (b = 1; b <= values_length; b++) {
-        value = values[b]
-        if (!match(value, /^[0-9]+$/)) {
-          is_version = 0
-          break
-        }
-      }
-      if (!is_version) {
+      if (!match(str, /^[0-9]+(\.[0-9]+)*$/)) {
         continue
       }
-
       max_values_length = split(max_str, max_values, ".")
       for (b = 1; b <= values_length; b++) {
         if (b > max_values_length || values[b] > max_values[b] + 0) {
