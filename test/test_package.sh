@@ -20,6 +20,15 @@ test_max_package_version() {
   versions="0.2.9 0.3"
   assertEquals 0.3 "`max_package_version $versions`"
 
+  versions="0.2.9 0x3"
+  assertEquals 0.2.9 "`max_package_version $versions`"
+
+  versions="0.2.9 0.3."
+  assertEquals 0.2.9 "`max_package_version $versions`"
+
+  versions="0.2.9 .3"
+  assertEquals 0.2.9 "`max_package_version $versions`"
+
   versions="version: 0.3 version: 0.2"
   assertEquals 0.3 "`max_package_version $versions`"
 
@@ -50,10 +59,12 @@ test_dependency_to_package_name_and_version() {
   assertEquals "foo-1a" "`dependency_to_package_name_and_version foo-1a`"
   assertEquals "foo-1a-11.02" "`dependency_to_package_name_and_version foo-1a-11.02`"
   assertEquals "foo-1a-11.02" "`dependency_to_package_name_and_version foo-1a-11.02-95dc0c72a075ab56f8cdd74470fc7c3d`"
+  assertEquals "foo-1a-11x02-95dc0" "`dependency_to_package_name_and_version foo-1a-11x02-95dc0`"
 }
 
 test_dependency_to_package_name() {
   assertEquals "ghc-prim" "`dependency_to_package_name ghc-prim`"
+  assertEquals "ghc-prim-0x3.1.0" "`dependency_to_package_name ghc-prim-0x3.1.0`"
   assertEquals "ghc-prim" "`dependency_to_package_name ghc-prim-0.3.1.0`"
   assertEquals "ghc-prim" "`dependency_to_package_name ghc-prim-0.3.1.0-95dc0c72a075ab56f8cdd74470fc7c3d`"
   assertEquals "rts" "`dependency_to_package_name builtin_rts`"
@@ -64,6 +75,7 @@ test_dependency_to_package_name() {
 
 test_dependency_to_package_version() {
   assertEquals "" "`dependency_to_package_version ghc-prim`"
+  assertEquals "" "`dependency_to_package_version ghc-prim-0x3.1.0`"
   assertEquals "0.3.1.0" "`dependency_to_package_version ghc-prim-0.3.1.0`"
   assertEquals "0.3.1.0" "`dependency_to_package_version ghc-prim-0.3.1.0-95dc0c72a075ab56f8cdd74470fc7c3d`"
   assertEquals "" "`dependency_to_package_version builtin_rts`"
