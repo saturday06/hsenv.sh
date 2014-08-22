@@ -1,5 +1,69 @@
 #!/bin/sh
 
+parse() {
+  HSENV_GHC=
+  HSENV_NAME=
+  HSENV_VERBOSE=0
+  HSENV_COMMAND=hsenv_main
+  HSENV_MAKE_COMMAND=make
+  HSENV_PS1_INDICATOR=yes
+  HSENV_SANITY_CHECK=yes
+  HSENV_SHARE_CABAL_CACHE=yes
+  HSENV_BOOTSTRAP_CABAL=no
+
+  for opt in $*; do
+    case $opt in
+      --ghc=*)
+        HSENV_GHC=${opt#*=}
+        shift
+        ;;
+      --name=*)
+        HSENV_NAME=${opt#*=}
+        shift
+        ;;
+      -v|--verbose)
+        [ $HSENV_VERBOSE -lt 1 ] && HSENV_VERBOSE=1
+        shift
+        ;;
+      --very-verbose)
+        [ $HSENV_VERBOSE -lt 2 ] && HSENV_VERBOSE=2
+        shift
+        ;;
+      --version)
+        HSENV_COMMAND=hsenv_version
+        return
+        ;;
+      -h|--help)
+        HSENV_COMMAND=hsenv_help
+        return
+        ;;
+      --dont-share-cabal-cache)
+        HSENV_SHARE_CABAL_CACHE=no
+        shift
+        ;;
+      --make-cmd=*)
+        HSENV_MAKE_COMMAND=${opt#*=}
+        shift
+        ;;
+      --no-ps1-indicator)
+        HSENV_PS1_INDICATOR=no
+        shift
+        ;;
+      --skip-sanity-check)
+        HSENV_SANITY_CHECK=no
+        shift
+        ;;
+      --bootstrap-cabal)
+        HSENV_BOOTSTRAP_CABAL=yes
+        shift
+        ;;
+      *)
+        # unknown option
+        ;;
+    esac
+  done
+}
+
 is_version() {
   echo $* | grep -E "^[0-9]+(\.[0-9]+)*$"
 }

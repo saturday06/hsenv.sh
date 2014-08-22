@@ -6,3 +6,4 @@ export _hsenv_private_template_dir="${_hsenv_private_root_dir}/template"
 
 . "$_hsenv_private_libexec_dir/log"
 . "$_hsenv_private_libexec_dir/host"
+. "$_hsenv_private_libexec_dir/option"
