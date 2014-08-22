@@ -56,7 +56,7 @@ fi
 if [ "$1" = "all" ]; then
   tested_shells=
   ignored_shells=
-  for sh in ash bash dash ksh mksh posh zsh; do
+  for sh in ash bash dash ksh mksh posh; do
     which $sh > /dev/null 2>&1
     if [ $? -ne 0 ]; then
       ignored_shells="$ignored_shells $sh"
