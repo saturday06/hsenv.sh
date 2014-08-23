@@ -65,19 +65,19 @@ parse() {
 }
 
 is_version() (
-  echo $* | grep -E "^[0-9]+(\.[0-9]+)*$"
+  echo $* | grep -E "^[0-9]+(\.[0-9]+)*$" > /dev/null
 )
 
 is_url() (
-  echo $* | grep -E "^https?://.+$"
+  echo $* | grep -E "^https?://.+$" > /dev/null
 )
 
 installation_of() (
   if [ -z "$1" ]; then
     echo transplant_local_executable
-  elif [ $(is_version $1) ]; then
+  elif is_version $1; then
     echo install_remote_source
-  elif [ $(is_url $1) ]; then
+  elif is_url $1; then
     echo install_remote_binary
   else
     echo install_local_binary
