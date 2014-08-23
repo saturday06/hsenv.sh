@@ -1,4 +1,4 @@
-hsenv-teokure [![Build Status](https://travis-ci.org/saturday06/hsenv-teokure.png?branch=master)](https://travis-ci.org/saturday06/hsenv-teokure)
+hsenv.sh [![Build Status](https://travis-ci.org/saturday06/hsenv.sh.png?branch=master)](https://travis-ci.org/saturday06/hsenv.sh)
 =============
 
-hsenvのておくれ版
+The clone of hsenv written in shellscript.
