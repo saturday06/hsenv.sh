@@ -17,3 +17,13 @@ The clone of [hsenv](https://github.com/Paczesiowa/hsenv) written in shellscript
     ~~~ sh
     $ export PATH="$HOME/.hsenv/bin:$PATH"
     ~~~
+
+## TODO
+
+- --bootstrap-cabal
+- sanity check
+- logging
+- more tests
+- msys2
+- xz
+- README
