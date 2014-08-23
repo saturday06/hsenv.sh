@@ -9,7 +9,7 @@ if [ -n "${ZSH_VERSION:-}" ]; then
 fi
 
 _hsenv_test_tmpdir="$_hsenv_private_root_dir/tmp"
-_hsenv_test_datadir="$_hsenv_private_root_dir/data"
+_hsenv_test_datadir="$_hsenv_private_root_dir/test/data"
 
 if [ -z "$HSENV_TEST_LEVEL" ]; then
   HSENV_TEST_LEVEL=0

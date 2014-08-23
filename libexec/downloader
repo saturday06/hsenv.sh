@@ -29,23 +29,46 @@ url_basename() (
   echo $1 | sed 's/#.*//' | sed 's/\?.*//' | sed 's%.*/%%'
 )
 
+url_to_cache_name() (
+  echo $1 | sed 's,/,%2F,g' | sed 's/:/%3A/g' | sed 's/;/%3B/g' | sed 's/\./%2E/g'
+)
+
 has_command() (
   which $1 > /dev/null 2> /dev/null
 )
 
 downloader() (
+  url=$1
+  file=$2
+  mkdir -p $_hsenv_private_cache_dir
+  cache_file=$_hsenv_private_cache_dir/`url_to_cache_name $url`
+  if [ -e $cache_file ]; then
+    cp $cache_file $file
+    return
+  fi
+
+  downloading_cache_file=$cache_file.downloading
+  rm -f $downloading_cache_file
+
   if has_command curl; then
-    downloader_curl $1 $2
+    downloader_curl $url $downloading_cache_file
   elif has_command wget; then
-    downloader_wget $1 $2
+    downloader_wget $url $downloading_cache_file
   elif has_command fetch; then
-    downloader_fetch $1 $2
+    downloader_fetch $url $downloading_cache_file
   elif has_command lwp-download; then
-    downloader_lwp_download $1 $2
+    downloader_lwp_download $url $downloading_cache_file
   else
     echo "curl/wget/fetch/lwp-download required"
     return 1
   fi
+
+  download_result=$?
+  if [ $download_result -ne 0 ]; then
+    return $download_result
+  fi
+
+  mv $downloading_cache_file $cache_file && cp $cache_file $file
 )
 
 downloader_curl() (
