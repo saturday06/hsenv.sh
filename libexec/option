@@ -6,10 +6,10 @@ parse() {
   export HSENV_VERBOSE=0
   export HSENV_COMMAND=hsenv_main
   export HSENV_MAKE_COMMAND=make
-  export HSENV_PS1_INDICATOR=yes
-  export HSENV_SANITY_CHECK=yes
-  export HSENV_SHARE_CABAL_CACHE=yes
-  export HSENV_BOOTSTRAP_CABAL=no
+  export HSENV_PS1_INDICATOR=true
+  export HSENV_SANITY_CHECK=true
+  export HSENV_SHARE_CABAL_CACHE=true
+  export HSENV_BOOTSTRAP_CABAL=false
 
   for opt in $*; do
     case $opt in
@@ -38,7 +38,7 @@ parse() {
         return
         ;;
       --dont-share-cabal-cache)
-        HSENV_SHARE_CABAL_CACHE=no
+        HSENV_SHARE_CABAL_CACHE=false
         shift
         ;;
       --make-cmd=*)
@@ -46,15 +46,15 @@ parse() {
         shift
         ;;
       --no-ps1-indicator)
-        HSENV_PS1_INDICATOR=no
+        HSENV_PS1_INDICATOR=false
         shift
         ;;
       --skip-sanity-check)
-        HSENV_SANITY_CHECK=no
+        HSENV_SANITY_CHECK=false
         shift
         ;;
       --bootstrap-cabal)
-        HSENV_BOOTSTRAP_CABAL=yes
+        HSENV_BOOTSTRAP_CABAL=true
         shift
         ;;
       *)
