@@ -19,6 +19,10 @@ install_method=`installation_of $HSENV_GHC`
 echo Using \`$install_method\"
 
 transplant_local_executable() (
+  if ! has_command ghc ; then
+    echo error: ghc is required.
+    exit 1
+  fi
   mkdir -p $hsenv_install_root
   hsenv_install_package_db=$hsenv_install_root/package.conf.d
   echo Initializing GHC Package database at $hsenv_install_package_db
