@@ -26,7 +26,7 @@ test_downloader() {
   for tool in curl wget fetch lwp-download; do
     if has_command $tool; then
       tested_downloaders="$tested_downloaders $tool"
-      command="downloader_`echo $tool | sed 's/-/_/'`"
+      command="downloader_`echo $tool | sed 's/-/_/g'`"
       dir="$tmpdir/$tool"
       mkdir -p "$dir"
 
