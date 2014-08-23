@@ -21,38 +21,33 @@ test_downloader() {
   rm -fr "$tmpdir"
   mkdir -p "$tmpdir"
 
-  url=http://saturday06.github.io/hsenv-teokure/test/cr_lf.bin
-  file="$tmpdir/output.bin"
   tested_downloaders=
   ignored_downloaders=
   for tool in curl wget fetch lwp-download; do
     if has_command $tool; then
       tested_downloaders="$tested_downloaders $tool"
       command="downloader_`echo $tool | sed 's/-/_/'`"
+      dir="$tmpdir/$tool"
+      mkdir -p "$dir"
 
-      rm -f $file
-      $command $url $file
-      result=$?
-      assertTrue $result
-
-      rm -f $file
-      $command $url.not.found $file
-      result=$?
-      assertFalse $result
+      assertTrue "$command http://saturday06.github.io/hsenv-teokure/test/cr_lf.bin $dir/cr_lf.bin"
+      assertTrue "cmp $_hsenv_test_datadir/cr_lf.bin $dir/cr_lf.bin"
+      assertTrue "$command http://saturday06.github.io/hsenv-teokure/test/null_0xa5.bin $dir/null_0xa5.bin"
+      assertTrue "cmp $_hsenv_test_datadir/null_0xa5.bin $dir/null_0xa5.bin"
+      assertFalse "$command http://saturday06.github.io/hsenv-teokure/test/not.found.bin $dir/not.found.bin"
     else
       ignored_downloaders="$ignored_downloaders $tool"
     fi
   done
 
-  rm -f $file
-  downloader $url $file
-  result=$?
-  assertTrue $result
+  dir="$tmpdir/downloader"
+  mkdir -p "$dir"
 
-  rm -f $file
-  downloader $url.not.found $file
-  result=$?
-  assertFalse $result
+  assertTrue "downloader http://saturday06.github.io/hsenv-teokure/test/cr_lf.bin $dir/cr_lf.bin"
+  assertTrue "cmp $_hsenv_test_datadir/cr_lf.bin $dir/cr_lf.bin"
+  assertTrue "downloader http://saturday06.github.io/hsenv-teokure/test/null_0xa5.bin $dir/null_0xa5.bin"
+  assertTrue "cmp $_hsenv_test_datadir/null_0xa5.bin $dir/null_0xa5.bin"
+  assertFalse "downloader http://saturday06.github.io/hsenv-teokure/test/not.found.bin $dir/not.found.bin"
 
   echo tested_downloaders: $tested_downloaders
   echo ignored_downloaders:$ignored_downloaders
