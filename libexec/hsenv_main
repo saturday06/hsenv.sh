@@ -1,0 +1,186 @@
+#!/bin/sh
+
+. $_hsenv_private_libexec_dir/init
+
+hsenv_work_dir=`pwd`
+if [ -z "$HSENV_NAME" ]; then
+  hsenv_install_root=$hsenv_work_dir/.hsenv
+else
+  hsenv_install_root=$hsenv_work_dir/.hsenv_$HSENV_NAME
+fi
+
+echo Install to $hsenv_install_root
+install_method=`installation_of $HSENV_GHC`
+echo Using \`$install_method\"
+
+transplant_local_executable() (
+  if [ -e $hsenv_install_root ]; then
+    echo Error \`$hsenv_install_root\' already exists.
+    echo Upgrading will implement in feature version.
+    #exit 1
+  fi
+  mkdir -p $hsenv_install_root
+  hsenv_install_package_db=$hsenv_install_root/package.conf.d
+  echo Initializing GHC Package database at $hsenv_install_package_db
+  version_output=`ghc-pkg --version`
+  version=`echo $version_output | sed 's/^.\+ //'`
+  if ! is_version $version; then
+    echo Couldn\'t extract ghc-pkg version number from: $version_output
+    exit 1
+  fi
+
+  if [ `max_package_version "6.10.4 $version"` = 6.10.4 ]; then
+    echo Detected GHC older than 6.12, initializing GHC_PACKAGE_PATH to file with '[]'
+    echo "[]" > $hsenv_install_package_db
+  else
+    ghc-pkg init $hsenv_install_package_db
+  fi
+
+  echo Copying necessary packages from original GHC package database
+
+  for package in base Cabal; do
+    if ! transplant_max_version_dependencies $package; then
+      echo Oops!
+      exit 1
+    fi
+  done
+
+  for package in haskell98 haskell2010 ghc ghc-binary; do
+    transplant_max_version_dependencies $package
+  done
+
+  shim_dir=$hsenv_install_root/shims
+  mkdir -p $shim_dir
+  for bin in alex ar c2hs cpphs ffihugs gcc greencard haddock happy \
+             hmake hpc hsc2hs hscolour hugs jhc ld lhc lhc-pkg nhc98 \
+             pkg-config ranlib strip tar uhc; do
+    abs_bin=`which $bin 2> /dev/null`
+    if [ -n "$abs_bin" ]; then
+      ln -s $abs_bin $shim_dir/$bin
+    fi
+  done
+
+  cp -fr $_hsenv_private_root_dir/skelton/ghc $hsenv_install_root/
+  install_helper_scripts
+)
+
+transplant_max_version_dependencies() (
+  package=$1
+  if ! ghc-pkg describe $package > /dev/null 2> /dev/null; then
+    echo Package \`$package\' not found
+    return 1
+  fi
+  echo Checking the highest installed version of package $package
+  versions=`ghc-pkg field $package version`
+  version=`max_package_version $versions`
+  if [ -n "$version" ]; then
+    echo Found: $version
+    package=$package-$version
+  else
+    echo Not found
+  fi
+  transplant_dependencies $package
+)
+
+transplant_dependencies() (
+  package=$1
+  if GHC_PACKAGE_PATH=$hsenv_install_package_db ghc-pkg --no-user-package-conf describe $package > /dev/null 2> /dev/null; then
+    return
+  fi
+  depends=`ghc-pkg field $package depends`
+  for dep in `dependencies_to_package_name_and_version $depends`; do
+    transplant_dependencies $dep
+  done
+  echo "Copying package \`$dep' to Virtual Haskell Environment."
+  ghc-pkg describe $package | GHC_PACKAGE_PATH=$hsenv_install_package_db ghc-pkg register -
+)
+
+filter_install() (
+  cat $1 \
+    | sed "s;<HSENV>;${hsenv_work_dir};g" \
+    | sed "s;<HSENV_DIR>;${hsenv_install_root};g" \
+    | sed "s;<HSENV_NAME>;${HSENV_NAME};g" \
+    | sed "s;<MODIFY_PS1>;${HSENV_PS1_INDICATOR};g" \
+    | sed "s;<HACKAGE_CACHE>;${hsenv_install_root}/cabal/packages;g" \
+    | sed "s;<CABAL_DIR>;${hsenv_install_root}/cabal;g" \
+    | sed "s;<CABAL_CONFIG>;${hsenv_install_root}/cabal/config;g" \
+    | sed "s;<GHC_PACKAGE_PATH>;${hsenv_install_package_db};g" \
+    > $2
+)
+
+install_helper_scripts() (
+  mkdir -p $hsenv_install_root/bin
+  mkdir -p $hsenv_install_root/cabal/bin
+  filter_install $_hsenv_private_root_dir/skelton/bin/activate $hsenv_install_root/bin/activate
+  filter_install $_hsenv_private_root_dir/skelton/cabal_config $hsenv_install_root/cabal/config
+  filter_install $_hsenv_private_root_dir/skelton/cabal $hsenv_install_root/cabal/bin/cabal
+  chmod u+x $hsenv_install_root/cabal/bin/cabal
+  path_var_prependix=$hsenv_install_root/cabal/bin:$hsenv_install_root/ghc/bin
+  if [ -d $hsenv_install_root/shims ]; then
+    path_var_prependix=$hsenv_install_root/shims:$path_var_prependix
+  fi
+  echo $path_var_prependix | tr -d '\r\n' > $hsenv_install_root/path_var_prependix
+  echo $hsenv_install_package_db | tr -d '\r\n' > $hsenv_install_root/ghc_package_path_var
+  echo To activate the new environment use \`source $hsenv_install_root/bin/activate\'
+)
+
+install_remote_url() (
+  url=$1
+  echo URL=$url
+  cache_dir=$hsenv_install_root/cache
+  file=$cache_dir/`url_basename $url`
+  mkdir -p $cache_dir
+  if ! downloader $url $file ; then
+    echo Oops!
+    exit 1
+  fi
+  install_local_file $file
+)
+
+install_remote_source() (
+  echo GHC version=$HSENV_GHC
+  install_remote_url `source_url $HSENV_GHC`
+)
+
+install_remote_binary() (
+  install_remote_url $HSENV_GHC
+)
+
+install_local_binary() (
+  install_local_file $HSENV_GHC
+)
+
+install_local_file() (
+  file=$1
+  echo from $file
+  if [ ! -f $file ]; then
+    echo ... not found
+    exit 1
+  fi
+  srcdir=$hsenv_install_root/src
+  mkdir -p $srcdir $hsenv_install_root/ghc
+  (bzip2 -cd $file | tar xf - -C $srcdir) && \
+    cd $srcdir && \
+    cd `ls | sort | awk '{print $1}'` && \
+    if [ -f configure ]; then \
+      ./configure --prefix=$hsenv_install_root/ghc && \
+      ($HSENV_MAKE_COMMAND || true) && \
+      $HSENV_MAKE_COMMAND install
+    else
+      cp -fr . $hsenv_install_root/ghc
+    fi
+
+  if [ $? -ne 0 ]; then
+    echo Oops!
+    exit 1
+  fi
+  hsenv_install_package_db=`$hsenv_install_root/ghc/bin/ghc --print-global-package-db | tr \\\\ /`
+  if [ -z "$hsenv_install_package_db" ]; then
+    echo Oops!
+    exit 1
+  fi
+
+  install_helper_scripts
+)
+
+$install_method
