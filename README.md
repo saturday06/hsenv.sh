@@ -25,5 +25,4 @@ The clone of [hsenv](https://github.com/Paczesiowa/hsenv) written in shellscript
 - logging
 - more tests
 - msys2
-- xz
 - README

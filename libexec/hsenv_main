@@ -150,6 +150,19 @@ install_local_binary() (
   install_local_file $HSENV_GHC
 )
 
+extract_archive() (
+  if echo $1 | grep -E "\.xz$" > /dev/null; then
+    xz -cd $1
+  elif echo $1 | grep -E "\.bz2$" > /dev/null; then
+    bzip2 -cd $1
+  elif echo $1 | grep -E "\.gz$" > /dev/null; then
+    gzip -cd $1
+  else
+    echo "Unsupported archive"
+    exit 1
+  fi
+)
+
 install_local_file() (
   file=$1
   echo from $file
@@ -159,7 +172,7 @@ install_local_file() (
   fi
   srcdir=$hsenv_install_root/src
   mkdir -p $srcdir $hsenv_install_root/ghc
-  (bzip2 -cd $file | tar xf - -C $srcdir) && \
+  (extract_archive $file | tar xf - -C $srcdir) && \
     cd $srcdir && \
     cd `ls | sort | awk '{print $1}'` && \
     if [ -f configure ]; then \
