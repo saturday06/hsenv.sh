@@ -21,5 +21,6 @@ The clone of [hsenv](https://github.com/Paczesiowa/hsenv) written in shellscript
 ## Still unimplemented features
 
 - --bootstrap-cabal
+- --dont-share-cabal-cache
 - sanity check
 - logging
