@@ -19,11 +19,6 @@ install_method=`installation_of $HSENV_GHC`
 echo Using \`$install_method\"
 
 transplant_local_executable() (
-  if [ -e $hsenv_install_root ]; then
-    echo Error \`$hsenv_install_root\' already exists.
-    echo Upgrading will implement in feature version.
-    #exit 1
-  fi
   mkdir -p $hsenv_install_root
   hsenv_install_package_db=$hsenv_install_root/package.conf.d
   echo Initializing GHC Package database at $hsenv_install_package_db
