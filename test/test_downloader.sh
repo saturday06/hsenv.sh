@@ -28,7 +28,7 @@ test_url_to_cache_name() {
 }
 
 test_downloader() {
-  dir="$_hsenv_test_tmpdir/downloader"
+  dir="$_hsenv_test_tmp_dir/downloader"
 
   if [ $HSENV_TEST_LEVEL -ge 1 ]; then
     rm -fr "$dir"
@@ -37,9 +37,9 @@ test_downloader() {
   mkdir -p "$dir"
   downloader http://saturday06.github.io/hsenv-teokure/test/cr_lf.bin $dir/cr_lf.bin
   assertTrue "downloader http://saturday06.github.io/hsenv-teokure/test/cr_lf.bin $dir/cr_lf.bin"
-  assertTrue "cmp $_hsenv_test_datadir/cr_lf.bin $dir/cr_lf.bin"
+  assertTrue "cmp $_hsenv_test_data_dir/cr_lf.bin $dir/cr_lf.bin"
   assertTrue "downloader http://saturday06.github.io/hsenv-teokure/test/null_0xa5.bin $dir/null_0xa5.bin"
-  assertTrue "cmp $_hsenv_test_datadir/null_0xa5.bin $dir/null_0xa5.bin"
+  assertTrue "cmp $_hsenv_test_data_dir/null_0xa5.bin $dir/null_0xa5.bin"
   assertFalse "downloader http://saturday06.github.io/hsenv-teokure/test/not.found.bin $dir/not.found.bin"
 }
 
@@ -48,9 +48,9 @@ test_downloader_tools() {
     return
   fi
 
-  tmpdir="$_hsenv_test_tmpdir/downloader_tools"
-  rm -fr "$tmpdir"
-  mkdir -p "$tmpdir"
+  tmp_dir="$_hsenv_test_tmp_dir/downloader_tools"
+  rm -fr "$tmp_dir"
+  mkdir -p "$tmp_dir"
 
   tested_downloaders=
   ignored_downloaders=
@@ -58,13 +58,13 @@ test_downloader_tools() {
     if has_command $tool; then
       tested_downloaders="$tested_downloaders $tool"
       command="downloader_`echo $tool | sed 's/-/_/g'`"
-      dir="$tmpdir/$tool"
+      dir="$tmp_dir/$tool"
       mkdir -p "$dir"
 
       assertTrue "$command http://saturday06.github.io/hsenv-teokure/test/cr_lf.bin $dir/cr_lf.bin"
-      assertTrue "cmp $_hsenv_test_datadir/cr_lf.bin $dir/cr_lf.bin"
+      assertTrue "cmp $_hsenv_test_data_dir/cr_lf.bin $dir/cr_lf.bin"
       assertTrue "$command http://saturday06.github.io/hsenv-teokure/test/null_0xa5.bin $dir/null_0xa5.bin"
-      assertTrue "cmp $_hsenv_test_datadir/null_0xa5.bin $dir/null_0xa5.bin"
+      assertTrue "cmp $_hsenv_test_data_dir/null_0xa5.bin $dir/null_0xa5.bin"
       assertFalse "$command http://saturday06.github.io/hsenv-teokure/test/not.found.bin $dir/not.found.bin"
     else
       ignored_downloaders="$ignored_downloaders $tool"
