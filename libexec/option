@@ -11,14 +11,14 @@ parse() {
   export HSENV_SHARE_CABAL_CACHE=true
   export HSENV_BOOTSTRAP_CABAL=false
 
-  for opt in $*; do
-    case $opt in
+  for parsed_option in $*; do
+    case $parsed_option in
       --ghc=*)
-        HSENV_GHC=${opt#*=}
+        HSENV_GHC=${parsed_option#*=}
         shift
         ;;
       --name=*)
-        HSENV_NAME=${opt#*=}
+        HSENV_NAME=${parsed_option#*=}
         shift
         ;;
       -v|--verbose)
@@ -42,7 +42,7 @@ parse() {
         shift
         ;;
       --make-cmd=*)
-        HSENV_MAKE_COMMAND=${opt#*=}
+        HSENV_MAKE_COMMAND=${parsed_option#*=}
         shift
         ;;
       --no-ps1-indicator)
