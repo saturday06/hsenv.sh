@@ -1,0 +1,4 @@
+#!/bin/sh
+
+. $_hsenv_private_libexec_dir/init
+echo "1.0"

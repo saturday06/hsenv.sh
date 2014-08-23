@@ -1,40 +1,5 @@
 #!/bin/sh
 
 . "`dirname $0`/../libexec/init"
-
-hsenv_main() {
-  echo "dummy!"
-}
-
-hsenv_version() {
-  echo "1.0"
-}
-
-hsenv_help() {
-  cat <<USAGE
-usage: hsenv [FLAGS]
-
-Flags:
---dont-share-cabal-cache  Don't share ~/.cabal/packages (hackage download cache)
---ghc=FILE                Use GHC from provided tarball (e.g.
-                          ghc-7.0.4-i386-unknown-linux.tar.bz2)
-                          (defaults to system's copy of GHC)
--h, --help                Show this help message
---make-cmd=CMD            Used as make substitute for installing GHC from tarball
-                          (e.g. gmake)
-                          (defaults to make)
---name=NAME               Use NAME as name of the Virtual Haskell Environment
-                          (defaults to current directory name)
---no-ps1-indicator        Don't modify the shell prompt to indicate the current hsenv
---skip-sanity-check       Skip all the sanity checks (use at your own risk)
--v, --verbose             Print some debugging info
---version                 Show version string
---very-verbose            Print some more debugging info
-
-Creates Virtual Haskell Environment in the current directory.
-All files will be stored in the .hsenv_ENVNAME/ subdirectory.
-USAGE
-}
-
 parse $*
-$HSENV_COMMAND
+$_hsenv_private_libexec_dir/$HSENV_COMMAND
