@@ -35,8 +35,8 @@ prepare_base_system_from_binary() (
     cd ghc-$version && \
     if [ -e configure ]; then \
       ./configure --prefix=$base_dir && \
-      $HSENV_TEST_MAKE install \
-    else \
+      $HSENV_TEST_MAKE install
+    else
       cp -fr * $base_dir
     fi
 )
