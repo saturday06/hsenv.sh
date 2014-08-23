@@ -1,14 +1,14 @@
 #!/bin/sh
 
-url_basename() {
+url_basename() (
   echo $1 | sed 's/#.*//' | sed 's/\?.*//' | sed 's%.*/%%'
-}
+)
 
-has_command() {
+has_command() (
   which $1 > /dev/null 2> /dev/null
-}
+)
 
-downloader() {
+downloader() (
   if has_command curl; then
     downloader_curl $1 $2
   elif has_command wget; then
@@ -21,20 +21,20 @@ downloader() {
     echo "curl/wget/fetch/lwp-download required"
     return 1
   fi
-}
+)
 
-downloader_curl() {
+downloader_curl() (
   curl --fail --output $2 $1
-}
+)
 
-downloader_wget() {
+downloader_wget() (
   wget --output-document=$2 $1
-}
+)
 
-downloader_fetch() {
+downloader_fetch() (
   fetch -o $2 $1
-}
+)
 
-downloader_lwp_download() {
+downloader_lwp_download() (
   lwp-download $1 $2
-}
+)

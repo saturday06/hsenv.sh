@@ -2,7 +2,7 @@
 
 cd `dirname $0`
 
-run_test() {
+run_test() (
   tmpdir=../tmp/run_test
   esc=`awk 'BEGIN { printf("%c", 27) }'`
   rm -fr $tmpdir
@@ -43,7 +43,7 @@ run_test() {
   else
     echo "SUCCEED"
   fi
-}
+)
 
 if [ "$HSENV_TEST_COLOR" = "" ]; then
   if [ -t ]; then

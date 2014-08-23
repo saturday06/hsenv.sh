@@ -1,18 +1,18 @@
 #!/bin/sh
 
-dependency_to_package_name() {
+dependency_to_package_name() (
   dependency_to_package_name_and_space_and_version $1 | awk '{print $1}'
-}
+)
 
-dependency_to_package_version() {
+dependency_to_package_version() (
   dependency_to_package_name_and_space_and_version $1 | awk '{print $2}'
-}
+)
 
-dependency_to_package_name_and_version() {
+dependency_to_package_name_and_version() (
   dependency_to_package_name_and_space_and_version $1 | awk '{if ($2) { print $1"-"$2} else { print $1 }}'
-}
+)
 
-dependency_to_package_name_and_space_and_version() {
+dependency_to_package_name_and_space_and_version() (
   awk 'BEGIN {
     dep = ARGV[1]
     sub(/^builtin_/, "", dep)
@@ -31,9 +31,9 @@ dependency_to_package_name_and_space_and_version() {
       }
     }
   }' $1
-}
+)
 
-dependencies_to_package_name_and_version() {
+dependencies_to_package_name_and_version() (
   if [ $1 = "depends:" ]; then
     shift
   fi
@@ -42,9 +42,9 @@ dependencies_to_package_name_and_version() {
     output="$output `dependency_to_package_name_and_version $dep`"
   done
   echo $output
-}
+)
 
-max_package_version() {
+max_package_version() (
   awk 'BEGIN {
     for (a = 1; a <= ARGC; a++) {
       str = ARGV[a]
@@ -64,4 +64,4 @@ max_package_version() {
     }
     printf max_str
   }' $*
-}
+)

@@ -1,13 +1,13 @@
 #!/bin/sh
 
-_hsenv_private_warn() {
+_hsenv_private_warn() (
   echo "[WARN] $*"
-}
+)
 
-_hsenv_private_debug() {
+_hsenv_private_debug() (
   echo "[DEBUG] $*"
-}
+)
 
-_hsenv_private_info() {
+_hsenv_private_info() (
   echo "[INFO] $*"
-}
+)
