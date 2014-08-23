@@ -9,6 +9,11 @@ else
   hsenv_install_root=$hsenv_work_dir/.hsenv_$HSENV_NAME
 fi
 
+if [ -e "$hsenv_install_root" ]; then
+  echo There is already `basename $hsenv_install_root` directory at $hsenv_work_dir
+  exit 1
+fi
+
 echo Install to $hsenv_install_root
 install_method=`installation_of $HSENV_GHC`
 echo Using \`$install_method\"
