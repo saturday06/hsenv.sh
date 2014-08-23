@@ -18,11 +18,8 @@ The clone of [hsenv](https://github.com/Paczesiowa/hsenv) written in shellscript
     $ export PATH="$HOME/.hsenv/bin:$PATH"
     ~~~
 
-## TODO
+## Still unimplemented features
 
 - --bootstrap-cabal
 - sanity check
 - logging
-- more tests
-- msys2
-- README
