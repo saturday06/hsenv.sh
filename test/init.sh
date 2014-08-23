@@ -1,6 +1,7 @@
 #!/bin/sh
 
-. `dirname $SHUNIT_PARENT`/../libexec/init
+export _hsenv_private_root_dir=$(cd `dirname $SHUNIT_PARENT`/..; pwd)
+. $_hsenv_private_root_dir/libexec/init
 
 PATH="$_hsenv_private_root_dir/bin:$PATH"
 if [ -n "${ZSH_VERSION:-}" ]; then

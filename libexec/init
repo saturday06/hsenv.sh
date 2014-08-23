@@ -1,6 +1,8 @@
 #!/bin/sh
 
-export _hsenv_private_root_dir=`cd "$(dirname $0)/.."; pwd`
+if [ -z "$_hsenv_private_root_dir" ]; then
+  export _hsenv_private_root_dir=`cd "$(dirname $0)/.."; pwd`
+fi
 export _hsenv_private_libexec_dir="${_hsenv_private_root_dir}/libexec"
 export _hsenv_private_template_dir="${_hsenv_private_root_dir}/template"
 
