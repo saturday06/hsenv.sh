@@ -4,6 +4,17 @@ SHUNIT_PARENT=$0
 . `dirname $0`/init.sh
 . `dirname $0`/../libexec/downloader
 
+test_source_url() {
+  assertEquals "http://www.haskell.org/ghc/dist/1.2.3/ghc-1.2.3-src.tar.bz2" "`source_url 1.2.3`"
+}
+
+test_binary_url() {
+  _hsenv_private_host_os=linux
+  assertEquals "http://www.haskell.org/ghc/dist/7.8.3/ghc-7.8.3-x86_64-unknown-linux-deb7.tar.bz2" "`binary_url 7.8.3`"
+  _hsenv_private_host_os=darwin
+  assertEquals "http://www.haskell.org/ghc/dist/7.8.3/ghc-7.8.3-x86_64-apple-darwin.tar.bz2" "`binary_url 7.8.3`"
+}
+
 test_url_basename() {
   assertEquals "bar" "`url_basename http://foo/bar`"
   assertEquals "bar.tar.xz" "`url_basename http://foo/bar.tar.xz`"

@@ -1,5 +1,30 @@
 #!/bin/sh
 
+source_url() (
+  echo http://www.haskell.org/ghc/dist/$1/ghc-$1-src.tar.bz2
+)
+
+binary_url() (
+  case $_hsenv_private_host_os in
+    linux)
+      echo http://www.haskell.org/ghc/dist/$1/ghc-$1-x86_64-unknown-linux-deb7.tar.bz2
+      return
+      ;;
+    darwin*)
+      echo http://www.haskell.org/ghc/dist/$1/ghc-$1-x86_64-apple-darwin.tar.bz2
+      return
+      ;;
+    mingw64)
+      echo http://www.haskell.org/ghc/dist/$1/ghc-$1-x86_64-unknown-mingw32.tar.bz2
+      return
+      ;;
+    mingw*)
+      echo http://www.haskell.org/ghc/dist/$1/ghc-$1-i386-unknown-mingw32.tar.bz2
+      return
+      ;;
+  esac
+)
+
 url_basename() (
   echo $1 | sed 's/#.*//' | sed 's/\?.*//' | sed 's%.*/%%'
 )
