@@ -9,11 +9,7 @@ parse() {
   export HSENV_PS1_INDICATOR=true
   export HSENV_SANITY_CHECK=true
   export HSENV_SHARE_CABAL_CACHE=true
-  if has_command cabal ; then
-    export HSENV_BOOTSTRAP_CABAL=false
-  else
-    export HSENV_BOOTSTRAP_CABAL=true
-  fi
+  export HSENV_BOOTSTRAP_CABAL=false
 
   for parsed_option in $*; do
     case $parsed_option in
