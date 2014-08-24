@@ -1,0 +1,34 @@
+#!/bin/sh
+
+extract_archive() (
+  archive=$1
+  output=$2
+
+  tmp_dir=$_hsenv_private_extract_archive_tmp_dir/$$/$archive
+  rm -fr $tmp_dir
+  mkdir -p $tmp_dir
+
+  if echo $1 | grep -E "\.xz$" > /dev/null; then
+    xz -cd $1 | tar xf - -C $tmp_dir
+  elif echo $1 | grep -E "\.bz2$" > /dev/null; then
+    bzip2 -cd $1 | tar xf - -C $tmp_dir
+  elif echo $1 | grep -E "\.gz$" > /dev/null; then
+    gzip -cd $1 | tar xf - -C $tmp_dir
+  else
+    echo "Unsupported archive"
+    return 1
+  fi
+
+  dir_count=`cd $tmp_dir && ls | wc -l`
+  if [ $dir_count != "1" ]; then
+    echo "extract archive \`$archive\' failed. Number of root directories is not 1 but $dir_count."
+    return 1
+  fi
+  rm -fr $output
+  mv $tmp_dir/`cd $tmp_dir && ls` $output
+  result=$?
+  if [ $result -eq 0 ]; then
+    rm -fr $tmp_dir
+  fi
+  return $result
+)

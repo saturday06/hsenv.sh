@@ -5,10 +5,13 @@ if [ -z "$_hsenv_private_root_dir" ]; then
 fi
 export _hsenv_private_libexec_dir="${_hsenv_private_root_dir}/libexec"
 export _hsenv_private_template_dir="${_hsenv_private_root_dir}/template"
-export _hsenv_private_cache_dir="${_hsenv_private_root_dir}/tmp/cache"
+export _hsenv_private_tmp_dir="${_hsenv_private_root_dir}/tmp"
+export _hsenv_private_cache_dir="${_hsenv_private_tmp_dir}/cache"
+export _hsenv_private_extract_archive_tmp_dir="${_hsenv_private_tmp_dir}/extract_archive"
 
 . "$_hsenv_private_libexec_dir/log"
 . "$_hsenv_private_libexec_dir/host"
 . "$_hsenv_private_libexec_dir/option"
 . "$_hsenv_private_libexec_dir/package"
 . "$_hsenv_private_libexec_dir/downloader"
+. "$_hsenv_private_libexec_dir/archive"

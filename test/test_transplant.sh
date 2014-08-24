@@ -14,8 +14,7 @@ prepare_base_system_from_source() (
   mkdir -p $base_dir $tmp_dir $src_dir
   downloader $url $tmp_dir/$file || return 1
   cd $src_dir
-  (bzip2 -cd $tmp_dir/$file | tar xf -) && \
-    cd ghc-$version && \
+  extract_archive $tmp_dir/$file $src_dir && \
     ./configure --prefix=$base_dir && \
     ($HSENV_TEST_MAKE || true) && \
     $HSENV_TEST_MAKE install
