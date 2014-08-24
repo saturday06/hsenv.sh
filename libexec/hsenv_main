@@ -125,6 +125,8 @@ install_helper_scripts() (
   fi
   echo $path_var_prependix | tr -d '\r\n' > $hsenv_install_root/path_var_prependix
   echo $hsenv_install_package_db | tr -d '\r\n' > $hsenv_install_root/ghc_package_path_var
+
+  echo
   echo To activate the new environment use \`source $hsenv_install_root/bin/activate\'
 )
 
