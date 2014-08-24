@@ -24,6 +24,7 @@ transplant_local_executable() (
     exit 1
   fi
   mkdir -p $hsenv_install_root
+
   hsenv_install_package_db=$hsenv_install_root/package.conf.d
   echo Initializing GHC Package database at $hsenv_install_package_db
   version_output=`ghc-pkg --version`
@@ -32,7 +33,6 @@ transplant_local_executable() (
     echo Couldn\'t extract ghc-pkg version number from: $version_output
     exit 1
   fi
-
   if [ `max_package_version "6.10.4 $version"` = 6.10.4 ]; then
     echo Detected GHC older than 6.12, initializing GHC_PACKAGE_PATH to file with '[]'
     echo "[]" > $hsenv_install_package_db
@@ -53,14 +53,14 @@ transplant_local_executable() (
     transplant_max_version_dependencies $package
   done
 
-  shim_dir=$hsenv_install_root/shims
-  mkdir -p $shim_dir
+  posterior_dir=$hsenv_install_root/posterior
+  mkdir -p $posterior_dir
   for bin in alex ar c2hs cpphs ffihugs gcc greencard haddock happy \
              hmake hpc hsc2hs hscolour hugs jhc ld lhc lhc-pkg nhc98 \
              pkg-config ranlib strip tar uhc; do
     abs_bin=`which $bin 2> /dev/null`
     if [ -n "$abs_bin" ]; then
-      ln -s $abs_bin $shim_dir/$bin
+      ln -s $abs_bin $posterior_dir/$bin
     fi
   done
 
@@ -113,21 +113,85 @@ filter_install() (
 )
 
 install_helper_scripts() (
-  mkdir -p $hsenv_install_root/bin
-  mkdir -p $hsenv_install_root/cabal/bin
-  filter_install $_hsenv_private_root_dir/skelton/bin/activate $hsenv_install_root/bin/activate
+  prior_bin=$hsenv_install_root/prior
+  posterior_bin=$hsenv_install_root/posterior
+  default_bin=$hsenv_install_root/bin
+  cabal_bin=$hsenv_install_root/cabal/bin
+
+  mkdir -p $prior_bin $posterior_bin $default_bin $cabal_bin
+  filter_install $_hsenv_private_root_dir/skelton/bin/activate $default_bin/activate
   filter_install $_hsenv_private_root_dir/skelton/cabal_config $hsenv_install_root/cabal/config
-  filter_install $_hsenv_private_root_dir/skelton/cabal $hsenv_install_root/cabal/bin/cabal
-  chmod u+x $hsenv_install_root/cabal/bin/cabal
-  path_var_prependix=$hsenv_install_root/cabal/bin:$hsenv_install_root/ghc/bin
-  if [ -d $hsenv_install_root/shims ]; then
-    path_var_prependix=$hsenv_install_root/shims:$path_var_prependix
+  filter_install $_hsenv_private_root_dir/skelton/cabal $prior_bin/cabal
+  chmod u+x $prior_bin/cabal
+  echo $hsenv_install_package_db | tr -d '\r\n' > $hsenv_install_root/ghc_package_path_var
+  path_var_prependix=$prior_bin:$cabal_bin:$hsenv_install_root/ghc/bin:$posterior_bin
+  if $HSENV_BOOTSTRAP_CABAL ; then
+    install_bootstrap_cabal
+    path_var_prependix=$path_var_prependix:$hsenv_install_root/cabal/bootstrap/bin
   fi
   echo $path_var_prependix | tr -d '\r\n' > $hsenv_install_root/path_var_prependix
-  echo $hsenv_install_package_db | tr -d '\r\n' > $hsenv_install_root/ghc_package_path_var
 
   echo
   echo To activate the new environment use \`source $hsenv_install_root/bin/activate\'
+)
+
+install_bootstrap_cabal() (
+  lib_versions=`GHC_PACKAGE_PATH=$hsenv_install_package_db $hsenv_install_root/ghc/bin/ghc-pkg field Cabal version`
+  lib_version=`max_package_version $lib_versions`
+  if [ -z "$lib_version" ]; then
+    echo Cabal package not found.
+    return 1
+  fi
+
+  echo Found: Cabal-$lib_version
+  case $lib_version in
+    1.20.*)
+      version=1.20.0.3
+      ;;
+    1.18.*)
+      version=1.18.0.5
+      ;;
+    1.16.*)
+      version=1.16.0.2
+      ;;
+    1.14.*)
+      version=0.14.0
+      ;;
+    *)
+      echo not supported version
+      return 1
+      ;;
+  esac
+
+  echo => cabal-install-$version
+
+  cabal_install_package_db=$hsenv_install_root/cabal/bootstrap/package.conf.d
+  echo cabal bootstrap package db: $cabal_install_package_db
+  mkdir -p $hsenv_install_root/cabal/bootstrap
+  ghc_version_output=`GHC_PACKAGE_PATH=$hsenv_install_package_db $hsenv_install_root/ghc/bin/ghc-pkg --version`
+  ghc_version=`echo $ghc_version_output | sed 's/^.\+ //'`
+  if ! is_version $ghc_version; then
+    echo Couldn\'t extract ghc-pkg version number from: $ghc_version_output
+    exit 1
+  fi
+  if [ `max_package_version "6.10.4 $version"` = 6.10.4 ]; then
+    echo Detected GHC older than 6.12, initializing GHC_PACKAGE_PATH to file with '[]'
+    echo "[]" > $cabal_install_package_db
+  else
+    GHC_PACKAGE_PATH=$hsenv_install_package_db $hsenv_install_root/ghc/bin/ghc-pkg init $cabal_install_package_db
+  fi
+
+  url=https://hackage.haskell.org/package/cabal-install-$version/cabal-install-$version.tar.gz
+  cabal_install_archive=$hsenv_install_root/cache/`url_basename $url`
+  cabal_install_extracted=$hsenv_install_root/cabal/bootstrap/src
+  mkdir -p $hsenv_install_root/cache $cabal_install_extracted
+  downloader $url $cabal_install_archive \
+    && extract_archive $cabal_install_archive $cabal_install_extracted \
+    && cd $cabal_install_extracted \
+    && EXTRA_CONFIGURE_OPTS=--package-db=$cabal_install_package_db \
+       PREFIX=$hsenv_install_root/cabal/bootstrap \
+       PATH=$hsenv_install_root/ghc/bin:$PATH \
+       ./bootstrap.sh --global
 )
 
 install_remote_url() (
