@@ -8,7 +8,7 @@ if [ -n "${ZSH_VERSION:-}" ]; then
   setopt shwordsplit
 fi
 
-_hsenv_test_tmp_dir="$_hsenv_private_root_dir/tmp"
+_hsenv_test_tmp_dir="$_hsenv_private_root_dir/tmp/test"
 _hsenv_test_data_dir="$_hsenv_private_root_dir/test/data"
 
 if [ -z "$HSENV_TEST_LEVEL" ]; then
