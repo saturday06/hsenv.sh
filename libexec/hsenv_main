@@ -57,9 +57,9 @@ transplant_local_executable() (
 
   posterior_dir=$hsenv_install_root/posterior
   mkdir -p $posterior_dir
-  for bin in alex ar c2hs cpphs ffihugs gcc greencard haddock happy \
-             hmake hpc hsc2hs hscolour hugs jhc ld lhc lhc-pkg nhc98 \
-             pkg-config ranlib strip tar uhc; do
+  for bin in alex ar ffihugs gcc greencard happy hmake hscolour \
+             hugs jhc ld lhc lhc-pkg nhc98 pkg-config ranlib \
+             strip tar uhc; do
     abs_bin=`which $bin 2> /dev/null`
     if [ -n "$abs_bin" ]; then
       ln -s $abs_bin $posterior_dir/$bin
@@ -67,6 +67,13 @@ transplant_local_executable() (
   done
 
   cp -fr $_hsenv_private_root_dir/skelton/ghc $hsenv_install_root/
+  for bin in c2hs cpphs haddock hpc hsc2hs; do
+    abs_bin=`which $bin 2> /dev/null`
+    if [ -n "$abs_bin" ]; then
+      ln -s $abs_bin $hsenv_install_root/ghc/bin/$bin
+    fi
+  done
+
   install_helper_scripts
 )
 
