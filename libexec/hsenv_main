@@ -129,7 +129,6 @@ install_helper_scripts() (
 
   mkdir -p $prior_bin $posterior_bin $default_bin $cabal_bin
   filter_install $_hsenv_private_root_dir/skelton/bin/activate $default_bin/activate
-  chmod u+x $prior_bin/cabal
   echo $hsenv_install_package_db | tr -d '\r\n' > $hsenv_install_root/ghc_package_path_var
   path_var_prependix=$prior_bin:$cabal_bin:$hsenv_install_root/ghc/bin
   if $HSENV_BOOTSTRAP_CABAL ; then
@@ -141,6 +140,7 @@ install_helper_scripts() (
   fi
   filter_install $_hsenv_private_root_dir/skelton/cabal_config $hsenv_install_root/cabal/config
   filter_install $_hsenv_private_root_dir/skelton/cabal $prior_bin/cabal
+  chmod u+x $prior_bin/cabal
   echo $path_var_prependix | tr -d '\r\n' > $hsenv_install_root/path_var_prependix
 
   echo
