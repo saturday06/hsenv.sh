@@ -11,10 +11,11 @@ prepare_base_system_from_source() (
   base_dir=$_hsenv_test_tmp_dir/base_system
   url=`source_url $version`
   file=`url_basename $url`
-  mkdir -p $base_dir $tmp_dir $src_dir
+  rm -fr $src_dir
+  mkdir -p $base_dir $tmp_dir
   downloader $url $tmp_dir/$file || return 1
-  cd $src_dir
   extract_archive $tmp_dir/$file $src_dir && \
+    cd $src_dir && \
     ./configure --prefix=$base_dir && \
     ($HSENV_TEST_MAKE || true) && \
     $HSENV_TEST_MAKE install
