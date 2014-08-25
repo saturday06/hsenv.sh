@@ -11,7 +11,7 @@ ignorable_tar_error() (
   fi
   cat $tar_error | \
     grep -vE "tar: Archive value [0-9]+ is out of [gu]id_t range 0\.\.[0-9]+$" | \
-    grep -vE "tar: Exiting with failure status due to previous errors$" > $tar_error.filtered
+    grep -vE "tar:? Exiting with failure status due to previous errors$" > $tar_error.filtered
   if [ -n "`cat $tar_error.filtered`" ]; then
     cat $tar_error.filtered
     return 1
