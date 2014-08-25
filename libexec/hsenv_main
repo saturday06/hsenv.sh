@@ -233,7 +233,7 @@ install_bootstrap_cabal() (
 
   url=https://hackage.haskell.org/package/cabal-install-$version/cabal-install-$version.tar.gz
   cabal_install_archive=$hsenv_install_root/cache/`url_basename $url`
-  cabal_install_extracted=$bootstrap_dir/src
+  cabal_install_extracted=$hsenv_install_root/tmp/cabal_bootstrap
   mkdir -p $hsenv_install_root/cache $cabal_install_extracted
   downloader $url $cabal_install_archive \
     && extract_archive $cabal_install_archive $cabal_install_extracted \
