@@ -223,7 +223,6 @@ install_local_binary() (
 
 install_local_file() (
   file=$1
-  echo from $file
   if [ ! -f $file ]; then
     echo ... not found
     exit 1
