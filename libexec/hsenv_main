@@ -175,7 +175,7 @@ install_bootstrap_cabal() (
     echo Couldn\'t extract ghc-pkg version number from: $ghc_version_output
     exit 1
   fi
-  if [ `max_package_version "6.10.4 $version"` = 6.10.4 ]; then
+  if [ `max_package_version "6.10.4 $ghc_version"` = 6.10.4 ]; then
     echo Detected GHC older than 6.12, initializing GHC_PACKAGE_PATH to file with '[]'
     echo "[]" > $cabal_install_package_db
   else
