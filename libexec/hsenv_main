@@ -279,7 +279,7 @@ install_local_file() (
     exit 1
   fi
   srcdir=$hsenv_install_root/src
-  mkdir -p $srcdir $hsenv_install_root/ghc
+  mkdir -p $hsenv_install_root/ghc
   (extract_archive $file $srcdir) && \
     cd $srcdir && \
     if [ -f configure ]; then \
