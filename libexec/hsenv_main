@@ -50,7 +50,9 @@ transplant_local_executable() (
   done
 
   for package in haskell98 haskell2010 ghc ghc-binary; do
-    transplant_max_version_dependencies $package
+    if ! transplant_max_version_dependencies $package; then
+      echo "  => Ignored"
+    fi
   done
 
   posterior_dir=$hsenv_install_root/posterior
