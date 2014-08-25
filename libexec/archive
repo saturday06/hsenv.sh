@@ -4,7 +4,7 @@ extract_archive() (
   archive=$1
   output=$2
 
-  tmp_dir=$_hsenv_private_extract_archive_tmp_dir/$$/$archive
+  tmp_dir=$_hsenv_private_extract_archive_tmp_dir/$$
   rm -fr $tmp_dir
   mkdir -p $tmp_dir
 
