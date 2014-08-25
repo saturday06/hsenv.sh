@@ -137,6 +137,8 @@ install_helper_scripts() (
 )
 
 install_bootstrap_cabal() (
+  bootstrap_dir=$hsenv_install_root/cabal/bootstrap
+  mkdir -p $bootstrap_dir/bin
   lib_versions=`GHC_PACKAGE_PATH=$hsenv_install_package_db $hsenv_install_root/ghc/bin/ghc-pkg field Cabal version`
   lib_version=`max_package_version $lib_versions`
   if [ -z "$lib_version" ]; then
@@ -166,9 +168,8 @@ install_bootstrap_cabal() (
 
   echo => cabal-install-$version
 
-  cabal_install_package_db=$hsenv_install_root/cabal/bootstrap/package.conf.d
+  cabal_install_package_db=$bootstrap_dir/package.conf.d
   echo cabal bootstrap package db: $cabal_install_package_db
-  mkdir -p $hsenv_install_root/cabal/bootstrap
   ghc_version_output=`GHC_PACKAGE_PATH=$hsenv_install_package_db $hsenv_install_root/ghc/bin/ghc-pkg --version`
   ghc_version=`echo $ghc_version_output | sed 's/^.\+ //'`
   if ! is_version $ghc_version; then
@@ -184,13 +185,13 @@ install_bootstrap_cabal() (
 
   url=https://hackage.haskell.org/package/cabal-install-$version/cabal-install-$version.tar.gz
   cabal_install_archive=$hsenv_install_root/cache/`url_basename $url`
-  cabal_install_extracted=$hsenv_install_root/cabal/bootstrap/src
+  cabal_install_extracted=$bootstrap_dir/src
   mkdir -p $hsenv_install_root/cache $cabal_install_extracted
   downloader $url $cabal_install_archive \
     && extract_archive $cabal_install_archive $cabal_install_extracted \
     && cd $cabal_install_extracted \
     && EXTRA_CONFIGURE_OPTS=--package-db=$cabal_install_package_db \
-       PREFIX=$hsenv_install_root/cabal/bootstrap \
+       PREFIX=$bootstrap_dir \
        PATH=$hsenv_install_root/ghc/bin:$PATH \
        ./bootstrap.sh --global
 )
