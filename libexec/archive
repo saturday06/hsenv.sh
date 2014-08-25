@@ -2,7 +2,7 @@
 
 ignorable_tar_error() (
   tar_error=$1
-  if !(echo $_hsenv_private_host_os | grep -E "^mingw" > /dev/null); then
+  if ! is_mingw; then
     cat $tar_error
     return 1
   fi
