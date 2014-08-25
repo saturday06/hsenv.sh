@@ -214,7 +214,7 @@ install_bootstrap_cabal() (
       ;;
   esac
 
-  echo => cabal-install-$version
+  echo Install: cabal-install-$version
 
   cabal_install_package_db=$bootstrap_dir/package.conf.d
   echo cabal bootstrap package db: $cabal_install_package_db
