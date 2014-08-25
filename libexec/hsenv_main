@@ -238,6 +238,7 @@ install_bootstrap_cabal() (
   downloader $url $cabal_install_archive \
     && extract_archive $cabal_install_archive $cabal_install_extracted \
     && cd $cabal_install_extracted \
+    && chmod u+x bootstrap.sh \
     && EXTRA_CONFIGURE_OPTS=--package-db=$cabal_install_package_db \
        PREFIX=$bootstrap_dir \
        PATH=$path_var_prependix:$PATH \
