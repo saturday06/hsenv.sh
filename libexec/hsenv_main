@@ -136,6 +136,39 @@ install_helper_scripts() (
   echo To activate the new environment use \`source $hsenv_install_root/bin/activate\'
 )
 
+install_bootstrap_cabal_mingw_archive() (
+  version=$1
+  tmp_dir=$bootstrap_dir/tmp
+  mkdir -p $tmp_dir
+  url=http://www.haskell.org/cabal/release/cabal-install-$version/cabal-$version-i386-unknown-mingw32.tar.gz
+  file=$tmp_dir/`url_basename $url`
+  if ! downloader $url $file; then
+    return 1
+  fi
+  extract_archive $file $bootstrap_dir/bin
+)
+
+install_bootstrap_cabal_mingw() (
+  lib_version=$1
+  case $lib_version in
+    1.20.*)
+      install_bootstrap_cabal_mingw_archive 1.20.0.3
+      return $?
+      ;;
+    1.18.*)
+      version=1.18.0.3
+      ;;
+    1.16.*|1.14.*)
+      version=0.14.0
+      ;;
+    *)
+      echo not supported version
+      return 1
+      ;;
+  esac
+  downloader http://www.haskell.org/cabal/release/cabal-install-$version/cabal.exe $bootstrap_dir/bin/cabal.exe
+)
+
 install_bootstrap_cabal() (
   bootstrap_dir=$hsenv_install_root/cabal/bootstrap
   mkdir -p $bootstrap_dir/bin
@@ -147,6 +180,10 @@ install_bootstrap_cabal() (
   fi
 
   echo Found: Cabal-$lib_version
+  if is_mingw; then
+    install_bootstrap_cabal_mingw $lib_version
+    return $?
+  fi
   case $lib_version in
     1.20.*)
       version=1.20.0.3
