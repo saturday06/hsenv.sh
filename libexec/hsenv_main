@@ -28,7 +28,7 @@ transplant_local_executable() (
   hsenv_install_package_db=$hsenv_install_root/package.conf.d
   echo Initializing GHC Package database at $hsenv_install_package_db
   version_output=`ghc-pkg --version`
-  version=`echo $version_output | sed 's/^.\+ //'`
+  version=`ghc_pkg_version "$ghc_version_output"`
   if ! is_version $version; then
     echo Couldn\'t extract ghc-pkg version number from: $version_output
     exit 1
@@ -233,7 +233,7 @@ install_bootstrap_cabal() (
   cabal_install_package_db=$bootstrap_dir/package.conf.d
   echo cabal bootstrap package db: $cabal_install_package_db
   ghc_version_output=`GHC_PACKAGE_PATH=$hsenv_install_package_db $hsenv_install_root/ghc/bin/ghc-pkg --version`
-  ghc_version=`echo $ghc_version_output | sed 's/^.\+ //'`
+  ghc_version=`ghc_pkg_version "$ghc_version_output"`
   if ! is_version $ghc_version; then
     echo Couldn\'t extract ghc-pkg version number from: $ghc_version_output
     exit 1

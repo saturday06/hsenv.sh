@@ -84,4 +84,8 @@ test_dependency_to_package_version() {
   assertEquals "1.0" "`dependency_to_package_version foo-1a-1.0-95dc0c72a075ab56f8cdd74470fc7c3d`"
 }
 
+test_ghc_pkg_version() {
+  assertEquals "7.8.3" "`ghc_pkg_version 'GHC package manager version 7.8.3'`"
+}
+
 . shunit2/src/shunit2

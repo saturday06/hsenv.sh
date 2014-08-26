@@ -65,3 +65,7 @@ max_package_version() (
     printf max_str
   }' $*
 )
+
+ghc_pkg_version() (
+  echo $1 | sed 's/^.* //'
+)
