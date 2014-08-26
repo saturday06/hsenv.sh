@@ -31,9 +31,9 @@ else
   exit 1
 fi
 
-EGREP() {
+EGREP() (
   $HSENV_EGREP_COMMAND $HSENV_EGREP_OPTION "$@"
-}
+)
 
 if awk 'BEGIN{sub(/foo/, "")}' 2> /dev/null; then
   HSENV_NAWK_COMMAND=awk
