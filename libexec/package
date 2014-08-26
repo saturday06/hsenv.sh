@@ -13,7 +13,7 @@ dependency_to_package_name_and_version() (
 )
 
 dependency_to_package_name_and_space_and_version() (
-  awk 'BEGIN {
+  NAWK 'BEGIN {
     dep = ARGV[1]
     sub(/^builtin_/, "", dep)
     len = split(dep, dep_words, "-")
@@ -45,7 +45,7 @@ dependencies_to_package_name_and_version() (
 )
 
 max_package_version() (
-  awk 'BEGIN {
+  NAWK 'BEGIN {
     for (a = 1; a <= ARGC; a++) {
       str = ARGV[a]
       values_length = split(str, values, ".")

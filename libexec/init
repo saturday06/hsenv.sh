@@ -34,3 +34,16 @@ fi
 EGREP() {
   $HSENV_EGREP_COMMAND $HSENV_EGREP_OPTION "$@"
 }
+
+if awk 'BEGIN{sub(/foo/, "")}' 2> /dev/null; then
+  HSENV_NAWK_COMMAND=awk
+elif has_command nawk; then
+  HSENV_NAWK_COMMAND=nawk
+else
+  echo "error: \`nawk\' required"
+  exit 1
+fi
+
+NAWK() (
+  $HSENV_NAWK_COMMAND "$@"
+)
