@@ -10,5 +10,5 @@ else
 fi
 
 is_mingw() (
-  echo $_hsenv_private_host_os | grep -E "^mingw" > /dev/null
+  echo $_hsenv_private_host_os | EGREP "^mingw" > /dev/null
 )

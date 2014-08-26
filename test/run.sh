@@ -28,7 +28,7 @@ run_test() (
       exit 1
     fi
     for r in "$error_regexp1" "$error_regexp2"; do
-      if grep -E "$r" $tmpdir/test_result.txt > /dev/null; then
+      if grep "$r" $tmpdir/test_result.txt > /dev/null; then
         [ "$HSENV_TEST_COLOR" = "yes" ] && echo "$esc[31;1m"
         echo "Error regexp: /$r/ found"
         echo "FAILED"

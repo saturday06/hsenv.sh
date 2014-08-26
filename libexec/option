@@ -65,11 +65,11 @@ parse() {
 }
 
 is_version() (
-  echo $* | grep -E "^[0-9]+(\.[0-9]+)*$" > /dev/null
+  echo $* | EGREP "^[0-9]+(\.[0-9]+)*$" > /dev/null
 )
 
 is_url() (
-  echo $* | grep -E "^https?://.+$" > /dev/null
+  echo $* | EGREP "^https?://.+$" > /dev/null
 )
 
 installation_of() (
