@@ -297,7 +297,7 @@ install_local_file() (
     echo Oops!
     exit 1
   fi
-  hsenv_install_package_db=`$hsenv_install_root/ghc/bin/ghc --print-global-package-db | tr \\\\ /`
+  hsenv_install_package_db=`$hsenv_install_root/ghc/bin/ghc --print-global-package-db | tr '\\\\' /`
   if [ -z "$hsenv_install_package_db" ]; then
     echo Oops!
     exit 1
