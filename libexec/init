@@ -15,3 +15,8 @@ export _hsenv_private_extract_archive_tmp_dir="${_hsenv_private_tmp_dir}/extract
 . "$_hsenv_private_libexec_dir/package"
 . "$_hsenv_private_libexec_dir/downloader"
 . "$_hsenv_private_libexec_dir/archive"
+
+export HSENV_PV_COMMAND=cat
+if has_command pv; then
+  export HSENV_PV_COMMAND=pv
+fi
