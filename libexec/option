@@ -5,7 +5,6 @@ parse() {
   export HSENV_NAME=
   export HSENV_VERBOSE=0
   export HSENV_COMMAND=hsenv_main
-  export HSENV_MAKE_COMMAND=make
   export HSENV_PS1_INDICATOR=true
   export HSENV_SANITY_CHECK=true
   export HSENV_SHARE_CABAL_CACHE=true
@@ -43,6 +42,10 @@ parse() {
         ;;
       --make-cmd=*)
         HSENV_MAKE_COMMAND=${parsed_option#*=}
+        shift
+        ;;
+      --tar-cmd=*)
+        HSENV_TAR_COMMAND=${parsed_option#*=}
         shift
         ;;
       --no-ps1-indicator)

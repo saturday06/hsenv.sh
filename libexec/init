@@ -47,3 +47,13 @@ fi
 NAWK() (
   $HSENV_NAWK_COMMAND "$@"
 )
+
+export HSENV_MAKE_COMMAND=make
+if has_command gmake; then
+  HSENV_MAKE_COMMAND=gmake
+fi
+
+export HSENV_TAR_COMMAND=tar
+if has_command gtar; then
+  HSENV_TAR_COMMAND=gtar
+fi
