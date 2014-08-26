@@ -109,15 +109,26 @@ transplant_dependencies() (
 )
 
 filter_install() (
+  CABAL_DIR=$hsenv_install_root/cabal
+  HACKAGE_CACHE=$hsenv_install_root/cabal/packages
+  mkdir -p $CABAL_DIR $HACKAGE_CACHE
+  if is_mingw; then
+    CABAL_DIR=`cd $CABAL_DIR && $COMSPEC /c cd | tr '\\\\' /`
+    HACKAGE_CACHE=`cd $HACKAGE_CACHE && $COMSPEC /c cd | tr '\\\\' /`
+    PATH_SEPARATOR=";"
+  else
+    PATH_SEPARATOR=:
+  fi
   cat $1 \
-    | sed "s;<HSENV>;${hsenv_work_dir};g" \
-    | sed "s;<HSENV_DIR>;${hsenv_install_root};g" \
-    | sed "s;<HSENV_NAME>;${HSENV_NAME};g" \
-    | sed "s;<MODIFY_PS1>;${HSENV_PS1_INDICATOR};g" \
-    | sed "s;<HACKAGE_CACHE>;${hsenv_install_root}/cabal/packages;g" \
-    | sed "s;<CABAL_DIR>;${hsenv_install_root}/cabal;g" \
-    | sed "s;<CABAL_CONFIG>;${hsenv_install_root}/cabal/config;g" \
-    | sed "s;<GHC_PACKAGE_PATH>;${hsenv_install_package_db};g" \
+    | sed "s|<HSENV>|$hsenv_work_dir|g" \
+    | sed "s|<HSENV_DIR>|$hsenv_install_root|g" \
+    | sed "s|<HSENV_NAME>|$HSENV_NAME|g" \
+    | sed "s|<MODIFY_PS1>|$HSENV_PS1_INDICATOR|g" \
+    | sed "s|<HACKAGE_CACHE>|$HACKAGE_CACHE|g" \
+    | sed "s|<CABAL_DIR>|$CABAL_DIR|g" \
+    | sed "s|<CABAL_CONFIG>|$hsenv_install_root/cabal/config|g" \
+    | sed "s|<GHC_PACKAGE_PATH>|$hsenv_install_package_db|g" \
+    | sed "s|<PATH_SEPARATOR>|$PATH_SEPARATOR|g" \
     > $2
 )
 

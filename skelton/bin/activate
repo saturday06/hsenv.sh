@@ -101,13 +101,14 @@ then
 fi
 
 export HASKELL_PACKAGE_SANDBOX="`<<HSENV_DIR>/ghc_package_path_var`"
+export PATH_SEPARATOR="<PATH_SEPARATOR>"
 
-GHC_PACKAGE_PATH_REPLACEMENT="$(cat <HSENV_DIR>/ghc_package_path_var | sed -e 's/^/:/' -e 's/::*/:/g' -e 's/:\s*$//')"
+GHC_PACKAGE_PATH_REPLACEMENT=$(cat <HSENV_DIR>/ghc_package_path_var | sed -e "s/^/$PATH_SEPARATOR/" -e "s/$PATH_SEPARATOR$PATH_SEPARATOR*/$PATH_SEPARATOR/g" -e "s/$PATH_SEPARATOR\\s*$//")
 
 replace_pkg () {
   replacement=$1
 
-  echo "$GHC_PACKAGE_PATH_REPLACEMENT" | sed -e "s/:/ $replacement/g"
+  echo "$GHC_PACKAGE_PATH_REPLACEMENT" | sed -e "s/$PATH_SEPARATOR/ $replacement/g"
 }
 
 export PACKAGE_DB_FOR_CABAL="$(replace_pkg '--package-db=')"
