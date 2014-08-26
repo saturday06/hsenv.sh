@@ -55,7 +55,7 @@ extract_archive() (
 
   dir_count=`cd $tmp_dir && ls | wc -l`
   if [ $dir_count != "1" ]; then
-    echo "extract archive \`$archive\' failed. Number of root directories is not 1 but $dir_count."
+    echo "extract archive \`$archive' failed. Number of root directories is not 1 but $dir_count."
     return 1
   fi
   rm -fr $output
