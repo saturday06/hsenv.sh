@@ -53,7 +53,7 @@ extract_archive() (
     return $extract_result
   fi
 
-  dir_count=`cd $tmp_dir && ls | wc -l`
+  dir_count=`cd $tmp_dir && ls | wc -l | tr -d "[:space:]"`
   if [ $dir_count != "1" ]; then
     echo "extract archive \`$archive' failed. Number of root directories is not 1 but $dir_count."
     return 1
