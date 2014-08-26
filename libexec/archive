@@ -20,8 +20,9 @@ ignorable_tar_error() (
 )
 
 extract_tar() (
+  tmp_dir=$1
   tar_error=$_hsenv_private_extract_archive_tmp_dir/$$.error
-  $HSENV_PV_COMMAND | LC_ALL=C tar xf - -C $1 2> $tar_error
+  $HSENV_PV_COMMAND | (cd $tmp_dir && LC_ALL=C tar xf -) 2> $tar_error
   result=$?
   if test $result -ne 0 && ignorable_tar_error $tar_error; then
     return 0
