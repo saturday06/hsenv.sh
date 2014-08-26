@@ -20,6 +20,10 @@ prepare_base_system() (
   else
     url=`binary_url $version`
   fi
+  if [ -z "$url" ]; then
+    # Oops!
+    return 0
+  fi
   file=`url_basename $url`
   downloader $url $tmp_dir/$file || return 1
   extract_archive $tmp_dir/$file $src_dir && \
