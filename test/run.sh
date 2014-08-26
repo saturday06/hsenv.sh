@@ -4,7 +4,7 @@ cd `dirname $0`
 
 run_test() (
   tmpdir=../tmp/run_test
-  esc=`awk 'BEGIN { printf("%c", 27) }'`
+  esc=`awk 'BEGIN { printf("%c", 27); exit 0 }'`
   rm -fr $tmpdir
   mkdir -p $tmpdir
   echo HSENV_TEST_SHELL=$HSENV_TEST_SHELL
