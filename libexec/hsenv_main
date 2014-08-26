@@ -131,6 +131,9 @@ install_helper_scripts() (
   filter_install $_hsenv_private_root_dir/skelton/bin/activate $default_bin/activate
   echo $hsenv_install_package_db | tr -d '\r\n' > $hsenv_install_root/ghc_package_path_var
   path_var_prependix=$prior_bin:$cabal_bin:$hsenv_install_root/ghc/bin
+  if is_mingw ; then
+    path_var_prependix=$path_var_prependix:$hsenv_install_root/ghc/mingw/bin
+  fi
   if $HSENV_BOOTSTRAP_CABAL ; then
     path_var_prependix=$path_var_prependix:$hsenv_install_root/cabal/bootstrap/bin
   fi
