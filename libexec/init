@@ -27,7 +27,7 @@ if echo "foo" | grep -E "^foo?$" > /dev/null 2> /dev/null; then
 elif has_command egrep; then
   HSENV_EGREP_COMMAND=egrep
 else
-  echo "error: \`grep -E\' or \`egrep\' required"
+  echo "error: \`grep -E' or \`egrep' required"
   exit 1
 fi
 
@@ -40,7 +40,7 @@ if awk 'BEGIN{sub(/foo/, "")}' 2> /dev/null; then
 elif has_command nawk; then
   HSENV_NAWK_COMMAND=nawk
 else
-  echo "error: \`nawk\' required"
+  echo "error: \`nawk' required"
   exit 1
 fi
 
