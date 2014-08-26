@@ -4,51 +4,37 @@ SHUNIT_PARENT=$0
 . `dirname $0`/init.sh
 . `dirname $0`/../libexec/downloader
 
-prepare_base_system_from_source() (
+prepare_base_system() (
   version=$1
-  tmp_dir=$_hsenv_test_tmp_dir/prepare_base_system
-  src_dir=$_hsenv_test_tmp_dir/src
-  base_dir=$_hsenv_test_tmp_dir/base_system
-  url=`source_url $version`
+  tmp_dir=$_hsenv_test_tmp_dir/transplant
+  src_dir=$tmp_dir/src
+  base_dir=$tmp_dir/base_system
+  if has_command $base_dir/bin/ghc; then
+    return 0
+  fi
+
+  rm -fr $tmp_dir
+  mkdir -p $tmp_dir
+  if has_command ghc && ! is_mingw; then
+    url=`source_url $version`
+  else
+    url=`binary_url $version`
+  fi
   file=`url_basename $url`
-  rm -fr $src_dir
-  mkdir -p $base_dir $tmp_dir
   downloader $url $tmp_dir/$file || return 1
   extract_archive $tmp_dir/$file $src_dir && \
-    cd $src_dir && \
-    ./configure --prefix=$base_dir && \
-    ($HSENV_TEST_MAKE || true) && \
-    $HSENV_TEST_MAKE install
-)
-
-prepare_base_system_from_binary() (
-  version=$1
-  tmp_dir=$_hsenv_test_tmp_dir/prepare_base_system
-  src_dir=$_hsenv_test_tmp_dir/precompiled
-  base_dir=$_hsenv_test_tmp_dir/base_system
-  url=`binary_url $version`
-  file=`url_basename $url`
-  mkdir -p $base_dir $tmp_dir $src_dir
-  downloader $url $tmp_dir/$file || return 1
-  cd $src_dir
-  (bzip2 -cd $tmp_dir/$file | tar xf -) && \
-    cd ghc-$version && \
-    if [ -e configure ]; then \
+    if [ -e $src_dir/configure ]; then \
+      cd $src_dir && \
       ./configure --prefix=$base_dir && \
+      ($HSENV_TEST_MAKE || true) && \
       $HSENV_TEST_MAKE install
     else
-      cp -fr * $base_dir
+      mv $src_dir $base_dir
     fi
 )
 
 test_transplant() {
-  if ! has_command $_hsenv_test_tmp_dir/base_system/bin/ghc; then
-    if has_command ghc; then
-      prepare_base_system_from_source 7.8.3
-    else
-      prepare_base_system_from_binary 7.8.3
-    fi
-  fi
+  prepare_base_system 7.8.3
   assertTrue $?
 }
 
