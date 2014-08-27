@@ -45,11 +45,11 @@ dependencies_to_package_name_and_version() (
 )
 
 max_package_version() (
-  sort_package_version $* | tail -n 1
+  sort_package_version $* | tail -1
 )
 
 min_package_version() (
-  sort_package_version $* | head -n 1
+  sort_package_version $* | head -1
 )
 
 ghc_pkg_version() (
