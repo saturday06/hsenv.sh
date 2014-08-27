@@ -163,6 +163,7 @@ install_helper_scripts() (
 
 install_bootstrap_cabal_mingw_archive() (
   version=$1
+  echo Install: cabal-install-$version
   tmp_dir=$bootstrap_dir/tmp
   mkdir -p $tmp_dir
   url=http://www.haskell.org/cabal/release/cabal-install-$version/cabal-$version-i386-unknown-mingw32.tar.gz
@@ -191,6 +192,7 @@ install_bootstrap_cabal_mingw() (
       return 1
       ;;
   esac
+  echo Install: cabal-install-$version
   downloader http://www.haskell.org/cabal/release/cabal-install-$version/cabal.exe $bootstrap_dir/bin/cabal.exe
 )
 
