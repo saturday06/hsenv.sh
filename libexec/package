@@ -45,25 +45,7 @@ dependencies_to_package_name_and_version() (
 )
 
 max_package_version() (
-  NAWK 'BEGIN {
-    for (a = 1; a <= ARGC; a++) {
-      str = ARGV[a]
-      values_length = split(str, values, ".")
-      if (!match(str, /^[0-9]+(\.[0-9]+)*$/)) {
-        continue
-      }
-      max_values_length = split(max_str, max_values, ".")
-      for (b = 1; b <= values_length; b++) {
-        if (b > max_values_length || values[b] > max_values[b] + 0) {
-          max_str = str
-          break
-        } else if (values[b] + 0 < max_values[b] + 0) {
-          break
-        }
-      }
-    }
-    printf max_str
-  }' $*
+  sort_package_version $* | tail -n 1
 )
 
 ghc_pkg_version() (
