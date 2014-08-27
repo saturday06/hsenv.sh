@@ -9,6 +9,9 @@ Flags:
 --ghc=FILE                Use GHC from provided tarball
                           (e.g. ghc-7.0.4-i386-unknown-linux.tar.bz2)
                           (defaults to system's copy of GHC)
+--bootstrap-cabal         Bootstrap cabal-install inside virtual environment
+                          (Use this if you don't have cabal-install installed
+                          or it's not on your \$PATH)
 -h, --help                Show this help message
 --make-cmd=CMD            Used as make substitute for installing GHC from tarball
                           (e.g. gmake)
