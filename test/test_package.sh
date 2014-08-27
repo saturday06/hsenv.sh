@@ -5,35 +5,16 @@ SHUNIT_PARENT=$0
 . `dirname $0`/../libexec/package
 
 test_max_package_version() {
-  versions="1 2 3 2"
-  assertEquals 3 "`max_package_version $versions`"
-
-  versions="12 2 3 2"
-  assertEquals 12 "`max_package_version $versions`"
-
-  versions="1.2 1.2.0 1.1"
-  assertEquals 1.2.0 "`max_package_version $versions`"
-
-  versions="2.9 3"
-  assertEquals 3 "`max_package_version $versions`"
-
-  versions="0.2.9 0.3"
-  assertEquals 0.3 "`max_package_version $versions`"
-
-  versions="0.2.9 0x3"
-  assertEquals 0.2.9 "`max_package_version $versions`"
-
-  versions="0.2.9 0.3."
-  assertEquals 0.2.9 "`max_package_version $versions`"
-
-  versions="0.2.9 .3"
-  assertEquals 0.2.9 "`max_package_version $versions`"
-
-  versions="version: 0.3 version: 0.2"
-  assertEquals 0.3 "`max_package_version $versions`"
-
-  versions="aa bb cc"
-  assertEquals "" "`max_package_version $versions`"
+  assertEquals 3 "`max_package_version 1 2 3 2`"
+  assertEquals 12 "`max_package_version 12 2 3 2`"
+  assertEquals 1.2.0 "`max_package_version 1.2 1.2.0 1.1`"
+  assertEquals 3 "`max_package_version 2.9 3`"
+  assertEquals 0.3 "`max_package_version 0.2.9 0.3`"
+  assertEquals 0.2.9 "`max_package_version 0.2.9 0x3`"
+  assertEquals 0.2.9 "`max_package_version 0.2.9 0.3.`"
+  assertEquals 0.2.9 "`max_package_version 0.2.9 .3`"
+  assertEquals 0.3 "`max_package_version version: 0.3 version: 0.2`"
+  assertEquals "" "`max_package_version aa bb cc`"
 }
 
 test_dependencies_to_package_name_and_version() {
