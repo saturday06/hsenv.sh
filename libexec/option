@@ -81,8 +81,8 @@ installation_of() (
   elif is_version $1; then
     echo install_remote_source
   elif is_url $1; then
-    echo install_remote_binary
+    echo install_remote
   else
-    echo install_local_binary
+    echo install_local
   fi
 )

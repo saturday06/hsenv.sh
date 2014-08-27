@@ -272,7 +272,7 @@ install_remote_url() (
     echo Oops!
     exit 1
   fi
-  install_local_file $file
+  install_local $file
 )
 
 install_remote_source() (
@@ -280,15 +280,11 @@ install_remote_source() (
   install_remote_url `source_url $HSENV_GHC`
 )
 
-install_remote_binary() (
+install_remote() (
   install_remote_url $HSENV_GHC
 )
 
-install_local_binary() (
-  install_local_file $HSENV_GHC
-)
-
-install_local_file() (
+install_local() (
   file=$1
   if [ ! -f $file ]; then
     echo ... not found
