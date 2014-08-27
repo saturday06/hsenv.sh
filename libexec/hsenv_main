@@ -28,7 +28,7 @@ transplant_local_executable() (
   hsenv_install_package_db=$hsenv_install_root/package.conf.d
   echo Initializing GHC Package database at $hsenv_install_package_db
   version_output=`ghc-pkg --version`
-  version=`ghc_pkg_version "$ghc_version_output"`
+  version=`ghc_pkg_version "$version_output"`
   if ! is_version $version; then
     echo Couldn\'t extract ghc-pkg version number from: $version_output
     exit 1
