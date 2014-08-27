@@ -126,7 +126,7 @@ filter_install() (
     | sed "s|<MODIFY_PS1>|$HSENV_PS1_INDICATOR|g" \
     | sed "s|<HACKAGE_CACHE>|$HACKAGE_CACHE|g" \
     | sed "s|<CABAL_DIR>|$CABAL_DIR|g" \
-    | sed "s|<CABAL_CONFIG>|$hsenv_install_root/cabal/config|g" \
+    | sed "s|<CABAL_CONFIG>|$CABAL_DIR/config|g" \
     | sed "s|<GHC_PACKAGE_PATH>|$hsenv_install_package_db|g" \
     | sed "s|<PATH_SEPARATOR>|$PATH_SEPARATOR|g" \
     > $2
