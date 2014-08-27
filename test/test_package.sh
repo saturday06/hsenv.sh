@@ -17,6 +17,19 @@ test_max_package_version() {
   assertEquals "" "`max_package_version aa bb cc`"
 }
 
+test_min_package_version() {
+  assertEquals 1 "`min_package_version 1 2 3 2`"
+  assertEquals 2 "`min_package_version 12 2 3 2`"
+  assertEquals 1.1 "`min_package_version 1.2 1.2.0 1.1`"
+  assertEquals 2.9 "`min_package_version 2.9 3`"
+  assertEquals 0.2.9 "`min_package_version 0.2.9 0.3`"
+  assertEquals 0.2.9 "`min_package_version 0.2.9 0x3`"
+  assertEquals 0.2.9 "`min_package_version 0.2.9 0.3.`"
+  assertEquals 0.2.9 "`min_package_version 0.2.9 .3`"
+  assertEquals 0.2 "`min_package_version version: 0.3 version: 0.2`"
+  assertEquals "" "`min_package_version aa bb cc`"
+}
+
 test_dependencies_to_package_name_and_version() {
   deps=`cat <<DEPS
 depends: ghc-prim-0.3.1.0-95dc0c72a075ab56f8cdd74470fc7c3d

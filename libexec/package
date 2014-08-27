@@ -48,6 +48,10 @@ max_package_version() (
   sort_package_version $* | tail -n 1
 )
 
+min_package_version() (
+  sort_package_version $* | head -n 1
+)
+
 ghc_pkg_version() (
   echo $1 | sed 's/^.* //'
 )
