@@ -175,7 +175,7 @@ install_bootstrap_cabal_mingw_archive() (
 
 install_bootstrap_cabal_mingw() (
   lib_version=$1
-  case $lib_version in
+  case `min_package_version $lib_version 1.20.0.2` in
     1.20.*)
       install_bootstrap_cabal_mingw_archive 1.20.0.3
       return $?
@@ -209,7 +209,7 @@ install_bootstrap_cabal() (
     install_bootstrap_cabal_mingw $lib_version
     return $?
   fi
-  case $lib_version in
+  case `min_package_version $lib_version 1.20.0.2` in
     1.20.*)
       version=1.20.0.3
       ;;
