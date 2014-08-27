@@ -25,5 +25,13 @@ Flags:
 --very-verbose            Print some more debugging info
 
 Creates Virtual Haskell Environment in the current directory.
-All files will be stored in the .hsenv_ENVNAME/ subdirectory.
+All files will be stored in the .hsenv[_NAME]/ subdirectory.
+
+To activate a sandbox in the current directory, run:
+
+    source .hsenv/bin/activate
+
+To deactivate an active sandbox, run:
+
+    deactivate_hsenv
 USAGE
