@@ -16,7 +16,7 @@ fi
 
 echo Install to $hsenv_install_root
 install_method=`installation_of $HSENV_GHC`
-echo Using \`$install_method\'
+echo Using \`$install_method\' method
 
 transplant_local_executable() (
   if ! has_command ghc ; then
