@@ -158,7 +158,7 @@ install_helper_scripts() (
   echo $path_var_prependix | tr -d '\r\n' > $hsenv_install_root/path_var_prependix
 
   echo
-  echo To activate the new environment use \`source $hsenv_install_root/bin/activate\'
+  echo To activate the new environment use \`source `basename $hsenv_install_root`/bin/activate\'
 )
 
 install_bootstrap_cabal_mingw_archive() (
