@@ -88,4 +88,59 @@ test_ghc_pkg_version() {
   assertEquals "7.8.3" "`ghc_pkg_version 'GHC package manager version 7.8.3'`"
 }
 
+test_sort_package_version() {
+  assertEquals "" "`sort_package_version 'foo'`"
+  assertEquals "1.0" "`sort_package_version '1.0'`"
+
+  assertEquals "\
+1.0
+2.0\
+" "`sort_package_version '1.0 2.0'`"
+
+  assertEquals "\
+1.0
+1.5
+2.0\
+" "`sort_package_version '1.0 2.0 1.5'`"
+
+  assertEquals "\
+1
+2
+2
+3\
+" "`sort_package_version 1 2 3 2`"
+
+  assertEquals "\
+2
+2
+3
+12\
+" "`sort_package_version 12 2 3 2`"
+
+assertEquals "\
+1.1
+1.2
+1.2.0\
+" "`sort_package_version 1.2 1.2.0 1.1`"
+
+assertEquals "\
+2.9
+3\
+" "`sort_package_version 2.9 3`"
+
+assertEquals "\
+0.2.9
+0.3\
+" "`sort_package_version 0.2.9 0.3`"
+
+assertEquals 0.2.9 "`sort_package_version 0.2.9 0x3`"
+assertEquals 0.2.9 "`sort_package_version 0.2.9 0.3.`"
+assertEquals 0.2.9 "`sort_package_version 0.2.9 .3`"
+assertEquals "\
+0.2
+0.3\
+" "`sort_package_version version: 0.3 version: 0.2`"
+assertEquals "" "`sort_package_version aa bb cc`"
+}
+
 . shunit2/src/shunit2
