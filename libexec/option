@@ -61,7 +61,8 @@ parse() {
         shift
         ;;
       *)
-        # unknown option
+        echo error: unknown option \`$parsed_option\'
+        exit 1
         ;;
     esac
   done
