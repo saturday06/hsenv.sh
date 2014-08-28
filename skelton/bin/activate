@@ -101,7 +101,7 @@ then
 fi
 
 export HASKELL_PACKAGE_SANDBOX="`<<HSENV_DIR>/ghc_package_path_var`"
-export PATH_SEPARATOR="<PATH_SEPARATOR>"
+PATH_SEPARATOR="<PATH_SEPARATOR>"
 
 GHC_PACKAGE_PATH_REPLACEMENT=$(cat <HSENV_DIR>/ghc_package_path_var | sed -e "s/^/$PATH_SEPARATOR/" -e "s/$PATH_SEPARATOR$PATH_SEPARATOR*/$PATH_SEPARATOR/g" -e "s/$PATH_SEPARATOR\\s*$//")
 
@@ -127,6 +127,7 @@ fi
 unset -v GHC_VERSION_OUTPUT
 unset -v GHC_VERSION_NUMBER
 unset -v PKG_DB_OPT_SUFFIX
+unset -v PATH_SEPARATOR
 unset -v GHC_PACKAGE_PATH_REPLACEMENT
 
 if [ -n "$BASH" -o -n "$ZSH_VERSION" ]; then
