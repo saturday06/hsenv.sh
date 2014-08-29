@@ -8,43 +8,43 @@ test_parse() {
   parse
   assertEquals "" "$HSENV_NAME"
   assertEquals "" "$HSENV_GHC"
-  assertEquals "0" "$HSENV_VERBOSE"
+  assertEquals "3" "$HSENV_LOG_LEVEL"
   assertEquals "hsenv_main" "$HSENV_COMMAND"
 
   parse --verbose
   assertEquals "" "$HSENV_NAME"
   assertEquals "" "$HSENV_GHC"
-  assertEquals "1" "$HSENV_VERBOSE"
+  assertEquals "4" "$HSENV_LOG_LEVEL"
 
   parse --very-verbose
   assertEquals "" "$HSENV_NAME"
   assertEquals "" "$HSENV_GHC"
-  assertEquals "2" "$HSENV_VERBOSE"
+  assertEquals "5" "$HSENV_LOG_LEVEL"
 
   parse --very-verbose --verbose
   assertEquals "" "$HSENV_NAME"
   assertEquals "" "$HSENV_GHC"
-  assertEquals "2" "$HSENV_VERBOSE"
+  assertEquals "5" "$HSENV_LOG_LEVEL"
 
   parse --verbose --very-verbose
   assertEquals "" "$HSENV_NAME"
   assertEquals "" "$HSENV_GHC"
-  assertEquals "2" "$HSENV_VERBOSE"
+  assertEquals "5" "$HSENV_LOG_LEVEL"
 
   parse --name=foo
   assertEquals "foo" "$HSENV_NAME"
   assertEquals "" "$HSENV_GHC"
-  assertEquals "0" "$HSENV_VERBOSE"
+  assertEquals "3" "$HSENV_LOG_LEVEL"
 
   parse --ghc=source
   assertEquals "" "$HSENV_NAME"
   assertEquals "source" "$HSENV_GHC"
-  assertEquals "0" "$HSENV_VERBOSE"
+  assertEquals "3" "$HSENV_LOG_LEVEL"
 
   parse --name=bar --ghc=http://example.com/foo.tar.gz --verbose
   assertEquals "bar" "$HSENV_NAME"
   assertEquals "http://example.com/foo.tar.gz" "$HSENV_GHC"
-  assertEquals "1" "$HSENV_VERBOSE"
+  assertEquals "4" "$HSENV_LOG_LEVEL"
 
   parse --version
   assertEquals "hsenv_version" "$HSENV_COMMAND"

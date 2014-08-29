@@ -1,9 +1,9 @@
 #!/bin/sh
 
-parse() {
+parse() { # No subshell
   export HSENV_GHC=
   export HSENV_NAME=
-  export HSENV_VERBOSE=0
+  export HSENV_LOG_LEVEL=3
   export HSENV_COMMAND=hsenv_main
   export HSENV_PS1_INDICATOR=true
   export HSENV_SANITY_CHECK=true
@@ -21,11 +21,11 @@ parse() {
         shift
         ;;
       -v|--verbose)
-        [ $HSENV_VERBOSE -lt 1 ] && HSENV_VERBOSE=1
+        [ $HSENV_LOG_LEVEL -lt 4 ] && HSENV_LOG_LEVEL=4
         shift
         ;;
       --very-verbose)
-        [ $HSENV_VERBOSE -lt 2 ] && HSENV_VERBOSE=2
+        [ $HSENV_LOG_LEVEL -lt 5 ] && HSENV_LOG_LEVEL=5
         shift
         ;;
       --version)
@@ -61,8 +61,7 @@ parse() {
         shift
         ;;
       *)
-        echo error: unknown option \`$parsed_option\'
-        exit 1
+        hsenv_abort Error: unknown option \`$parsed_option\'
         ;;
     esac
   done

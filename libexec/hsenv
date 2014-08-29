@@ -1,5 +1,8 @@
 #!/bin/sh
 
 . "`dirname $0`/../libexec/init"
+
+export hsenv_work_dir=`pwd`
+start_new_log
 parse $*
 $_hsenv_private_libexec_dir/$HSENV_COMMAND

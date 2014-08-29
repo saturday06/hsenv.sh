@@ -1,13 +1,86 @@
 #!/bin/sh
 
-_hsenv_private_warn() (
-  echo "[WARN] $*"
+start_new_log() (
+  rm -f $hsenv_work_dir/hsenv.log
+  touch $hsenv_work_dir/hsenv.log
 )
 
-_hsenv_private_debug() (
-  echo "[DEBUG] $*"
+move_log_to_install_dir() (
+  early_log=$hsenv_work_dir/hsenv.log
+  log=$hsenv_install_root/hsenv.log
+  if [ -f $early_log ]; then
+    mv $early_log $log
+  fi
 )
 
-_hsenv_private_info() (
-  echo "[INFO] $*"
+hsenv_log_file() (
+  if [ -z "$hsenv_work_dir" ]; then
+    echo Error: \$hsenv_work_dir not defined
+    exit 1
+  fi
+
+  early_log=$hsenv_work_dir/hsenv.log
+  if [ -f $early_log ]; then
+    echo $early_log
+    return
+  fi
+
+  if [ -z "$hsenv_install_root" ]; then
+    echo Error: \$hsenv_install_root not defined
+    exit 1
+  fi
+
+  echo $hsenv_install_root/hsenv.log
 )
+
+hsenv_log() (
+  log_level=$1
+  shift
+  from_stdin=false
+  if [ "$*" = "-" ]; then
+    from_stdin=true
+  fi
+  log_file=`hsenv_log_file`
+  if [ $log_level -le $HSENV_LOG_LEVEL ]; then
+    if $from_stdin; then
+      cat - | tee -a $log_file
+    else
+      echo "$@" | tee -a $log_file
+    fi
+  else
+    if $from_stdin; then
+      cat - >> $log_file
+    else
+      echo "$@" >> $log_file
+    fi
+  fi
+)
+
+hsenv_trace() (
+  hsenv_log 5 "$@"
+)
+
+hsenv_debug() (
+  hsenv_log 4 "$@"
+)
+
+hsenv_info() (
+  hsenv_log 3 "$@"
+)
+
+hsenv_warn() (
+  hsenv_log 2 "$@"
+)
+
+hsenv_error() (
+  hsenv_log 1 "$@"
+)
+
+hsenv_fatal() (
+  hsenv_log 0 "$@"
+)
+
+hsenv_abort() { # No subshell
+  hsenv_fatal "$@"
+  exit 1
+}

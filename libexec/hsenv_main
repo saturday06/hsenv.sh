@@ -2,56 +2,38 @@
 
 . $_hsenv_private_libexec_dir/init
 
-hsenv_work_dir=`pwd`
-if [ -z "$HSENV_NAME" ]; then
-  hsenv_install_root=$hsenv_work_dir/.hsenv
-else
-  hsenv_install_root=$hsenv_work_dir/.hsenv_$HSENV_NAME
-fi
-
-if [ -e "$hsenv_install_root" ]; then
-  echo There is already `basename $hsenv_install_root` directory at $hsenv_work_dir
-  exit 1
-fi
-
-echo Install to $hsenv_install_root
-install_method=`installation_of $HSENV_GHC`
-echo Using \`$install_method\' method
-
 transplant_local_executable() (
   if ! has_command ghc ; then
-    echo error: ghc is required.
-    exit 1
+    hsenv_abort Error: ghc is required.
   fi
-  mkdir -p $hsenv_install_root
 
   hsenv_install_package_db=$hsenv_install_root/package.conf.d
-  echo Initializing GHC Package database at $hsenv_install_package_db
+  hsenv_info Initializing GHC Package database at $hsenv_install_package_db
   version_output=`ghc-pkg --version`
   version=`ghc_pkg_version "$version_output"`
   if ! is_version $version; then
-    echo Couldn\'t extract ghc-pkg version number from: $version_output
-    exit 1
+    hsenv_abort Couldn\'t extract ghc-pkg version number from: $version_output
   fi
+  mkdir -p $hsenv_install_root
+  move_log_to_install_dir
   if [ `max_package_version 6.10.4 $version` = 6.10.4 ]; then
-    echo Detected GHC older than 6.12, initializing GHC_PACKAGE_PATH to file with '[]'
+    hsenv_debug Detected GHC older than 6.12, initializing GHC_PACKAGE_PATH to file with '[]'
     echo "[]" > $hsenv_install_package_db
   else
     ghc-pkg init $hsenv_install_package_db
   fi
 
-  echo Copying necessary packages from original GHC package database
+  hsenv_info Copying necessary packages from original GHC package database
 
   for package in base Cabal; do
     if ! transplant_max_version_dependencies $package; then
-      echo Oops!
-      exit 1
+      hsenv_abort failed
     fi
   done
 
   for package in haskell98 haskell2010 ghc ghc-binary; do
     if ! transplant_max_version_dependencies $package; then
-      echo "  => Ignored"
+      hsenv_debug "  => Ignored"
     fi
   done
 
@@ -79,19 +61,21 @@ transplant_local_executable() (
 
 transplant_max_version_dependencies() (
   package=$1
+  hsenv_debug "Checking if \`$package' is already installed."
   if ! ghc-pkg describe $package > /dev/null 2> /dev/null; then
-    echo Package \`$package\' not found
+    hsenv_debug "It's not."
     return 1
   fi
-  echo Checking the highest installed version of package $package
+  hsenv_debug "It is."
+
+  hsenv_debug Checking the highest installed version of package $package
   versions=`ghc-pkg field $package version`
   version=`max_package_version $versions`
-  if [ -n "$version" ]; then
-    echo Found: $version
-    package=$package-$version
-  else
-    echo Not found
+  if [ -z "$version" ]; then
+    hsenv_abort "Couldn't extract version string from: $versions"
   fi
+  hsenv_debug Found: $version
+  package=$package-$version
   transplant_dependencies $package
 )
 
@@ -104,8 +88,8 @@ transplant_dependencies() (
   for dep in `dependencies_to_package_name_and_version $depends`; do
     transplant_dependencies $dep
   done
-  echo "Copying package \`$dep' to Virtual Haskell Environment."
-  ghc-pkg describe $package | GHC_PACKAGE_PATH=$hsenv_install_package_db ghc-pkg register -
+  hsenv_debug "Copying package \`$dep' to Virtual Haskell Environment."
+  ghc-pkg describe $package | GHC_PACKAGE_PATH=$hsenv_install_package_db ghc-pkg register - | hsenv_debug -
 )
 
 filter_install() (
@@ -157,13 +141,13 @@ install_helper_scripts() (
   chmod u+x $prior_bin/cabal
   echo $path_var_prependix | tr -d '\r\n' > $hsenv_install_root/path_var_prependix
 
-  echo
-  echo To activate the new environment use \`source `basename $hsenv_install_root`/bin/activate\'
+  hsenv_info
+  hsenv_info To activate the new environment use \`source `basename $hsenv_install_root`/bin/activate\'
 )
 
 install_bootstrap_cabal_mingw_archive() (
   version=$1
-  echo Install: cabal-install-$version
+  hsenv_info Install: cabal-install-$version
   tmp_dir=$bootstrap_dir/tmp
   mkdir -p $tmp_dir
   url=http://www.haskell.org/cabal/release/cabal-install-$version/cabal-$version-i386-unknown-mingw32.tar.gz
@@ -188,11 +172,11 @@ install_bootstrap_cabal_mingw() (
       version=0.14.0
       ;;
     *)
-      echo not supported version
+      hsenv_warn Not supported version
       return 1
       ;;
   esac
-  echo Install: cabal-install-$version
+  hsenv_info Install: cabal-install-$version
   downloader http://www.haskell.org/cabal/release/cabal-install-$version/cabal.exe $bootstrap_dir/bin/cabal.exe
 )
 
@@ -202,11 +186,11 @@ install_bootstrap_cabal() (
   lib_versions=`GHC_PACKAGE_PATH=$hsenv_install_package_db $hsenv_install_root/ghc/bin/ghc-pkg field Cabal version`
   lib_version=`max_package_version $lib_versions`
   if [ -z "$lib_version" ]; then
-    echo Cabal package not found.
+    hsenv_warn Cabal package not found.
     return 1
   fi
 
-  echo Found: Cabal-$lib_version
+  hsenv_info Found: Cabal-$lib_version
   if is_mingw; then
     install_bootstrap_cabal_mingw $lib_version
     return $?
@@ -225,23 +209,23 @@ install_bootstrap_cabal() (
       version=0.14.0
       ;;
     *)
-      echo not supported version
+      hsenv_warn Not supported version
       return 1
       ;;
   esac
 
-  echo Install: cabal-install-$version
+  hsenv_info Install: cabal-install-$version
 
   cabal_install_package_db=$bootstrap_dir/package.conf.d
-  echo cabal bootstrap package db: $cabal_install_package_db
+  hsenv_debug Bootstrap package db: $cabal_install_package_db
   ghc_version_output=`GHC_PACKAGE_PATH=$hsenv_install_package_db $hsenv_install_root/ghc/bin/ghc-pkg --version`
   ghc_version=`ghc_pkg_version "$ghc_version_output"`
   if ! is_version $ghc_version; then
-    echo Couldn\'t extract ghc-pkg version number from: $ghc_version_output
+    hsenv_warn Couldn\'t extract ghc-pkg version number from: $ghc_version_output
     exit 1
   fi
   if [ `max_package_version 6.10.4 $ghc_version` = 6.10.4 ]; then
-    echo Detected GHC older than 6.12, initializing GHC_PACKAGE_PATH to file with '[]'
+    hsenv_debug Detected GHC older than 6.12, initializing GHC_PACKAGE_PATH to file with '[]'
     echo "[]" > $cabal_install_package_db
   else
     GHC_PACKAGE_PATH=$hsenv_install_package_db $hsenv_install_root/ghc/bin/ghc-pkg init $cabal_install_package_db
@@ -264,19 +248,19 @@ install_bootstrap_cabal() (
 
 install_remote_url() (
   url=$1
-  echo URL=$url
+  hsenv_info URL=$url
   cache_dir=$hsenv_install_root/cache
   file=$cache_dir/`url_basename $url`
   mkdir -p $cache_dir
+  move_log_to_install_dir
   if ! downloader $url $file ; then
-    echo Oops!
-    exit 1
+    hsenv_abort Failed
   fi
   install_local $file
 )
 
 install_remote_source() (
-  echo GHC version=$HSENV_GHC
+  hsenv_info GHC version=$HSENV_GHC
   install_remote_url `source_url $HSENV_GHC`
 )
 
@@ -287,11 +271,11 @@ install_remote() (
 install_local() (
   file=$1
   if [ ! -f $file ]; then
-    echo ... not found
-    exit 1
+    hsenv_abort Not found
   fi
   srcdir=$hsenv_install_root/src
   mkdir -p $hsenv_install_root/ghc
+  move_log_to_install_dir
   (extract_archive $file $srcdir) && \
     cd $srcdir && \
     if [ -f configure ]; then \
@@ -303,16 +287,26 @@ install_local() (
     fi
 
   if [ $? -ne 0 ]; then
-    echo Oops!
-    exit 1
+    hsenv_abort Failed
   fi
   hsenv_install_package_db=`$hsenv_install_root/ghc/bin/ghc --print-global-package-db | tr '\\\\' /`
   if [ -z "$hsenv_install_package_db" ]; then
-    echo Oops!
-    exit 1
+    hsenv_abort Failed
   fi
 
   install_helper_scripts
 )
 
+if [ -z "$HSENV_NAME" ]; then
+  export hsenv_install_root=$hsenv_work_dir/.hsenv
+else
+  export hsenv_install_root=$hsenv_work_dir/.hsenv_$HSENV_NAME
+fi
+if [ -e "$hsenv_install_root" ]; then
+  hsenv_abort There is already `basename $hsenv_install_root` directory at $hsenv_work_dir
+fi
+
+hsenv_info Install to $hsenv_install_root
+install_method=`installation_of $HSENV_GHC`
+hsenv_debug Using \`$install_method\' method
 $install_method
