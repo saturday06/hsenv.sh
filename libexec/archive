@@ -13,7 +13,7 @@ ignorable_tar_error() (
     $EGREP -v "tar: Archive value [0-9]+ is out of [gu]id_t range 0\.\.[0-9]+$" | \
     $EGREP -v "tar:? Exiting with failure status due to previous errors$" > $tar_error.filtered
   if [ -n "`cat $tar_error.filtered`" ]; then
-    cat $tar_error.filtered
+    cat $tar_error.filtered | hsenv_error -
     return 1
   fi
   return 0
