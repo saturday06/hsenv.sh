@@ -15,39 +15,3 @@ export HSENV_EXTRACT_ARCHIVE_DIR="$HSENV_TMP_DIR/extract_archive"
 . "$HSENV_LIBEXEC_DIR/package"
 . "$HSENV_LIBEXEC_DIR/downloader"
 . "$HSENV_LIBEXEC_DIR/archive"
-
-export PV=cat
-if has_command pv; then
-  export PV=pv
-fi
-
-if echo "foo" | grep -E "^foo?$" > /dev/null 2> /dev/null; then
-  HSENV_GREP_E() (
-    grep -E "$@"
-  )
-  export EGREP=HSENV_GREP_E
-elif has_command egrep; then
-  export EGREP=egrep
-else
-  echo "error: \`grep -E' or \`egrep' required"
-  exit 1
-fi
-
-if awk 'BEGIN{sub(/foo/, "")}' 2> /dev/null; then
-  export NAWK=awk
-elif has_command nawk; then
-  export NAWK=nawk
-else
-  echo "error: \`nawk' required"
-  exit 1
-fi
-
-export MAKE=make
-if has_command gmake; then
-  MAKE=gmake
-fi
-
-export TAR=tar
-if has_command gtar; then
-  TAR=gtar
-fi

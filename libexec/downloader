@@ -33,10 +33,6 @@ url_to_cache_name() (
   echo $1 | sed 's,/,%2F,g' | sed 's/:/%3A/g' | sed 's/;/%3B/g' | sed 's/\./%2E/g'
 )
 
-has_command() (
-  which $1 > /dev/null 2> /dev/null
-)
-
 downloader() (
   url=$1
   file=$2
