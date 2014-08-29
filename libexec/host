@@ -2,9 +2,9 @@
 
 export HSENV_HOST_COMBO=`$HSENV_LIBEXEC_DIR/config.guess`
 if [ "$HSENV_HOST_COMBO" != "" ]; then
-  export HSENV_HOST_CPU=`echo $_hsenv_private_host | awk -F- '{print $1}'`
-  export HSENV_HOST_VENDOR=`echo $_hsenv_private_host | awk -F- '{print $2}'`
-  export HSENV_HOST_OS=`echo $_hsenv_private_host | awk -F- '{print $3}'`
+  export HSENV_HOST_CPU=`echo $HSENV_HOST_COMBO | awk -F- '{print $1}'`
+  export HSENV_HOST_VENDOR=`echo $HSENV_HOST_COMBO | awk -F- '{print $2}'`
+  export HSENV_HOST_OS=`echo $HSENV_HOST_COMBO | awk -F- '{print $3}'`
 else
   _hsenv_private_warn "host environment detection (config.guess) failed"
 fi
