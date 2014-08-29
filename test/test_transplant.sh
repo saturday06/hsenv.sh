@@ -6,7 +6,7 @@ SHUNIT_PARENT=$0
 
 prepare_base_system() (
   version=$1
-  tmp_dir=$_hsenv_test_tmp_dir/transplant
+  tmp_dir=$HSENV_TEST_TMP_DIR/transplant
   src_dir=$tmp_dir/src
   base_dir=$tmp_dir/base_system
   if has_command $base_dir/bin/ghc; then

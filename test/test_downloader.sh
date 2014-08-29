@@ -9,9 +9,9 @@ test_source_url() {
 }
 
 test_binary_url() {
-  _hsenv_private_host_os=linux
+  HSENV_HOST_OS=linux
   assertEquals "http://www.haskell.org/ghc/dist/7.8.3/ghc-7.8.3-x86_64-unknown-linux-deb7.tar.bz2" "`binary_url 7.8.3`"
-  _hsenv_private_host_os=darwin
+  HSENV_HOST_OS=darwin
   assertEquals "http://www.haskell.org/ghc/dist/7.8.3/ghc-7.8.3-x86_64-apple-darwin.tar.bz2" "`binary_url 7.8.3`"
 }
 
@@ -28,7 +28,7 @@ test_url_to_cache_name() {
 }
 
 test_downloader() {
-  dir="$_hsenv_test_tmp_dir/downloader"
+  dir="$HSENV_TEST_TMP_DIR/downloader"
 
   if [ $HSENV_TEST_LEVEL -ge 1 ]; then
     rm -fr "$dir"
@@ -37,9 +37,9 @@ test_downloader() {
   mkdir -p "$dir"
   downloader http://saturday06.github.io/hsenv-teokure/test/cr_lf.bin $dir/cr_lf.bin
   assertTrue "downloader http://saturday06.github.io/hsenv-teokure/test/cr_lf.bin $dir/cr_lf.bin"
-  assertTrue "cmp $_hsenv_test_data_dir/cr_lf.bin $dir/cr_lf.bin"
+  assertTrue "cmp $HSENV_TEST_DATA_DIR/cr_lf.bin $dir/cr_lf.bin"
   assertTrue "downloader http://saturday06.github.io/hsenv-teokure/test/null_0xa5.bin $dir/null_0xa5.bin"
-  assertTrue "cmp $_hsenv_test_data_dir/null_0xa5.bin $dir/null_0xa5.bin"
+  assertTrue "cmp $HSENV_TEST_DATA_DIR/null_0xa5.bin $dir/null_0xa5.bin"
   assertFalse "downloader http://saturday06.github.io/hsenv-teokure/test/not.found.bin $dir/not.found.bin"
 }
 
@@ -48,7 +48,7 @@ test_downloader_tools() {
     return
   fi
 
-  tmp_dir="$_hsenv_test_tmp_dir/downloader_tools"
+  tmp_dir="$HSENV_TEST_TMP_DIR/downloader_tools"
   rm -fr "$tmp_dir"
   mkdir -p "$tmp_dir"
 
@@ -62,9 +62,9 @@ test_downloader_tools() {
       mkdir -p "$dir"
 
       assertTrue "$command http://saturday06.github.io/hsenv-teokure/test/cr_lf.bin $dir/cr_lf.bin"
-      assertTrue "cmp $_hsenv_test_data_dir/cr_lf.bin $dir/cr_lf.bin"
+      assertTrue "cmp $HSENV_TEST_DATA_DIR/cr_lf.bin $dir/cr_lf.bin"
       assertTrue "$command http://saturday06.github.io/hsenv-teokure/test/null_0xa5.bin $dir/null_0xa5.bin"
-      assertTrue "cmp $_hsenv_test_data_dir/null_0xa5.bin $dir/null_0xa5.bin"
+      assertTrue "cmp $HSENV_TEST_DATA_DIR/null_0xa5.bin $dir/null_0xa5.bin"
       assertFalse "$command http://saturday06.github.io/hsenv-teokure/test/not.found.bin $dir/not.found.bin"
     else
       ignored_downloaders="$ignored_downloaders $tool"

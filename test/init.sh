@@ -1,17 +1,17 @@
 #!/bin/sh
 
-export _hsenv_private_root_dir=$(cd `dirname $SHUNIT_PARENT`/..; pwd)
-. $_hsenv_private_root_dir/libexec/init
+export HSENV_ROOT_DIR=$(cd `dirname $SHUNIT_PARENT`/..; pwd)
+. $HSENV_ROOT_DIR/libexec/init
 
-PATH="$_hsenv_private_root_dir/bin:$PATH"
+PATH="$HSENV_ROOT_DIR/bin:$PATH"
 if [ -n "${ZSH_VERSION:-}" ]; then
   setopt shwordsplit
 fi
 
-_hsenv_test_tmp_dir="$_hsenv_private_root_dir/tmp/test"
-_hsenv_test_data_dir="$_hsenv_private_root_dir/test/data"
+HSENV_TEST_TMP_DIR="$HSENV_ROOT_DIR/tmp/test"
+HSENV_TEST_DATA_DIR="$HSENV_ROOT_DIR/test/data"
 
-mkdir -p $_hsenv_test_tmp_dir
+mkdir -p $HSENV_TEST_TMP_DIR
 
 if [ -z "$HSENV_TEST_LEVEL" ]; then
   HSENV_TEST_LEVEL=0

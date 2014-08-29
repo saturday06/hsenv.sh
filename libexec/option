@@ -41,11 +41,11 @@ parse() { # No subshell
         shift
         ;;
       --make-cmd=*)
-        HSENV_MAKE_COMMAND=${parsed_option#*=}
+        MAKE=${parsed_option#*=}
         shift
         ;;
       --tar-cmd=*)
-        HSENV_TAR_COMMAND=${parsed_option#*=}
+        TAR=${parsed_option#*=}
         shift
         ;;
       --no-ps1-indicator)
@@ -68,11 +68,11 @@ parse() { # No subshell
 }
 
 is_version() (
-  echo $* | EGREP "^[0-9]+(\.[0-9]+)*$" > /dev/null
+  echo $* | $EGREP "^[0-9]+(\.[0-9]+)*$" > /dev/null
 )
 
 is_url() (
-  echo $* | EGREP "^https?://.+$" > /dev/null
+  echo $* | $EGREP "^https?://.+$" > /dev/null
 )
 
 installation_of() (

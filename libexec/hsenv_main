@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. $_hsenv_private_libexec_dir/init
+. $HSENV_LIBEXEC_DIR/init
 
 transplant_local_executable() (
   if ! has_command ghc ; then
@@ -48,7 +48,7 @@ transplant_local_executable() (
     fi
   done
 
-  cp -fr $_hsenv_private_root_dir/skelton/ghc $hsenv_install_root/
+  cp -fr $HSENV_SKELTON_DIR/ghc $hsenv_install_root/
   for bin in c2hs cpphs haddock hpc hsc2hs; do
     abs_bin=`which $bin 2> /dev/null`
     if [ -n "$abs_bin" ]; then
@@ -123,7 +123,7 @@ install_helper_scripts() (
   cabal_bin=$hsenv_install_root/cabal/bin
 
   mkdir -p $prior_bin $posterior_bin $default_bin $cabal_bin
-  filter_install $_hsenv_private_root_dir/skelton/bin/activate $default_bin/activate
+  filter_install $HSENV_SKELTON_DIR/bin/activate $default_bin/activate
   echo $hsenv_install_package_db | tr -d '\r\n' > $hsenv_install_root/ghc_package_path_var
   path_var_prependix=$prior_bin:$cabal_bin:$hsenv_install_root/ghc/bin
   if is_mingw ; then
@@ -136,8 +136,8 @@ install_helper_scripts() (
   if $HSENV_BOOTSTRAP_CABAL ; then
     install_bootstrap_cabal
   fi
-  filter_install $_hsenv_private_root_dir/skelton/cabal_config $hsenv_install_root/cabal/config
-  filter_install $_hsenv_private_root_dir/skelton/cabal $prior_bin/cabal
+  filter_install $HSENV_SKELTON_DIR/cabal_config $hsenv_install_root/cabal/config
+  filter_install $HSENV_SKELTON_DIR/cabal $prior_bin/cabal
   chmod u+x $prior_bin/cabal
   echo $path_var_prependix | tr -d '\r\n' > $hsenv_install_root/path_var_prependix
 
@@ -280,8 +280,8 @@ install_local() (
     cd $srcdir && \
     if [ -f configure ]; then \
       ./configure --prefix=$hsenv_install_root/ghc && \
-      ($HSENV_MAKE_COMMAND || true) && \
-      $HSENV_MAKE_COMMAND install
+      ($MAKE || true) && \
+      $MAKE install
     else
       cp -fr . $hsenv_install_root/ghc
     fi

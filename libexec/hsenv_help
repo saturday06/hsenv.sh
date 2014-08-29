@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. $_hsenv_private_libexec_dir/init
+. $HSENV_LIBEXEC_DIR/init
 cat <<USAGE
 usage: hsenv [FLAGS]
 

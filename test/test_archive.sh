@@ -5,8 +5,8 @@ SHUNIT_PARENT=$0
 . `dirname $0`/../libexec/archive
 
 test_ignorable_tar_error() {
-  _hsenv_private_host_os=mingw32
-  f=$_hsenv_test_tmp_dir/ignorable_tar_error.txt
+  HSENV_HOST_OS=mingw32
+  f=$HSENV_TEST_TMP_DIR/ignorable_tar_error.txt
   echo > $f
 
   assertFalse "ignorable_tar_error $f"
@@ -26,15 +26,15 @@ EOF
 tar Exiting with failure status due to previous errors
 EOF
   assertTrue "ignorable_tar_error $f"
-  _hsenv_private_host_os=linux
+  HSENV_HOST_OS=linux
   assertFalse "ignorable_tar_error $f"
-  _hsenv_private_host_os=mingw64
+  HSENV_HOST_OS=mingw64
   assertTrue "ignorable_tar_error $f"
 }
 
 test_extract_archive() {
-  data_dir=$_hsenv_test_data_dir/extract_archive
-  out_dir=$_hsenv_test_tmp_dir/extract_archive
+  data_dir=$HSENV_TEST_DATA_DIR/extract_archive
+  out_dir=$HSENV_TEST_TMP_DIR/extract_archive
   mkdir -p $out_dir
 
   assertTrue "extract_archive $data_dir/test.tar.gz $out_dir/gz"
@@ -49,7 +49,7 @@ test_extract_archive() {
   assertTrue "cmp $data_dir/xz.txt $out_dir/xz/xz.txt"
   assertFalse "extract_archive $data_dir/multi_root.tar.xz $out_dir/xz"
 
-  rm -fr $_hsenv_private_extract_archive_tmp_dir
+  rm -fr $HSENV_EXTRACT_ARCHIVE_DIR
 }
 
 . shunit2/src/shunit2

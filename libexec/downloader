@@ -5,7 +5,7 @@ source_url() (
 )
 
 binary_url() (
-  case $_hsenv_private_host_os in
+  case $HSENV_HOST_OS in
     linux)
       echo http://www.haskell.org/ghc/dist/$1/ghc-$1-x86_64-unknown-linux-deb7.tar.bz2
       return
@@ -40,8 +40,8 @@ has_command() (
 downloader() (
   url=$1
   file=$2
-  mkdir -p $_hsenv_private_cache_dir
-  cache_file=$_hsenv_private_cache_dir/`url_to_cache_name $url`
+  mkdir -p $HSENV_CACHE_DIR
+  cache_file=$HSENV_CACHE_DIR/`url_to_cache_name $url`
   if [ -e $cache_file ]; then
     cp $cache_file $file
     return

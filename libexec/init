@@ -1,59 +1,53 @@
 #!/bin/sh
 
-if [ -z "$_hsenv_private_root_dir" ]; then
-  export _hsenv_private_root_dir=`cd "$(dirname $0)/.."; pwd`
+if [ -z "$HSENV_ROOT_DIR" ]; then
+  export HSENV_ROOT_DIR=`cd "$(dirname $0)/.."; pwd`
 fi
-export _hsenv_private_libexec_dir="${_hsenv_private_root_dir}/libexec"
-export _hsenv_private_template_dir="${_hsenv_private_root_dir}/template"
-export _hsenv_private_tmp_dir="${_hsenv_private_root_dir}/tmp"
-export _hsenv_private_cache_dir="${_hsenv_private_tmp_dir}/cache"
-export _hsenv_private_extract_archive_tmp_dir="${_hsenv_private_tmp_dir}/extract_archive"
+export HSENV_LIBEXEC_DIR="$HSENV_ROOT_DIR/libexec"
+export HSENV_SKELTON_DIR="$HSENV_ROOT_DIR/skelton"
+export HSENV_TMP_DIR="$HSENV_ROOT_DIR/tmp"
+export HSENV_CACHE_DIR="$HSENV_TMP_DIR/cache"
+export HSENV_EXTRACT_ARCHIVE_DIR="$HSENV_TMP_DIR/extract_archive"
 
-. "$_hsenv_private_libexec_dir/log"
-. "$_hsenv_private_libexec_dir/host"
-. "$_hsenv_private_libexec_dir/option"
-. "$_hsenv_private_libexec_dir/package"
-. "$_hsenv_private_libexec_dir/downloader"
-. "$_hsenv_private_libexec_dir/archive"
+. "$HSENV_LIBEXEC_DIR/log"
+. "$HSENV_LIBEXEC_DIR/host"
+. "$HSENV_LIBEXEC_DIR/option"
+. "$HSENV_LIBEXEC_DIR/package"
+. "$HSENV_LIBEXEC_DIR/downloader"
+. "$HSENV_LIBEXEC_DIR/archive"
 
-export HSENV_PV_COMMAND=cat
+export PV=cat
 if has_command pv; then
-  export HSENV_PV_COMMAND=pv
+  export PV=pv
 fi
 
 if echo "foo" | grep -E "^foo?$" > /dev/null 2> /dev/null; then
-  HSENV_EGREP_COMMAND=grep
-  HSENV_EGREP_OPTION=-E
+  HSENV_GREP_E() (
+    grep -E "$@"
+  )
+  export EGREP=HSENV_GREP_E
 elif has_command egrep; then
-  HSENV_EGREP_COMMAND=egrep
+  export EGREP=egrep
 else
   echo "error: \`grep -E' or \`egrep' required"
   exit 1
 fi
 
-EGREP() (
-  $HSENV_EGREP_COMMAND $HSENV_EGREP_OPTION "$@"
-)
-
 if awk 'BEGIN{sub(/foo/, "")}' 2> /dev/null; then
-  HSENV_NAWK_COMMAND=awk
+  export NAWK=awk
 elif has_command nawk; then
-  HSENV_NAWK_COMMAND=nawk
+  export NAWK=nawk
 else
   echo "error: \`nawk' required"
   exit 1
 fi
 
-NAWK() (
-  $HSENV_NAWK_COMMAND "$@"
-)
-
-export HSENV_MAKE_COMMAND=make
+export MAKE=make
 if has_command gmake; then
-  HSENV_MAKE_COMMAND=gmake
+  MAKE=gmake
 fi
 
-export HSENV_TAR_COMMAND=tar
+export TAR=tar
 if has_command gtar; then
-  HSENV_TAR_COMMAND=gtar
+  TAR=gtar
 fi

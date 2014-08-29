@@ -1,14 +1,14 @@
 #!/bin/sh
 
-export _hsenv_private_host=`$_hsenv_private_libexec_dir/config.guess`
-if [ "$_hsenv_private_host" != "" ]; then
-  export _hsenv_private_host_cpu=`echo $_hsenv_private_host | awk -F- '{print $1}'`
-  export _hsenv_private_host_vendor=`echo $_hsenv_private_host | awk -F- '{print $2}'`
-  export _hsenv_private_host_os=`echo $_hsenv_private_host | awk -F- '{print $3}'`
+export HSENV_HOST_COMBO=`$HSENV_LIBEXEC_DIR/config.guess`
+if [ "$HSENV_HOST_COMBO" != "" ]; then
+  export HSENV_HOST_CPU=`echo $_hsenv_private_host | awk -F- '{print $1}'`
+  export HSENV_HOST_VENDOR=`echo $_hsenv_private_host | awk -F- '{print $2}'`
+  export HSENV_HOST_OS=`echo $_hsenv_private_host | awk -F- '{print $3}'`
 else
   _hsenv_private_warn "host environment detection (config.guess) failed"
 fi
 
 is_mingw() (
-  echo $_hsenv_private_host_os | EGREP "^mingw" > /dev/null
+  echo $HSENV_HOST_OS | $EGREP "^mingw" > /dev/null
 )

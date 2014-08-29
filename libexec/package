@@ -13,7 +13,7 @@ dependency_to_package_name_and_version() (
 )
 
 dependency_to_package_name_and_space_and_version() (
-  NAWK 'BEGIN {
+  $NAWK 'BEGIN {
     dep = ARGV[1]
     sub(/^builtin_/, "", dep)
     len = split(dep, dep_words, "-")
@@ -57,7 +57,7 @@ ghc_pkg_version() (
 )
 
 sort_package_version() (
-  NAWK '
+  $NAWK '
     function is_version(str) {
       return match(str, /^[0-9]+(\.[0-9]+)*$/)
     }

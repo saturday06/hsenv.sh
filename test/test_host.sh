@@ -4,11 +4,11 @@ SHUNIT_PARENT=$0
 . `dirname $0`/init.sh
 
 test_is_mingw() {
-  _hsenv_private_host_os=mingw32
+  HSENV_HOST_OS=mingw32
   assertTrue is_mingw
-  _hsenv_private_host_os=mingw64
+  HSENV_HOST_OS=mingw64
   assertTrue is_mingw
-  _hsenv_private_host_os=linux
+  HSENV_HOST_OS=linux
   assertFalse is_mingw
 }
 
