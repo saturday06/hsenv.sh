@@ -2,7 +2,7 @@
 
 . "`dirname $0`/../libexec/init"
 
-export hsenv_work_dir=`pwd`
+export HSENV_WORK_DIR=`pwd`
 start_new_log
 parse $*
 $HSENV_LIBEXEC_DIR/$HSENV_COMMAND

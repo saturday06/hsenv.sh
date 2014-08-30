@@ -1,36 +1,36 @@
 #!/bin/sh
 
 start_new_log() (
-  rm -f $hsenv_work_dir/hsenv.log
-  touch $hsenv_work_dir/hsenv.log
+  rm -f $HSENV_WORK_DIR/hsenv.log
+  touch $HSENV_WORK_DIR/hsenv.log
 )
 
 move_log_to_install_dir() (
-  early_log=$hsenv_work_dir/hsenv.log
-  log=$hsenv_install_root/hsenv.log
+  early_log=$HSENV_WORK_DIR/hsenv.log
+  log=$HSENV_INSTALL_ROOT/hsenv.log
   if [ -f $early_log ]; then
     mv $early_log $log
   fi
 )
 
 log_file() (
-  if [ -z "$hsenv_work_dir" ]; then
-    echo Error: \$hsenv_work_dir not defined
+  if [ -z "$HSENV_WORK_DIR" ]; then
+    echo Error: \$HSENV_WORK_DIR not defined
     exit 1
   fi
 
-  early_log=$hsenv_work_dir/hsenv.log
+  early_log=$HSENV_WORK_DIR/hsenv.log
   if [ -f $early_log ]; then
     echo $early_log
     return
   fi
 
-  if [ -z "$hsenv_install_root" ]; then
-    echo Error: \$hsenv_install_root not defined
+  if [ -z "$HSENV_INSTALL_ROOT" ]; then
+    echo Error: \$HSENV_INSTALL_ROOT not defined
     exit 1
   fi
 
-  echo $hsenv_install_root/hsenv.log
+  echo $HSENV_INSTALL_ROOT/hsenv.log
 )
 
 hsenv_log() (

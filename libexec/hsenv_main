@@ -7,14 +7,14 @@ transplant_local_executable() (
     hsenv_abort Error: ghc is required.
   fi
 
-  hsenv_install_package_db=$hsenv_install_root/package.conf.d
+  hsenv_install_package_db=$HSENV_INSTALL_ROOT/package.conf.d
   hsenv_info Initializing GHC Package database at $hsenv_install_package_db
   version_output=`ghc-pkg --version`
   version=`ghc_pkg_version "$version_output"`
   if ! is_version $version; then
     hsenv_abort Couldn\'t extract ghc-pkg version number from: $version_output
   fi
-  mkdir -p $hsenv_install_root
+  mkdir -p $HSENV_INSTALL_ROOT
   move_log_to_install_dir
   if [ `max_package_version 6.10.4 $version` = 6.10.4 ]; then
     hsenv_debug Detected GHC older than 6.12, initializing GHC_PACKAGE_PATH to file with '[]'
@@ -37,7 +37,7 @@ transplant_local_executable() (
     fi
   done
 
-  posterior_dir=$hsenv_install_root/posterior
+  posterior_dir=$HSENV_INSTALL_ROOT/posterior
   mkdir -p $posterior_dir
   for bin in alex ar ffihugs gcc greencard happy hmake hscolour \
              hugs jhc ld lhc lhc-pkg nhc98 pkg-config ranlib \
@@ -48,11 +48,11 @@ transplant_local_executable() (
     fi
   done
 
-  cp -fr $HSENV_SKELTON_DIR/ghc $hsenv_install_root/
+  cp -fr $HSENV_SKELTON_DIR/ghc $HSENV_INSTALL_ROOT/
   for bin in c2hs cpphs haddock hpc hsc2hs; do
     abs_bin=`which $bin 2> /dev/null`
     if [ -n "$abs_bin" ]; then
-      ln -s $abs_bin $hsenv_install_root/ghc/bin/$bin
+      ln -s $abs_bin $HSENV_INSTALL_ROOT/ghc/bin/$bin
     fi
   done
 
@@ -93,8 +93,8 @@ transplant_dependencies() (
 )
 
 filter_install() (
-  CABAL_DIR=$hsenv_install_root/cabal
-  HACKAGE_CACHE=$hsenv_install_root/cabal/packages
+  CABAL_DIR=$HSENV_INSTALL_ROOT/cabal
+  HACKAGE_CACHE=$HSENV_INSTALL_ROOT/cabal/packages
   mkdir -p $CABAL_DIR $HACKAGE_CACHE
   if is_mingw; then
     CABAL_DIR=`cd $CABAL_DIR && $COMSPEC /c cd | tr '\\\\' /`
@@ -104,8 +104,8 @@ filter_install() (
     PATH_SEPARATOR=:
   fi
   cat $1 \
-    | sed "s|<HSENV>|$hsenv_work_dir|g" \
-    | sed "s|<HSENV_DIR>|$hsenv_install_root|g" \
+    | sed "s|<HSENV>|$HSENV_WORK_DIR|g" \
+    | sed "s|<HSENV_DIR>|$HSENV_INSTALL_ROOT|g" \
     | sed "s|<HSENV_NAME>|$HSENV_NAME|g" \
     | sed "s|<MODIFY_PS1>|$HSENV_PS1_INDICATOR|g" \
     | sed "s|<HACKAGE_CACHE>|$HACKAGE_CACHE|g" \
@@ -117,32 +117,32 @@ filter_install() (
 )
 
 install_helper_scripts() (
-  prior_bin=$hsenv_install_root/prior
-  posterior_bin=$hsenv_install_root/posterior
-  default_bin=$hsenv_install_root/bin
-  cabal_bin=$hsenv_install_root/cabal/bin
+  prior_bin=$HSENV_INSTALL_ROOT/prior
+  posterior_bin=$HSENV_INSTALL_ROOT/posterior
+  default_bin=$HSENV_INSTALL_ROOT/bin
+  cabal_bin=$HSENV_INSTALL_ROOT/cabal/bin
 
   mkdir -p $prior_bin $posterior_bin $default_bin $cabal_bin
   filter_install $HSENV_SKELTON_DIR/bin/activate $default_bin/activate
-  echo $hsenv_install_package_db | tr -d '\r\n' > $hsenv_install_root/ghc_package_path_var
-  path_var_prependix=$prior_bin:$cabal_bin:$hsenv_install_root/ghc/bin
+  echo $hsenv_install_package_db | tr -d '\r\n' > $HSENV_INSTALL_ROOT/ghc_package_path_var
+  path_var_prependix=$prior_bin:$cabal_bin:$HSENV_INSTALL_ROOT/ghc/bin
   if is_mingw ; then
-    path_var_prependix=$path_var_prependix:$hsenv_install_root/ghc/mingw/bin
+    path_var_prependix=$path_var_prependix:$HSENV_INSTALL_ROOT/ghc/mingw/bin
   fi
   if $HSENV_BOOTSTRAP_CABAL ; then
-    path_var_prependix=$path_var_prependix:$hsenv_install_root/cabal/bootstrap/bin
+    path_var_prependix=$path_var_prependix:$HSENV_INSTALL_ROOT/cabal/bootstrap/bin
   fi
   path_var_prependix=$path_var_prependix:$posterior_bin
   if $HSENV_BOOTSTRAP_CABAL ; then
     install_bootstrap_cabal
   fi
-  filter_install $HSENV_SKELTON_DIR/cabal_config $hsenv_install_root/cabal/config
+  filter_install $HSENV_SKELTON_DIR/cabal_config $HSENV_INSTALL_ROOT/cabal/config
   filter_install $HSENV_SKELTON_DIR/cabal $prior_bin/cabal
   chmod u+x $prior_bin/cabal
-  echo $path_var_prependix | tr -d '\r\n' > $hsenv_install_root/path_var_prependix
+  echo $path_var_prependix | tr -d '\r\n' > $HSENV_INSTALL_ROOT/path_var_prependix
 
   hsenv_info
-  hsenv_info To activate the new environment use \`source `basename $hsenv_install_root`/bin/activate\'
+  hsenv_info To activate the new environment use \`source `basename $HSENV_INSTALL_ROOT`/bin/activate\'
 )
 
 install_bootstrap_cabal_mingw_archive() (
@@ -181,9 +181,9 @@ install_bootstrap_cabal_mingw() (
 )
 
 install_bootstrap_cabal() (
-  bootstrap_dir=$hsenv_install_root/cabal/bootstrap
+  bootstrap_dir=$HSENV_INSTALL_ROOT/cabal/bootstrap
   mkdir -p $bootstrap_dir/bin
-  lib_versions=`GHC_PACKAGE_PATH=$hsenv_install_package_db $hsenv_install_root/ghc/bin/ghc-pkg field Cabal version`
+  lib_versions=`GHC_PACKAGE_PATH=$hsenv_install_package_db $HSENV_INSTALL_ROOT/ghc/bin/ghc-pkg field Cabal version`
   lib_version=`max_package_version $lib_versions`
   if [ -z "$lib_version" ]; then
     hsenv_warn Cabal package not found.
@@ -218,7 +218,7 @@ install_bootstrap_cabal() (
 
   cabal_install_package_db=$bootstrap_dir/package.conf.d
   hsenv_debug Bootstrap package db: $cabal_install_package_db
-  ghc_version_output=`GHC_PACKAGE_PATH=$hsenv_install_package_db $hsenv_install_root/ghc/bin/ghc-pkg --version`
+  ghc_version_output=`GHC_PACKAGE_PATH=$hsenv_install_package_db $HSENV_INSTALL_ROOT/ghc/bin/ghc-pkg --version`
   ghc_version=`ghc_pkg_version "$ghc_version_output"`
   if ! is_version $ghc_version; then
     hsenv_warn Couldn\'t extract ghc-pkg version number from: $ghc_version_output
@@ -228,13 +228,13 @@ install_bootstrap_cabal() (
     hsenv_debug Detected GHC older than 6.12, initializing GHC_PACKAGE_PATH to file with '[]'
     echo "[]" > $cabal_install_package_db
   else
-    GHC_PACKAGE_PATH=$hsenv_install_package_db $hsenv_install_root/ghc/bin/ghc-pkg init $cabal_install_package_db
+    GHC_PACKAGE_PATH=$hsenv_install_package_db $HSENV_INSTALL_ROOT/ghc/bin/ghc-pkg init $cabal_install_package_db
   fi
 
   url=https://hackage.haskell.org/package/cabal-install-$version/cabal-install-$version.tar.gz
-  cabal_install_archive=$hsenv_install_root/cache/`url_basename $url`
-  cabal_install_extracted=$hsenv_install_root/tmp/cabal_bootstrap
-  mkdir -p $hsenv_install_root/cache $cabal_install_extracted
+  cabal_install_archive=$HSENV_INSTALL_ROOT/cache/`url_basename $url`
+  cabal_install_extracted=$HSENV_INSTALL_ROOT/tmp/cabal_bootstrap
+  mkdir -p $HSENV_INSTALL_ROOT/cache $cabal_install_extracted
   downloader $url $cabal_install_archive \
     && extract_archive $cabal_install_archive $cabal_install_extracted \
     && cd $cabal_install_extracted \
@@ -249,7 +249,7 @@ install_bootstrap_cabal() (
 install_remote_url() (
   url=$1
   hsenv_info URL=$url
-  cache_dir=$hsenv_install_root/cache
+  cache_dir=$HSENV_INSTALL_ROOT/cache
   file=$cache_dir/`url_basename $url`
   mkdir -p $cache_dir
   move_log_to_install_dir
@@ -273,23 +273,23 @@ install_local() (
   if [ ! -f $file ]; then
     hsenv_abort Not found
   fi
-  srcdir=$hsenv_install_root/src
-  mkdir -p $hsenv_install_root/ghc
+  srcdir=$HSENV_INSTALL_ROOT/src
+  mkdir -p $HSENV_INSTALL_ROOT/ghc
   move_log_to_install_dir
   (extract_archive $file $srcdir) && \
     cd $srcdir && \
     if [ -f configure ]; then \
-      ./configure --prefix=$hsenv_install_root/ghc && \
+      ./configure --prefix=$HSENV_INSTALL_ROOT/ghc && \
       ($MAKE || true) && \
       $MAKE install
     else
-      cp -fr . $hsenv_install_root/ghc
+      cp -fr . $HSENV_INSTALL_ROOT/ghc
     fi
 
   if [ $? -ne 0 ]; then
     hsenv_abort Failed
   fi
-  hsenv_install_package_db=`$hsenv_install_root/ghc/bin/ghc --print-global-package-db | tr '\\\\' /`
+  hsenv_install_package_db=`$HSENV_INSTALL_ROOT/ghc/bin/ghc --print-global-package-db | tr '\\\\' /`
   if [ -z "$hsenv_install_package_db" ]; then
     hsenv_abort Failed
   fi
@@ -297,16 +297,11 @@ install_local() (
   install_helper_scripts
 )
 
-if [ -z "$HSENV_NAME" ]; then
-  export hsenv_install_root=$hsenv_work_dir/.hsenv
-else
-  export hsenv_install_root=$hsenv_work_dir/.hsenv_$HSENV_NAME
-fi
-if [ -e "$hsenv_install_root" ]; then
-  hsenv_abort There is already `basename $hsenv_install_root` directory at $hsenv_work_dir
+if [ -e "$HSENV_INSTALL_ROOT" ]; then
+  hsenv_abort There is already `basename $HSENV_INSTALL_ROOT` directory at $HSENV_WORK_DIR
 fi
 
-hsenv_info Install to $hsenv_install_root
+hsenv_info Install to $HSENV_INSTALL_ROOT
 install_method=`installation_of $HSENV_GHC`
 hsenv_debug Using \`$install_method\' method
 $install_method
