@@ -89,7 +89,7 @@ transplant_dependencies() (
     transplant_dependencies $dep
   done
   hsenv_debug "Copying package \`$dep' to Virtual Haskell Environment."
-  ghc-pkg describe $package | GHC_PACKAGE_PATH=$hsenv_install_package_db ghc-pkg register - | hsenv_debug -
+  ghc-pkg describe $package | GHC_PACKAGE_PATH=$hsenv_install_package_db ghc-pkg register - 2>&1 | hsenv_debug -
 )
 
 filter_install() (
@@ -239,11 +239,11 @@ install_bootstrap_cabal() (
     && extract_archive $cabal_install_archive $cabal_install_extracted \
     && cd $cabal_install_extracted \
     && chmod u+x bootstrap.sh \
-    && CURL=\\curl \
-       EXTRA_CONFIGURE_OPTS="--package-db=$cabal_install_package_db" \
-       PREFIX=$bootstrap_dir \
-       PATH=$path_var_prependix:$PATH \
-       ./bootstrap.sh --global
+    && (CURL=\\curl \
+         EXTRA_CONFIGURE_OPTS="--package-db=$cabal_install_package_db" \
+         PREFIX=$bootstrap_dir \
+         PATH=$path_var_prependix:$PATH \
+         ./bootstrap.sh --global 2>&1 | hsenv_debug -)
 )
 
 install_remote_url() (
@@ -279,9 +279,9 @@ install_local() (
   (extract_archive $file $srcdir) && \
     cd $srcdir && \
     if [ -f configure ]; then \
-      ./configure --prefix=$HSENV_INSTALL_ROOT/ghc && \
-      ($MAKE || true) && \
-      $MAKE install
+      (./configure --prefix=$HSENV_INSTALL_ROOT/ghc && \
+        ($MAKE || true) && \
+        $MAKE install) 2>&1 | hsenv_debug -
     else
       cp -fr . $HSENV_INSTALL_ROOT/ghc
     fi
