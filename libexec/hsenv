@@ -5,4 +5,9 @@
 export HSENV_WORK_DIR=`pwd`
 start_new_log
 parse $*
-$HSENV_LIBEXEC_DIR/$HSENV_COMMAND
+if [ -z "$HSENV_NAME" ]; then
+  export HSENV_INSTALL_ROOT=$HSENV_WORK_DIR/.hsenv
+else
+  export HSENV_INSTALL_ROOT=$HSENV_WORK_DIR/.hsenv_$HSENV_NAME
+fi
+$HSENV_LIBEXEC_DIR/$HSENV_COMMAND 2>&1 | hsenv_log_to_file_and_stdout true true -

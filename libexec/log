@@ -33,26 +33,36 @@ log_file() (
   echo $HSENV_INSTALL_ROOT/hsenv.log
 )
 
+hsenv_log_to_file_and_stdout() (
+  write_file=$1
+  shift
+  write_stdout=$1
+  shift
+
+  from_stdin=false
+  if [ "$*" = "-" ]; then
+    while read line; do
+      hsenv_log_to_file_and_stdout $write_file $write_stdout $line
+    done
+    return
+  fi
+
+  if $write_file; then
+    log_file=`log_file`
+    echo "$@" >> $log_file
+  fi
+  if $write_stdout; then
+    echo "$@"
+  fi
+)
+
 hsenv_log() (
   log_level=$1
   shift
-  from_stdin=false
-  if [ "$*" = "-" ]; then
-    from_stdin=true
-  fi
-  log_file=`log_file`
   if [ $log_level -le $HSENV_LOG_LEVEL ]; then
-    if $from_stdin; then
-      cat - | tee -a $log_file
-    else
-      echo "$@" | tee -a $log_file
-    fi
+    hsenv_log_to_file_and_stdout false true "$@"
   else
-    if $from_stdin; then
-      cat - >> $log_file
-    else
-      echo "$@" >> $log_file
-    fi
+    hsenv_log_to_file_and_stdout true false "$@"
   fi
 )
 
