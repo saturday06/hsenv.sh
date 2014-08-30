@@ -92,5 +92,6 @@ hsenv_fatal() (
 
 hsenv_abort() { # No subshell
   hsenv_fatal "$@"
+  hsenv_fatal See \``log_file`\' for more information
   exit 1
 }
