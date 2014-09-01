@@ -1,4 +1,4 @@
 #!/bin/sh
 
 . $HSENV_LIBEXEC_DIR/init
-echo "1.0"
+echo "1.0" >&$HSENV_RAW_STDOUT

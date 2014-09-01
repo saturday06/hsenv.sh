@@ -61,14 +61,15 @@ downloader() (
 
   download_result=$?
   if [ $download_result -ne 0 ]; then
+    rm -f $downloading_cache_file
     return $download_result
   fi
 
-  mv $downloading_cache_file $cache_file && cp $cache_file $file
+  test -e $downloading_cache_file && mv $downloading_cache_file $cache_file && cp $cache_file $file
 )
 
 downloader_curl() (
-  curl --fail --output $2 $1
+  (curl --fail --silent --show-error $1 || rm -f $2) | $PV > $2
 )
 
 downloader_wget() (

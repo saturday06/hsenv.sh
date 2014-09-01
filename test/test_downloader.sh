@@ -35,7 +35,6 @@ test_downloader() {
   fi
 
   mkdir -p "$dir"
-  downloader http://saturday06.github.io/hsenv-teokure/test/cr_lf.bin $dir/cr_lf.bin
   assertTrue "downloader http://saturday06.github.io/hsenv-teokure/test/cr_lf.bin $dir/cr_lf.bin"
   assertTrue "cmp $HSENV_TEST_DATA_DIR/cr_lf.bin $dir/cr_lf.bin"
   assertTrue "downloader http://saturday06.github.io/hsenv-teokure/test/null_0xa5.bin $dir/null_0xa5.bin"

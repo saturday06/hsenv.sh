@@ -1,8 +1,13 @@
 #!/bin/sh
 
+exec 5>&1
+exec 6>&2
+export HSENV_RAW_STDOUT=5
+export HSENV_RAW_STDERR=6
+export HSENV_WORK_DIR=`pwd`
+
 . "`dirname $0`/../libexec/init"
 
-export HSENV_WORK_DIR=`pwd`
 start_new_log
 parse $*
 if [ -z "$HSENV_NAME" ]; then
@@ -11,4 +16,4 @@ else
   export HSENV_INSTALL_ROOT=$HSENV_WORK_DIR/.hsenv_$HSENV_NAME
 fi
 hsenv_trace Options: "$@"
-$HSENV_LIBEXEC_DIR/$HSENV_COMMAND 2>&1 | hsenv_log_to_file_and_stdout true true -
+. $HSENV_LIBEXEC_DIR/$HSENV_COMMAND 2>&1 | hsenv_debug -

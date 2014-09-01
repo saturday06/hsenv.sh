@@ -93,7 +93,13 @@ has_command() (
 
 export PV=cat
 if has_command pv; then
-  export PV=pv
+  HSENV_PV() (
+    pv 2>&$HSENV_RAW_STDERR
+    pv_result=$?
+    $NAWK 'BEGIN { printf("%c[F%c[K", 27, 27) }' >&$HSENV_RAW_STDOUT
+    return $pv_result
+  )
+  export PV=HSENV_PV
 fi
 
 if echo "foo" | grep -E "^foo?$" > /dev/null 2> /dev/null; then
@@ -126,3 +132,4 @@ export TAR=tar
 if has_command gtar; then
   export TAR=gtar
 fi
+

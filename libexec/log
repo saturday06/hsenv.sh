@@ -1,15 +1,15 @@
 #!/bin/sh
 
 start_new_log() (
-  rm -f $HSENV_WORK_DIR/hsenv.log
-  touch $HSENV_WORK_DIR/hsenv.log
+  mkdir -p `dirname $HSENV_EARLY_LOG_FILE`
+  rm -f $HSENV_EARLY_LOG_FILE
+  touch $HSENV_EARLY_LOG_FILE
 )
 
 move_log_to_install_dir() (
-  early_log=$HSENV_WORK_DIR/hsenv.log
-  log=$HSENV_INSTALL_ROOT/hsenv.log
-  if [ -f $early_log ]; then
-    mv $early_log $log
+  mkdir -p $HSENV_INSTALL_ROOT
+  if [ -f $HSENV_EARLY_LOG_FILE ]; then
+    mv $HSENV_EARLY_LOG_FILE $HSENV_INSTALL_ROOT/hsenv.log
   fi
 )
 
@@ -19,9 +19,8 @@ log_file() (
     exit 1
   fi
 
-  early_log=$HSENV_WORK_DIR/hsenv.log
-  if [ -f $early_log ]; then
-    echo $early_log
+  if [ -f $HSENV_EARLY_LOG_FILE ]; then
+    echo $HSENV_EARLY_LOG_FILE
     return
   fi
 
@@ -33,36 +32,30 @@ log_file() (
   echo $HSENV_INSTALL_ROOT/hsenv.log
 )
 
-hsenv_log_to_file_and_stdout() (
-  write_file=$1
-  shift
-  write_stdout=$1
+hsenv_log() (
+  log_level=$1
   shift
 
-  from_stdin=false
+  if [ -z "$HSENV_LOG_LEVEL" ]; then
+    return
+  fi
+
   if [ "$*" = "-" ]; then
-    while read line; do
-      hsenv_log_to_file_and_stdout $write_file $write_stdout $line
+    while IFS= read line; do
+      hsenv_log $log_level "$line"
     done
     return
   fi
 
-  if $write_file; then
-    log_file=`log_file`
-    echo "$@" >> $log_file
-  fi
-  if $write_stdout; then
-    echo "$@"
-  fi
-)
+  log_file=`log_file`
+  echo "$*" >> $log_file
 
-hsenv_log() (
-  log_level=$1
-  shift
   if [ $log_level -le $HSENV_LOG_LEVEL ]; then
-    hsenv_log_to_file_and_stdout false true "$@"
-  else
-    hsenv_log_to_file_and_stdout true false "$@"
+    if [ -t $HSENV_RAW_STDOUT ]; then
+      echo "$*" >&$HSENV_RAW_STDOUT
+    else
+      echo "$*"
+    fi
   fi
 )
 
