@@ -39,10 +39,12 @@ downloader() (
   mkdir -p $HSENV_CACHE_DIR
   cache_file=$HSENV_CACHE_DIR/`url_to_cache_name $url`
   if [ -e $cache_file ]; then
+    hsenv_info Use local cache for \`$url\'
     cp $cache_file $file
     return
   fi
 
+  hsenv_info Downloading \`$url\'
   downloading_cache_file=$cache_file.downloading
   rm -f $downloading_cache_file
 
@@ -55,7 +57,7 @@ downloader() (
   elif has_command lwp-download; then
     downloader_lwp_download $url $downloading_cache_file
   else
-    echo "curl/wget/fetch/lwp-download required"
+    hsenv_error "curl/wget/fetch/lwp-download required"
     return 1
   fi
 

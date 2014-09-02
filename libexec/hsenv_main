@@ -141,6 +141,7 @@ install_helper_scripts() (
   chmod u+x $prior_bin/cabal
   echo $path_var_prependix | tr -d '\r\n' > $HSENV_INSTALL_ROOT/path_var_prependix
 
+  hsenv_info Done
   hsenv_info
   hsenv_info To activate the new environment use \`source `basename $HSENV_INSTALL_ROOT`/bin/activate\'
 )
@@ -181,6 +182,7 @@ install_bootstrap_cabal_mingw() (
 )
 
 install_bootstrap_cabal() (
+  hsenv_info Bootstrap cabal-install
   bootstrap_dir=$HSENV_INSTALL_ROOT/cabal/bootstrap
   mkdir -p $bootstrap_dir/bin
   lib_versions=`GHC_PACKAGE_PATH=$hsenv_install_package_db $HSENV_INSTALL_ROOT/ghc/bin/ghc-pkg field Cabal version`
@@ -239,6 +241,7 @@ install_bootstrap_cabal() (
     && extract_archive $cabal_install_archive $cabal_install_extracted \
     && cd $cabal_install_extracted \
     && chmod u+x bootstrap.sh \
+    && hsenv_info Installing... \
     && (CURL=\\curl \
          EXTRA_CONFIGURE_OPTS="--package-db=$cabal_install_package_db" \
          PREFIX=$bootstrap_dir \
@@ -248,7 +251,6 @@ install_bootstrap_cabal() (
 
 install_remote_url() (
   url=$1
-  hsenv_info URL=$url
   cache_dir=$HSENV_INSTALL_ROOT/cache
   file=$cache_dir/`url_basename $url`
   mkdir -p $cache_dir
@@ -276,7 +278,9 @@ install_local() (
   srcdir=$HSENV_INSTALL_ROOT/src
   mkdir -p $HSENV_INSTALL_ROOT/ghc
   move_log_to_install_dir
+  hsenv_info Extracting...
   (extract_archive $file $srcdir) && \
+    hsenv_info Installing... && \
     cd $srcdir && \
     if [ -f configure ]; then \
       (./configure --prefix=$HSENV_INSTALL_ROOT/ghc && \
