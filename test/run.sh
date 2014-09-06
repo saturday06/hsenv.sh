@@ -45,6 +45,14 @@ run_test() (
   fi
 )
 
+if [ -z "$HSENV_TEST_LEVEL" ]; then
+  HSENV_TEST_LEVEL=0
+fi
+
+if [ $HSENV_TEST_LEVEL -ge 3 ]; then
+  rm -fr ../tmp
+fi
+
 if [ "$HSENV_TEST_COLOR" = "" ]; then
   if [ -t ]; then
     HSENV_TEST_COLOR=yes
