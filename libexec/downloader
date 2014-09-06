@@ -72,6 +72,7 @@ downloader() (
 
 downloader_curl() (
   (curl --fail --silent --show-error $1 || rm -f $2) | $PV > $2
+  test -e $2
 )
 
 downloader_wget() (
