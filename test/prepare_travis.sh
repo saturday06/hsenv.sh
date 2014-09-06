@@ -8,6 +8,6 @@ case `../libexec/config.guess | awk -F- '{print $3}'` in
     ;;
   darwin*)
     brew update
-    brew install dash ksh mksh
+    brew install dash ksh mksh xz
     ;;
 esac
