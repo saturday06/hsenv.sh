@@ -276,18 +276,17 @@ install_local() (
     hsenv_abort Not found
   fi
   srcdir=$HSENV_INSTALL_ROOT/src
-  mkdir -p $HSENV_INSTALL_ROOT/ghc
   move_log_to_install_dir
   hsenv_info Extracting...
   (extract_archive $file $srcdir) && \
     hsenv_info Installing... && \
-    cd $srcdir && \
-    if [ -f configure ]; then \
+    if [ -f $srcdir/configure ]; then \
+      cd $srcdir && \
       (./configure --prefix=$HSENV_INSTALL_ROOT/ghc && \
         ($MAKE || true) && \
         $MAKE install) 2>&1 | $PV | hsenv_debug -
     else
-      cp -fr . $HSENV_INSTALL_ROOT/ghc
+      mv $srcdir $HSENV_INSTALL_ROOT/ghc
     fi
 
   if [ $? -ne 0 ]; then
