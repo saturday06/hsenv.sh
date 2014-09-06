@@ -70,17 +70,23 @@ downloader() (
   test -e $downloading_cache_file && mv $downloading_cache_file $cache_file && cp $cache_file $file
 )
 
+execute_downloader_with_pv() (
+  file=$1
+  shift
+  ($* || rm -f $file) | $PV > $file
+  test -e $file
+)
+
 downloader_curl() (
-  (curl --fail --silent --show-error $1 || rm -f $2) | $PV > $2
-  test -e $2
+  execute_downloader_with_pv $2 curl --fail --silent --show-error $1
 )
 
 downloader_wget() (
-  wget --output-document=$2 $1
+  execute_downloader_with_pv $2 wget --output-document=- $1
 )
 
 downloader_fetch() (
-  fetch -o $2 $1
+  execute_downloader_with_pv $2 fetch -o - $1
 )
 
 downloader_lwp_download() (
