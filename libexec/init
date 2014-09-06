@@ -15,12 +15,10 @@ if [ -z "$HSENV_EARLY_LOG_FILE" ]; then
   export HSENV_EARLY_LOG_FILE="$HSENV_TMP_DIR/log/`date "+%Y%m%d%I%M%S"`_$HSENV_ROOT_PID.log"
 fi
 if [ -z "$HSENV_RAW_STDOUT" ]; then
-  exec 5>&1
-  export HSENV_RAW_STDOUT=5
+  export HSENV_RAW_STDOUT=1
 fi
 if [ -z "$HSENV_RAW_STDERR" ]; then
-  exec 6>&2
-  export HSENV_RAW_STDERR=6
+  export HSENV_RAW_STDERR=2
 fi
 
 . "$HSENV_LIBEXEC_DIR/log"
