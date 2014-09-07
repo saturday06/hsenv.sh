@@ -8,7 +8,11 @@ parse() { # No subshell
   export HSENV_PS1_INDICATOR=true
   export HSENV_SANITY_CHECK=true
   export HSENV_SHARE_CABAL_CACHE=true
-  export HSENV_BOOTSTRAP_CABAL=false
+  if has_command cabal; then
+    export HSENV_BOOTSTRAP_CABAL=false
+  else
+    export HSENV_BOOTSTRAP_CABAL=true
+  fi
 
   for parsed_option in $*; do
     case $parsed_option in
