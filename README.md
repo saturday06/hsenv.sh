@@ -20,6 +20,6 @@ The clone of [tmhedberg/hsenv](https://github.com/tmhedberg/hsenv) written in sh
 
 ## Still unimplemented features
 
-- --dont-share-cabal-cache
+- cabal's cache sharing
 - sanity check
 - error handling to be comparable to the origin
