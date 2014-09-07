@@ -116,6 +116,13 @@ filter_install() (
     > $2
 )
 
+cabal_update() (
+  cd $HSENV_WORK_DIR
+  . .hsenv/bin/activate
+  cabal update
+  deactivate_hsenv
+)
+
 install_helper_scripts() (
   prior_bin=$HSENV_INSTALL_ROOT/prior
   posterior_bin=$HSENV_INSTALL_ROOT/posterior
@@ -133,13 +140,14 @@ install_helper_scripts() (
     path_var_prependix=$path_var_prependix:$HSENV_INSTALL_ROOT/cabal/bootstrap/bin
   fi
   path_var_prependix=$path_var_prependix:$posterior_bin
-  if $HSENV_BOOTSTRAP_CABAL ; then
-    install_bootstrap_cabal
-  fi
   filter_install $HSENV_SKELTON_DIR/cabal_config $HSENV_INSTALL_ROOT/cabal/config
   filter_install $HSENV_SKELTON_DIR/cabal $prior_bin/cabal
   chmod u+x $prior_bin/cabal
   echo $path_var_prependix | tr -d '\r\n' > $HSENV_INSTALL_ROOT/path_var_prependix
+
+  if $HSENV_BOOTSTRAP_CABAL; then
+    install_bootstrap_cabal && (cabal_update | hsenv_debug -)
+  fi
 
   hsenv_info Done
   hsenv_info
