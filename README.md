@@ -22,5 +22,4 @@ The clone of [hsenv](https://github.com/Paczesiowa/hsenv) written in shellscript
 
 - --dont-share-cabal-cache
 - sanity check
-- logging
 - error handling to be comparable to the origin
