@@ -3,7 +3,7 @@
 . $HSENV_LIBEXEC_DIR/init
 
 transplant_local_executable() (
-  if ! has_command ghc ; then
+  if ! has_command ghc; then
     hsenv_abort Error: ghc is required.
   fi
 
@@ -133,10 +133,10 @@ install_helper_scripts() (
   filter_install $HSENV_SKELTON_DIR/bin/activate $default_bin/activate
   echo $hsenv_install_package_db | tr -d '\r\n' > $HSENV_INSTALL_ROOT/ghc_package_path_var
   path_var_prependix=$prior_bin:$cabal_bin:$HSENV_INSTALL_ROOT/ghc/bin
-  if is_mingw ; then
+  if is_mingw; then
     path_var_prependix=$path_var_prependix:$HSENV_INSTALL_ROOT/ghc/mingw/bin
   fi
-  if $HSENV_BOOTSTRAP_CABAL ; then
+  if $HSENV_BOOTSTRAP_CABAL; then
     path_var_prependix=$path_var_prependix:$HSENV_INSTALL_ROOT/cabal/bootstrap/bin
   fi
   path_var_prependix=$path_var_prependix:$posterior_bin
@@ -263,7 +263,7 @@ install_remote_url() (
   file=$cache_dir/`url_basename $url`
   mkdir -p $cache_dir
   move_log_to_install_dir
-  if ! downloader $url $file ; then
+  if ! downloader $url $file; then
     hsenv_abort Failed
   fi
   install_local $file
