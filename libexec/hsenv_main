@@ -252,7 +252,7 @@ install_bootstrap_cabal() (
     && cd $cabal_install_extracted \
     && chmod u+x bootstrap.sh \
     && hsenv_info Installing... \
-    && (CURL=\\curl \
+    && (CURL=\curl \
          EXTRA_CONFIGURE_OPTS="--package-db=$cabal_install_package_db" \
          PREFIX=$bootstrap_dir \
          PATH=$path_var_prependix:$PATH \
