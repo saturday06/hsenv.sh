@@ -147,6 +147,9 @@ install_helper_scripts() (
 
   if $HSENV_BOOTSTRAP_CABAL; then
     install_bootstrap_cabal && (cabal_update | hsenv_debug -)
+    if ! has_command $HSENV_INSTALL_ROOT/cabal/bootstrap/bin/cabal; then
+      hsenv_warn Failed. See \``log_file`\' for more information
+    fi
   fi
 
   hsenv_info Done
