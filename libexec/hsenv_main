@@ -120,7 +120,6 @@ cabal_update() (
   cd $HSENV_WORK_DIR
   . .hsenv/bin/activate
   cabal update
-  deactivate_hsenv
 )
 
 install_helper_scripts() (
