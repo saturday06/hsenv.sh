@@ -1,6 +1,6 @@
-diff -u cabal-install-1.16.0.2.orig/bootstrap.sh cabal-install-1.16.0.2/bootstrap.sh
---- cabal-install-1.16.0.2.orig/bootstrap.sh	2012-11-07 14:16:35.000000000 +0900
-+++ cabal-install-1.16.0.2/bootstrap.sh	2014-09-17 19:59:13.818753211 +0900
+diff -u cabal-install-0.14.0.orig/bootstrap.sh cabal-install-0.14.0/bootstrap.sh
+--- cabal-install-0.14.0.orig/bootstrap.sh	2014-09-17 23:12:23.342655189 +0900
++++ cabal-install-0.14.0/bootstrap.sh	2014-09-17 23:12:38.942655057 +0900
 @@ -119,7 +119,7 @@
    URL=${HACKAGE_URL}/${PKG}/${VER}/${PKG}-${VER}.tar.gz
    if which ${CURL} > /dev/null

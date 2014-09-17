@@ -137,12 +137,12 @@ test_sort_package_version() {
   assertEquals "" "`sort_package_version aa bb cc`"
 }
 
-test_compare_version() {
-  assertTrue "right_is_newer_version 1.4 1.3"
-  assertFalse "right_is_newer_version 1.4 1.4"
-  assertTrue "right_is_newer_version 1.4.0 1.4"
-  assertFalse "right_is_newer_version 1.4 1.4.0"
-  assertFalse "right_is_newer_version 1.4 1.5"
+test_right_is_newer_or_same_version() {
+  assertTrue "right_is_newer_or_same_version 1.4 1.3"
+  assertTrue "right_is_newer_or_same_version 1.4 1.4"
+  assertTrue "right_is_newer_or_same_version 1.4.0 1.4"
+  assertFalse "right_is_newer_or_same_version 1.4 1.4.0"
+  assertFalse "right_is_newer_or_same_version 1.4 1.5"
 }
 
 . shunit2/src/shunit2

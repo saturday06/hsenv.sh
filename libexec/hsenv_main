@@ -171,22 +171,20 @@ install_bootstrap_cabal_mingw_archive() (
 
 install_bootstrap_cabal_mingw() (
   lib_version=$1
-  case `min_package_version $lib_version 1.20.0.2` in
-    1.20.*)
-      install_bootstrap_cabal_mingw_archive 1.20.0.3
-      return $?
-      ;;
-    1.18.*)
-      version=1.18.0.3
-      ;;
-    1.16.*|1.14.*)
-      version=0.14.0
-      ;;
-    *)
-      hsenv_warn Not supported version
-      return 1
-      ;;
-  esac
+  if right_is_newer_or_same_version $lib_version 1.20; then
+    install_bootstrap_cabal_mingw_archive 1.20.0.3
+    return $?
+  elif right_is_newer_or_same_version $lib_version 1.18; then
+    version=1.18.0.3
+  elif right_is_newer_or_same_version $lib_version 1.14; then
+    version=0.14.0
+  elif right_is_newer_or_same_version $lib_version 1.10; then
+    version=0.10.2
+  elif right_is_newer_or_same_version $lib_version 1.8; then
+    version=0.8.2
+  else
+    version=0.6.4
+  fi
   hsenv_info Install: cabal-install-$version
   downloader http://www.haskell.org/cabal/release/cabal-install-$version/cabal.exe $bootstrap_dir/bin/cabal.exe
 )
@@ -207,28 +205,31 @@ install_bootstrap_cabal() (
     install_bootstrap_cabal_mingw $lib_version
     return $?
   fi
-  case `min_package_version $lib_version 1.20.0.2` in
-    1.20.*)
-      version=1.20.0.3
-      ;;
-    1.18.*)
-      version=1.18.0.5
-      ;;
-    1.16.*)
-      version=1.16.0.2
-      patch_file=$HSENV_PATCH_DIR/cabal-install-1.16.0.2.patch
-      ;;
-    1.14.*)
-      version=0.14.0
-      ;;
-    *)
-      hsenv_warn Not supported version
-      return 1
-      ;;
-  esac
+
+  if right_is_newer_or_same_version $lib_version 1.20; then
+    version=1.20.0.3
+  elif right_is_newer_or_same_version $lib_version 1.18; then
+    version=1.18.0.5
+  elif right_is_newer_or_same_version $lib_version 1.16; then
+    version=1.16.0.2
+  elif right_is_newer_or_same_version $lib_version 1.14; then
+    version=0.14.0
+  elif right_is_newer_or_same_version $lib_version 1.10; then
+    version=0.10.2
+  elif right_is_newer_or_same_version $lib_version 1.8; then
+    version=0.8.2
+  elif right_is_newer_or_same_version $lib_version 1.6; then
+    version=0.6.4
+  elif right_is_newer_or_same_version $lib_version 1.4; then
+    version=0.5.2
+  else
+    hsenv_info Automated installation of cabal-install is not supported
+    return 0
+  fi
 
   hsenv_info Install: cabal-install-$version
 
+  patch_file=$HSENV_PATCH_DIR/cabal-install-$version.patch
   cabal_install_package_db=$bootstrap_dir/package.conf.d
   hsenv_debug Bootstrap package db: $cabal_install_package_db
   ghc_version_output=`GHC_PACKAGE_PATH=$hsenv_install_package_db $HSENV_INSTALL_ROOT/ghc/bin/ghc-pkg --version`
@@ -251,7 +252,7 @@ install_bootstrap_cabal() (
   downloader $url $cabal_install_archive \
     && extract_archive $cabal_install_archive $cabal_install_extracted \
     && cd $cabal_install_extracted \
-    && (test -z "$patch_file" || patch < "$patch_file" >> `log_file`) \
+    && (test ! -e $patch_file || patch < $patch_file >> `log_file`) \
     && chmod u+x bootstrap.sh \
     && hsenv_info Installing... \
     && ( \

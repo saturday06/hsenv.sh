@@ -1,0 +1,29 @@
+diff -u cabal-install-0.6.4.orig/bootstrap.sh cabal-install-0.6.4/bootstrap.sh
+--- cabal-install-0.6.4.orig/bootstrap.sh	2014-09-17 23:02:17.866660310 +0900
++++ cabal-install-0.6.4/bootstrap.sh	2014-09-17 23:05:44.034658566 +0900
+@@ -16,6 +16,7 @@
+ GHC_PKG=${GHC_PKG:-ghc-pkg}
+ WGET=${WGET:-wget}
+ CURL=${CURL:-curl}
++FETCH=${FETCH:-fetch}
+ TAR=${TAR:-tar}
+ GUNZIP=${GUNZIP:-gunzip}
+ SCOPE_OF_INSTALLATION="--user"
+@@ -127,12 +128,15 @@
+   URL=${HACKAGE_URL}/${PKG}/${VER}/${PKG}-${VER}.tar.gz
+   if which ${CURL} > /dev/null
+   then
+-    ${CURL} -C - -O ${URL} || die "Failed to download ${PKG}."
++    ${CURL} -L --fail -O ${URL} || die "Failed to download ${PKG}."
+   elif which ${WGET} > /dev/null
+   then
+     ${WGET} -c ${URL} || die "Failed to download ${PKG}."
++  elif which ${FETCH} > /dev/null
++  then
++    ${FETCH} ${URL} || die "Failed to download ${PKG}."
+   else
+-    die "Failed to find a downloader. 'wget' or 'curl' is required."
++    die "Failed to find a downloader. 'curl', 'wget' or 'fetch' is required."
+   fi
+   [ -f "${PKG}-${VER}.tar.gz" ] \
+     || die "Downloading ${URL} did not create ${PKG}-${VER}.tar.gz"
