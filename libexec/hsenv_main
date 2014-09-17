@@ -252,11 +252,11 @@ install_bootstrap_cabal() (
     && cd $cabal_install_extracted \
     && chmod u+x bootstrap.sh \
     && hsenv_info Installing... \
-    && (CURL=\curl \
-         EXTRA_CONFIGURE_OPTS="--package-db=$cabal_install_package_db" \
-         PREFIX=$bootstrap_dir \
-         PATH=$path_var_prependix:$PATH \
-         ./bootstrap.sh --global 2>&1 | $PV | hsenv_debug -)
+    && ( \
+      EXTRA_CONFIGURE_OPTS="--package-db=$cabal_install_package_db" \
+      PREFIX=$bootstrap_dir \
+      PATH=$path_var_prependix:$PATH \
+      ./bootstrap.sh --global 2>&1 | $PV | hsenv_debug -)
 )
 
 install_remote_url() (
