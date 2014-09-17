@@ -5,6 +5,7 @@ if [ -z "$HSENV_ROOT_DIR" ]; then
 fi
 export HSENV_LIBEXEC_DIR="$HSENV_ROOT_DIR/libexec"
 export HSENV_SKELTON_DIR="$HSENV_ROOT_DIR/skelton"
+export HSENV_PATCH_DIR="$HSENV_ROOT_DIR/patch"
 export HSENV_TMP_DIR="$HSENV_ROOT_DIR/tmp"
 export HSENV_CACHE_DIR="$HSENV_TMP_DIR/cache"
 export HSENV_EXTRACT_ARCHIVE_DIR="$HSENV_TMP_DIR/extract_archive"

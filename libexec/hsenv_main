@@ -216,6 +216,7 @@ install_bootstrap_cabal() (
       ;;
     1.16.*)
       version=1.16.0.2
+      patch_file=$HSENV_PATCH_DIR/cabal-install-1.16.0.2.patch
       ;;
     1.14.*)
       version=0.14.0
@@ -250,6 +251,7 @@ install_bootstrap_cabal() (
   downloader $url $cabal_install_archive \
     && extract_archive $cabal_install_archive $cabal_install_extracted \
     && cd $cabal_install_extracted \
+    && (test -z "$patch_file" || patch < "$patch_file" >> `log_file`) \
     && chmod u+x bootstrap.sh \
     && hsenv_info Installing... \
     && ( \

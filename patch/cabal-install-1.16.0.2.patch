@@ -1,0 +1,15 @@
+Common subdirectories: cabal-install-1.16.0.2.orig/bash-completion and cabal-install-1.16.0.2/bash-completion
+diff -u cabal-install-1.16.0.2.orig/bootstrap.sh cabal-install-1.16.0.2/bootstrap.sh
+--- cabal-install-1.16.0.2.orig/bootstrap.sh	2012-11-07 14:16:35.000000000 +0900
++++ cabal-install-1.16.0.2/bootstrap.sh	2014-09-17 19:59:13.818753211 +0900
+@@ -119,7 +119,7 @@
+   URL=${HACKAGE_URL}/${PKG}/${VER}/${PKG}-${VER}.tar.gz
+   if which ${CURL} > /dev/null
+   then
+-    ${CURL} --fail -C - -O ${URL} || die "Failed to download ${PKG}."
++    ${CURL} -L --fail -O ${URL} || die "Failed to download ${PKG}."
+   elif which ${WGET} > /dev/null
+   then
+     ${WGET} -c ${URL} || die "Failed to download ${PKG}."
+Common subdirectories: cabal-install-1.16.0.2.orig/cbits and cabal-install-1.16.0.2/cbits
+Common subdirectories: cabal-install-1.16.0.2.orig/Distribution and cabal-install-1.16.0.2/Distribution
