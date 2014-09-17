@@ -111,3 +111,12 @@ sort_package_version() (
       }
     }' $*
 )
+
+right_is_newer_version() (
+  right=$1
+  left=$2
+  if [ $right = $left ] || [ `max_package_version $right $left` = $left ]; then
+    return 1
+  fi
+  return 0
+)
