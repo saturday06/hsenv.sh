@@ -111,30 +111,30 @@ test_sort_package_version() {
 12\
 " "`sort_package_version 12 2 3 2`"
 
-assertEquals "\
+  assertEquals "\
 1.1
 1.2
 1.2.0\
 " "`sort_package_version 1.2 1.2.0 1.1`"
 
-assertEquals "\
+  assertEquals "\
 2.9
 3\
 " "`sort_package_version 2.9 3`"
 
-assertEquals "\
+  assertEquals "\
 0.2.9
 0.3\
 " "`sort_package_version 0.2.9 0.3`"
 
-assertEquals 0.2.9 "`sort_package_version 0.2.9 0x3`"
-assertEquals 0.2.9 "`sort_package_version 0.2.9 0.3.`"
-assertEquals 0.2.9 "`sort_package_version 0.2.9 .3`"
-assertEquals "\
+  assertEquals 0.2.9 "`sort_package_version 0.2.9 0x3`"
+  assertEquals 0.2.9 "`sort_package_version 0.2.9 0.3.`"
+  assertEquals 0.2.9 "`sort_package_version 0.2.9 .3`"
+  assertEquals "\
 0.2
 0.3\
 " "`sort_package_version version: 0.3 version: 0.2`"
-assertEquals "" "`sort_package_version aa bb cc`"
+  assertEquals "" "`sort_package_version aa bb cc`"
 }
 
 test_compare_version() {
