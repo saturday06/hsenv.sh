@@ -39,15 +39,25 @@ test_extract_archive() {
 
   assertTrue "extract_archive $data_dir/test.tar.gz $out_dir/gz"
   assertTrue "cmp $data_dir/gz.txt $out_dir/gz/gz.txt"
-  assertFalse "extract_archive $data_dir/multi_root.tar.gz $out_dir/gz"
+  assertTrue "extract_archive $data_dir/test.tgz $out_dir/tgz"
+  assertTrue "cmp $data_dir/gz.txt $out_dir/tgz/gz.txt"
+  assertFalse "extract_archive $data_dir/multi_root.tar.gz $out_dir/mgz"
 
   assertTrue "extract_archive $data_dir/test.tar.bz2 $out_dir/bz2"
   assertTrue "cmp $data_dir/bz2.txt $out_dir/bz2/bz2.txt"
-  assertFalse "extract_archive $data_dir/multi_root.tar.bz2 $out_dir/bz2"
+  assertTrue "extract_archive $data_dir/test.tbz $out_dir/tbz"
+  assertTrue "cmp $data_dir/bz2.txt $out_dir/tbz/bz2.txt"
+  assertFalse "extract_archive $data_dir/multi_root.tar.bz2 $out_dir/mbz2"
 
   assertTrue "extract_archive $data_dir/test.tar.xz $out_dir/xz"
   assertTrue "cmp $data_dir/xz.txt $out_dir/xz/xz.txt"
-  assertFalse "extract_archive $data_dir/multi_root.tar.xz $out_dir/xz"
+  assertTrue "extract_archive $data_dir/test.txz $out_dir/txz"
+  assertTrue "cmp $data_dir/xz.txt $out_dir/txz/xz.txt"
+  assertFalse "extract_archive $data_dir/multi_root.tar.xz $out_dir/mxz"
+
+  assertTrue "extract_archive $data_dir/test.tar $out_dir/tar"
+  assertTrue "cmp $data_dir/tar.txt $out_dir/tar/tar.txt"
+  assertFalse "extract_archive $data_dir/multi_root.tar $out_dir/mtar"
 
   rm -fr $HSENV_EXTRACT_ARCHIVE_DIR
 }

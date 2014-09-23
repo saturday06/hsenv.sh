@@ -38,12 +38,14 @@ extract_archive() (
   rm -fr $tmp_dir
   mkdir -p $tmp_dir
 
-  if echo $1 | $EGREP "\.xz$" > /dev/null; then
+  if echo $1 | $EGREP "\.(xz|txz)$" > /dev/null; then
     xz -cd $1 | extract_tar $tmp_dir
-  elif echo $1 | $EGREP "\.bz2$" > /dev/null; then
+  elif echo $1 | $EGREP "\.(bz2|tbz)$" > /dev/null; then
     bzip2 -cd $1 | extract_tar $tmp_dir
-  elif echo $1 | $EGREP "\.gz$" > /dev/null; then
+  elif echo $1 | $EGREP "\.t?gz$" > /dev/null; then
     gzip -cd $1 | extract_tar $tmp_dir
+  elif echo $1 | $EGREP "\.tar$" > /dev/null; then
+    cat $1 | extract_tar $tmp_dir
   else
     echo "Unsupported archive"
     return 1
