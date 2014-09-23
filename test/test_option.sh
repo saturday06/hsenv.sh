@@ -4,52 +4,52 @@ SHUNIT_PARENT=$0
 . `dirname $0`/init.sh
 . `dirname $0`/../libexec/option
 
-test_parse() {
-  parse
+test_read_option() {
+  read_option
   assertEquals "" "$HSENV_NAME"
   assertEquals "" "$HSENV_GHC"
   assertEquals "3" "$HSENV_LOG_LEVEL"
   assertEquals "hsenv_main" "$HSENV_COMMAND"
 
-  parse --verbose
+  read_option --verbose
   assertEquals "" "$HSENV_NAME"
   assertEquals "" "$HSENV_GHC"
   assertEquals "4" "$HSENV_LOG_LEVEL"
 
-  parse --very-verbose
+  read_option --very-verbose
   assertEquals "" "$HSENV_NAME"
   assertEquals "" "$HSENV_GHC"
   assertEquals "5" "$HSENV_LOG_LEVEL"
 
-  parse --very-verbose --verbose
+  read_option --very-verbose --verbose
   assertEquals "" "$HSENV_NAME"
   assertEquals "" "$HSENV_GHC"
   assertEquals "5" "$HSENV_LOG_LEVEL"
 
-  parse --verbose --very-verbose
+  read_option --verbose --very-verbose
   assertEquals "" "$HSENV_NAME"
   assertEquals "" "$HSENV_GHC"
   assertEquals "5" "$HSENV_LOG_LEVEL"
 
-  parse --name=foo
+  read_option --name=foo
   assertEquals "foo" "$HSENV_NAME"
   assertEquals "" "$HSENV_GHC"
   assertEquals "3" "$HSENV_LOG_LEVEL"
 
-  parse --ghc=source
+  read_option --ghc=source
   assertEquals "" "$HSENV_NAME"
   assertEquals "source" "$HSENV_GHC"
   assertEquals "3" "$HSENV_LOG_LEVEL"
 
-  parse --name=bar --ghc=http://example.com/foo.tar.gz --verbose
+  read_option --name=bar --ghc=http://example.com/foo.tar.gz --verbose
   assertEquals "bar" "$HSENV_NAME"
   assertEquals "http://example.com/foo.tar.gz" "$HSENV_GHC"
   assertEquals "4" "$HSENV_LOG_LEVEL"
 
-  parse --version
+  read_option --version
   assertEquals "hsenv_version" "$HSENV_COMMAND"
 
-  parse --help
+  read_option --help
   assertEquals "hsenv_help" "$HSENV_COMMAND"
 }
 

@@ -9,7 +9,7 @@ export HSENV_WORK_DIR=`pwd`
 . "`dirname $0`/../libexec/init"
 
 start_new_log
-parse $*
+read_option $*
 if [ -z "$HSENV_NAME" ]; then
   export HSENV_INSTALL_ROOT=$HSENV_WORK_DIR/.hsenv
 else

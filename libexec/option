@@ -1,6 +1,6 @@
 #!/bin/sh
 
-parse() { # No subshell
+read_option() { # No subshell
   export HSENV_GHC=
   export HSENV_NAME=
   export HSENV_LOG_LEVEL=3
