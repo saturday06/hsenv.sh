@@ -4,10 +4,12 @@ read_option() { # No subshell
   export HSENV_GHC=
   export HSENV_NAME=
   export HSENV_LOG_LEVEL=3
-  export HSENV_COMMAND=hsenv_main
   export HSENV_PS1_INDICATOR=true
   export HSENV_SANITY_CHECK=true
   export HSENV_SHARE_CABAL_CACHE=true
+  if [ -z "$HSENV_COMMAND" ]; then
+    export HSENV_COMMAND=$HSENV_LIBEXEC_DIR/hsenv_main
+  fi
   if has_command cabal; then
     export HSENV_BOOTSTRAP_CABAL=false
   else
@@ -33,11 +35,11 @@ read_option() { # No subshell
         shift
         ;;
       --version)
-        HSENV_COMMAND=hsenv_version
+        HSENV_COMMAND=$HSENV_LIBEXEC_DIR/hsenv_version
         return
         ;;
       -h|--help)
-        HSENV_COMMAND=hsenv_help
+        HSENV_COMMAND=$HSENV_LIBEXEC_DIR/hsenv_help
         return
         ;;
       --dont-share-cabal-cache)

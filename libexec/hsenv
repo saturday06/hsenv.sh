@@ -16,4 +16,4 @@ else
   export HSENV_INSTALL_ROOT=$HSENV_WORK_DIR/.hsenv_$HSENV_NAME
 fi
 hsenv_trace Options: "$@"
-. $HSENV_LIBEXEC_DIR/$HSENV_COMMAND 2>&1 | hsenv_info -
+. $HSENV_COMMAND 2>&1 | hsenv_info -

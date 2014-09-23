@@ -9,7 +9,7 @@ test_read_option() {
   assertEquals "" "$HSENV_NAME"
   assertEquals "" "$HSENV_GHC"
   assertEquals "3" "$HSENV_LOG_LEVEL"
-  assertEquals "hsenv_main" "$HSENV_COMMAND"
+  assertEquals "$HSENV_LIBEXEC_DIR/hsenv_main" "$HSENV_COMMAND"
 
   read_option --verbose
   assertEquals "" "$HSENV_NAME"
@@ -47,10 +47,10 @@ test_read_option() {
   assertEquals "4" "$HSENV_LOG_LEVEL"
 
   read_option --version
-  assertEquals "hsenv_version" "$HSENV_COMMAND"
+  assertEquals "$HSENV_LIBEXEC_DIR/hsenv_version" "$HSENV_COMMAND"
 
   read_option --help
-  assertEquals "hsenv_help" "$HSENV_COMMAND"
+  assertEquals "$HSENV_LIBEXEC_DIR/hsenv_help" "$HSENV_COMMAND"
 }
 
 test_is_version() {
