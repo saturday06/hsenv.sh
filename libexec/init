@@ -22,6 +22,14 @@ if [ -z "$HSENV_RAW_STDERR" ]; then
   export HSENV_RAW_STDERR=2
 fi
 
+unset_hsenv_envs() {
+  for key in `$NAWK 'BEGIN { for (key in ENVIRON) { print key } }'`; do
+    if echo $key | grep "^HSENV_" > /dev/null 2> /dev/null; then
+      unset $key
+    fi
+  done
+}
+
 . "$HSENV_LIBEXEC_DIR/log"
 . "$HSENV_LIBEXEC_DIR/host"
 . "$HSENV_LIBEXEC_DIR/option"
