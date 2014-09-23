@@ -51,11 +51,7 @@ hsenv_log() (
   echo "$*" >> $log_file
 
   if [ $log_level -le $HSENV_LOG_LEVEL ]; then
-    if [ -t $HSENV_RAW_STDOUT ]; then
-      echo "$*" >&$HSENV_RAW_STDOUT
-    else
-      echo "$*"
-    fi
+    echo "$*" >&$HSENV_RAW_STDOUT
   fi
 )
 
