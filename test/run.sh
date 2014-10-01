@@ -48,6 +48,7 @@ run_test() (
 if [ -z "$HSENV_TEST_LEVEL" ]; then
   HSENV_TEST_LEVEL=0
 fi
+echo HSENV_TEST_LEVEL=$HSENV_TEST_LEVEL
 
 if [ $HSENV_TEST_LEVEL -ge 3 ]; then
   rm -fr ../tmp
@@ -61,7 +62,7 @@ if [ "$HSENV_TEST_COLOR" = "" ]; then
   fi
 fi
 
-if [ "$1" = "all" ]; then
+if [ $HSENV_TEST_LEVEL -ge 10 ]; then
   tested_shells=
   ignored_shells=
   for sh in ash bash dash ksh mksh posh sh; do

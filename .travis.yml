@@ -3,4 +3,4 @@ os:
   - osx
 before_install:
   - ./test/prepare_travis.sh
-script: HSENV_TEST_LEVEL=10 ./test/run.sh all
+script: HSENV_TEST_LEVEL=10 ./test/run.sh
