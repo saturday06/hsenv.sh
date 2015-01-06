@@ -307,16 +307,19 @@ install_local() (
   srcdir=$HSENV_INSTALL_ROOT/src
   move_log_to_install_dir
   hsenv_info Extracting...
-  (extract_archive $file $srcdir) && \
-    hsenv_info Installing... && \
-    if [ -f $srcdir/configure ]; then \
-      cd $srcdir && \
-      (./configure --prefix=$HSENV_INSTALL_ROOT/ghc && \
-        ($MAKE || true) && \
-        $MAKE install) 2>&1 | $PV | hsenv_debug -
-    else
-      mv $srcdir $HSENV_INSTALL_ROOT/ghc
-    fi
+  if ! extract_archive $file $srcdir; then
+    hsenv_abort Failed
+  fi
+  hsenv_info Installing...
+  if [ -f $srcdir/configure ]; then
+    (cd $srcdir \
+      && ./configure --prefix=$HSENV_INSTALL_ROOT/ghc \
+      && ($MAKE || true) \
+      && $MAKE install \
+      ) 2>&1 | $PV | hsenv_debug -
+  else
+    mv $srcdir $HSENV_INSTALL_ROOT/ghc
+  fi
 
   if ! $HSENV_INSTALL_ROOT/ghc/bin/ghc --version > /dev/null; then
     hsenv_abort Failed
