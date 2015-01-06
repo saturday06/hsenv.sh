@@ -5,24 +5,19 @@ cat <<USAGE >&$HSENV_RAW_STDOUT
 usage: hsenv [FLAGS]
 
 Flags:
---dont-share-cabal-cache  Don't share ~/.cabal/packages (hackage download cache)
---ghc=FILE                Use GHC from provided tarball
-                          (e.g. ghc-7.0.4-i386-unknown-linux.tar.bz2)
-                          (defaults to system's copy of GHC)
---bootstrap-cabal         Bootstrap cabal-install inside virtual environment
-                          (Use this if you don't have cabal-install installed
-                          or it's not on your \$PATH)
--h, --help                Show this help message
---make-cmd=CMD            Used as make substitute for installing GHC from tarball
-                          (e.g. gmake)
-                          (defaults to make)
---name=NAME               Use NAME as name of the Virtual Haskell Environment
-                          (defaults to current directory name)
---no-ps1-indicator        Don't modify the shell prompt to indicate the current hsenv
---skip-sanity-check       Skip all the sanity checks (use at your own risk)
--v, --verbose             Print some debugging info
---version                 Show version string
---very-verbose            Print some more debugging info
+--ghc=FILE          Use GHC from provided tarball
+                    (e.g. ghc-7.0.4-i386-unknown-linux.tar.bz2)
+                    (defaults to system's copy of GHC)
+-h, --help          Show this help message
+--make-cmd=CMD      Used as make substitute for installing GHC from tarball
+                    (e.g. gmake)
+                    (defaults to make)
+--name=NAME         Use NAME as name of the Virtual Haskell Environment
+                    (defaults to current directory name)
+--no-ps1-indicator  Don't modify the shell prompt to indicate the current hsenv
+-v, --verbose       Print some debugging info
+--version           Show version string
+--very-verbose      Print some more debugging info
 
 Creates Virtual Haskell Environment in the current directory.
 All files will be stored in the .hsenv[_NAME]/ subdirectory.
