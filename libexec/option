@@ -131,9 +131,11 @@ else
   exit 1
 fi
 
-export MAKE=make
-if has_command gmake; then
-  export MAKE=gmake
+if [ -z "$MAKE" ]; then
+  export MAKE=make
+  if has_command gmake; then
+    export MAKE=gmake
+  fi
 fi
 
 export TAR=tar
