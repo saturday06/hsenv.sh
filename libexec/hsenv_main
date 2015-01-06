@@ -316,11 +316,14 @@ install_local() (
       && ./configure --prefix=$HSENV_INSTALL_ROOT/ghc \
       && ($MAKE || true) \
       && $MAKE install \
+      && touch $HSENV_INSTALL_ROOT/ghc.done \
       ) 2>&1 | $PV | hsenv_debug -
   else
-    mv $srcdir $HSENV_INSTALL_ROOT/ghc
+    mv $srcdir $HSENV_INSTALL_ROOT/ghc && touch $HSENV_INSTALL_ROOT/ghc.done
   fi
-
+  if [ ! -e $HSENV_INSTALL_ROOT/ghc.done ]; then
+    hsenv_abort Failed
+  fi
   if ! $HSENV_INSTALL_ROOT/ghc/bin/ghc --version > /dev/null; then
     hsenv_abort Failed
   fi
