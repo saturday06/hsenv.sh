@@ -131,9 +131,16 @@ else
   exit 1
 fi
 
+is_gnu_make() (
+  if ! has_command $1; then
+    return 1
+  fi
+  (cd $HSENV_LIBEXEC_DIR/gnumakechecker && $1) > /dev/null 2> /dev/null
+)
+
 if [ -z "$MAKE" ]; then
   export MAKE=make
-  if has_command gmake; then
+  if ! is_gnu_make $MAKE && is_gnu_make gmake; then
     export MAKE=gmake
   fi
 fi
@@ -142,4 +149,3 @@ export TAR=tar
 if has_command gtar; then
   export TAR=gtar
 fi
-
