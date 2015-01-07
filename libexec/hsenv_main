@@ -173,7 +173,10 @@ install_bootstrap_cabal_mingw_archive() (
 
 install_bootstrap_cabal_mingw() (
   lib_version=$1
-  if right_is_newer_or_same_version $lib_version 1.20; then
+  if right_is_newer_or_same_version $lib_version 1.22; then
+    install_bootstrap_cabal_mingw_archive 1.22.0.0
+    return $?
+  elif right_is_newer_or_same_version $lib_version 1.20; then
     install_bootstrap_cabal_mingw_archive 1.20.0.3
     return $?
   elif right_is_newer_or_same_version $lib_version 1.18; then
@@ -208,8 +211,10 @@ install_bootstrap_cabal() (
     return $?
   fi
 
-  if right_is_newer_or_same_version $lib_version 1.20; then
-    version=1.20.0.3
+  if right_is_newer_or_same_version $lib_version 1.22; then
+    version=1.22.0.0
+  elif right_is_newer_or_same_version $lib_version 1.20; then
+    version=1.20.0.6
   elif right_is_newer_or_same_version $lib_version 1.18; then
     version=1.18.0.5
   elif right_is_newer_or_same_version $lib_version 1.16; then
