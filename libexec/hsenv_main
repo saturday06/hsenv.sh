@@ -152,6 +152,7 @@ install_helper_scripts() (
     fi
   fi
 
+  touch "$HSENV_INSTALL_ROOT/done"
   hsenv_info Done
   hsenv_info
   hsenv_info To activate the new environment use \`source `basename $HSENV_INSTALL_ROOT`/bin/activate\'
@@ -314,8 +315,10 @@ install_local() (
   install_helper_scripts
 )
 
-if [ -e "$HSENV_INSTALL_ROOT" ]; then
-  hsenv_abort There is already `basename $HSENV_INSTALL_ROOT` directory at $HSENV_WORK_DIR
+if [ -e "$HSENV_INSTALL_ROOT/done" ]; then
+  hsenv_abort There is already installed hsenv \``basename $HSENV_INSTALL_ROOT`\' at $HSENV_WORK_DIR
+elif [ -e "$HSENV_INSTALL_ROOT" ]; then
+  rm -fr "$HSENV_INSTALL_ROOT"
 fi
 
 hsenv_info Install to $HSENV_INSTALL_ROOT
