@@ -2,8 +2,13 @@
 
 . $HSENV_LIBEXEC_DIR/init
 
-transplant_local_executable() (
+install_with_no_version() (
   if ! has_command ghc; then
+    url=`binary_url $HSENV_HOST_COMBO $HSENV_GHC`
+    if [ -n "$url" ]; then
+      install_remote_url $url
+      return
+    fi
     hsenv_abort Error: ghc is required.
   fi
 

@@ -83,7 +83,7 @@ is_url() (
 
 installation_of() (
   if [ -z "$1" ]; then
-    echo transplant_local_executable
+    echo install_with_no_version
   elif is_version $1; then
     echo install_with_version
   elif is_url $1; then

@@ -74,8 +74,8 @@ test_is_url() {
 }
 
 test_installation_of() {
-  assertEquals "transplant_local_executable" "`installation_of`"
-  assertEquals "transplant_local_executable" "`installation_of ''`"
+  assertEquals "install_with_no_version" "`installation_of`"
+  assertEquals "install_with_no_version" "`installation_of ''`"
   assertEquals "install_with_version" "`installation_of 7.8.3`"
   assertEquals "install_with_version" "`installation_of 1.2`"
   assertEquals "install_remote" "`installation_of http://aa`"
