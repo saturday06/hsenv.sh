@@ -6,7 +6,8 @@ if [ "$HSENV_HOST_COMBO" != "" ]; then
   export HSENV_HOST_VENDOR=`echo $HSENV_HOST_COMBO | awk -F- '{print $2}'`
   export HSENV_HOST_OS=`echo $HSENV_HOST_COMBO | awk -F- '{print $3}'`
 else
-  _hsenv_private_warn "host environment detection (config.guess) failed"
+  echo "host environment detection (config.guess) failed" >&$HSENV_RAW_STDERR
+  exit 1
 fi
 
 is_mingw() (
