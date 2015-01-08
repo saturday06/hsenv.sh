@@ -9,10 +9,10 @@ test_source_url() {
 }
 
 test_binary_url() {
-  HSENV_HOST_OS=linux
-  assertEquals "http://www.haskell.org/ghc/dist/7.8.3/ghc-7.8.3-x86_64-unknown-linux-deb7.tar.bz2" "`binary_url 7.8.3`"
-  HSENV_HOST_OS=darwin
-  assertEquals "http://www.haskell.org/ghc/dist/7.8.3/ghc-7.8.3-x86_64-apple-darwin.tar.bz2" "`binary_url 7.8.3`"
+  assertEquals "https://www.haskell.org/ghc/dist/7.8.4/ghc-7.8.4-x86_64-unknown-mingw32.tar.xz" "`binary_url x86_64-pc-msys 7.8.4`"
+  assertEquals "https://www.haskell.org/ghc/dist/7.8.3/ghc-7.8.3-x86_64-unknown-mingw32.tar.xz" "`binary_url x86_64-pc-msys 7.8.3`"
+  assertEquals "https://www.haskell.org/ghc/dist/7.8.3/ghc-7.8.3-i386-unknown-mingw32.tar.xz" "`binary_url i686-pc-mingw32 7.8.3`"
+  assertEquals "" "`binary_url i686-pc-mingw32 1.2.3`"
 }
 
 test_url_basename() {

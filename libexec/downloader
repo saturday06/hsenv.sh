@@ -5,24 +5,19 @@ source_url() (
 )
 
 binary_url() (
-  case $HSENV_HOST_OS in
-    linux)
-      echo http://www.haskell.org/ghc/dist/$1/ghc-$1-x86_64-unknown-linux-deb7.tar.bz2
-      return
-      ;;
-    darwin*)
-      echo http://www.haskell.org/ghc/dist/$1/ghc-$1-x86_64-apple-darwin.tar.bz2
-      return
-      ;;
-    mingw64)
-      echo http://www.haskell.org/ghc/dist/$1/ghc-$1-x86_64-unknown-mingw32.tar.bz2
-      return
-      ;;
-    mingw*)
-      echo http://www.haskell.org/ghc/dist/$1/ghc-$1-i386-unknown-mingw32.tar.bz2
-      return
-      ;;
-  esac
+  combo=$1
+  versions=$2
+  if [ -z "$versions" ]; then
+    versions=`cd $HSENV_LIBEXEC_DIR/binchecker/versions && echo *`
+  fi
+  for version in `sort_package_version $versions`; do
+    command=$HSENV_LIBEXEC_DIR/binchecker/versions/$version
+    url_bak=`$command $combo`
+    if [ -n "$url_bak" ]; then
+      url=$url_bak
+    fi
+  done
+  echo $url
 )
 
 url_basename() (
