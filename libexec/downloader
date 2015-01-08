@@ -10,9 +10,13 @@ binary_url() (
   if [ -z "$versions" ]; then
     versions=`cd $HSENV_LIBEXEC_DIR/binchecker/versions && echo *`
   fi
+  error_log_file=`log_file`
+  if [ $? -ne 0 ]; then
+    error_log_file=/dev/null
+  fi
   for version in `sort_package_version $versions`; do
     command=$HSENV_LIBEXEC_DIR/binchecker/versions/$version
-    url_bak=`$command $combo`
+    url_bak=`$command $combo 2>> $error_log_file`
     if [ -n "$url_bak" ]; then
       url=$url_bak
     fi
