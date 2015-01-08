@@ -318,7 +318,7 @@ install_local() (
       mv $srcdir $HSENV_INSTALL_ROOT/ghc
     fi
 
-  if ! $HSENV_INSTALL_ROOT/ghc/bin/ghc --version 2> /dev/null; then
+  if ! $HSENV_INSTALL_ROOT/ghc/bin/ghc --version > /dev/null; then
     hsenv_abort Failed
   fi
 
