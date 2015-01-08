@@ -118,7 +118,7 @@ filter_install() (
 
 cabal_update() (
   cd $HSENV_WORK_DIR
-  . .hsenv/bin/activate
+  . $HSENV_INSTALL_ROOT/bin/activate
   cabal update
 )
 
