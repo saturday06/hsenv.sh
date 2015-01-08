@@ -33,6 +33,18 @@ url_to_cache_name() (
   echo $1 | sed 's,/,%2F,g' | sed 's/:/%3A/g' | sed 's/;/%3B/g' | sed 's/\./%2E/g'
 )
 
+has_downloader() (
+  tool=$1
+  if ! has_command $tool; then
+    return 1
+  fi
+  if [ "$tool" = "lwp-download" ]; then
+    lwp-download http://example.com $HSENV_TMP_DIR/lwp-download-check > /dev/null 2> /dev/null
+  else
+    true
+  fi
+)
+
 downloader() (
   url=$1
   file=$2
@@ -48,13 +60,13 @@ downloader() (
   downloading_cache_file=$cache_file.downloading
   rm -f $downloading_cache_file
 
-  if has_command curl; then
+  if has_downloader curl; then
     downloader_curl $url $downloading_cache_file
-  elif has_command wget; then
+  elif has_downloader wget; then
     downloader_wget $url $downloading_cache_file
-  elif has_command fetch; then
+  elif has_downloader fetch; then
     downloader_fetch $url $downloading_cache_file
-  elif has_command lwp-download; then
+  elif has_downloader lwp-download; then
     downloader_lwp_download $url $downloading_cache_file
   else
     hsenv_error "curl/wget/fetch/lwp-download required"

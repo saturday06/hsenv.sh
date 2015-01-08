@@ -54,7 +54,7 @@ test_downloader_tools() {
   tested_downloaders=
   ignored_downloaders=
   for tool in curl wget fetch lwp-download; do
-    if has_command $tool; then
+    if has_downloader $tool; then
       tested_downloaders="$tested_downloaders $tool"
       command="downloader_`echo $tool | sed 's/-/_/g'`"
       dir="$tmp_dir/$tool"
