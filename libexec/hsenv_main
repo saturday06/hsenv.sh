@@ -281,9 +281,13 @@ install_remote_url() (
   install_local $file
 )
 
-install_remote_source() (
+install_with_version() (
   hsenv_info GHC version=$HSENV_GHC
-  install_remote_url `source_url $HSENV_GHC`
+  url=`binary_url $HSENV_HOST_COMBO $HSENV_GHC`
+  if [ -z "$url" ]; then
+    url=`source_url $HSENV_GHC`
+  fi
+  install_remote_url $url
 )
 
 install_remote() (
