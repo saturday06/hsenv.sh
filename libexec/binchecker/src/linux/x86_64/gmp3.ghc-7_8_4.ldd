@@ -1,0 +1,22 @@
+	linux-vdso.so.1 (0x00007fffe168f000)
+	librt.so.1 => /lib64/librt.so.1 (0x00007f1955d29000)
+	libutil.so.1 => /lib64/libutil.so.1 (0x00007f1955b26000)
+	libdl.so.2 => /lib64/libdl.so.2 (0x00007f1955921000)
+	libgmp.so.3 => not found
+	libm.so.6 => /lib64/libm.so.6 (0x00007f1955620000)
+	libHSdirectory-1.2.1.0-ghc7.8.4.so => not found
+	libHSunix-2.7.0.1-ghc7.8.4.so => not found
+	libHSbytestring-0.10.4.0-ghc7.8.4.so => not found
+	libHStime-1.4.2-ghc7.8.4.so => not found
+	libHSold-locale-1.0.0.6-ghc7.8.4.so => not found
+	libHSdeepseq-1.3.0.2-ghc7.8.4.so => not found
+	libHSarray-0.5.0.0-ghc7.8.4.so => not found
+	libHSfilepath-1.3.0.2-ghc7.8.4.so => not found
+	libHSbase-4.7.0.2-ghc7.8.4.so => not found
+	libHSinteger-gmp-0.5.1.0-ghc7.8.4.so => not found
+	libHSghc-prim-0.3.1.0-ghc7.8.4.so => not found
+	libHSrts-ghc7.8.4.so => not found
+	libffi.so.6 => not found
+	libc.so.6 => /lib64/libc.so.6 (0x00007f1955272000)
+	libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f1955055000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007f1955f5e000)
