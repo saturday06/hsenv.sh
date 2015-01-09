@@ -47,7 +47,9 @@ case $1 in
   ;;
   i*86-pc-solaris2.11)
     if ./ix86-pc-solaris2.11; then
-      echo $base-i386-unknown-solaris2.11.tar.bz2
+      echo $base-i386-unknown-solaris2.11.tar.xz
+    elif ./ix86-pc-solaris2.10; then
+      echo $base-i386-unknown-solaris2.10.tar.xz
     fi
   ;;
 esac

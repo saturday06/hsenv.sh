@@ -1,0 +1,6 @@
+	libcurses.so.1 =>	 /lib/libcurses.so.1
+	librt.so.1 =>	 /lib/librt.so.1
+	libdl.so.1 =>	 /lib/libdl.so.1
+	libm.so.2 =>	 /lib/libm.so.2
+	libpthread.so.1 =>	 /lib/libpthread.so.1
+	libc.so.1 =>	 /lib/libc.so.1
