@@ -1,0 +1,28 @@
+#!/bin/sh
+
+set -e
+cd `dirname $0`/..
+base=https://www.haskell.org/ghc/dist/7.0.1/ghc-7.0.1
+
+case $1 in
+  i*86-pc-linux-*)
+    if ./ix86-pc-linux-gnu-gmp3; then
+      echo $base-i386-unknown-linux.tar.bz2
+    fi
+  ;;
+  x86_64-unknown-linux-*)
+    if ./x86_64-unknown-linux-gnu-gmp3; then
+      echo $base-x86_64-unknown-linux.tar.bz2
+    fi
+  ;;
+  i*86-unknown-freebsd*)
+    if ./ix86-unknown-freebsd8; then
+      echo $base-i386-unknown-freebsd.tar.bz2
+    fi
+  ;;
+  x86_64-unknown-freebsd*)
+    if ./x86_64-unknown-freebsd8; then
+      echo $base-x86_64-unknown-freebsd.tar.bz2
+    fi
+  ;;
+esac
