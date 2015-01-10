@@ -271,7 +271,7 @@ install_bootstrap_cabal() (
       EXTRA_CONFIGURE_OPTS="--package-db=$cabal_install_package_db" \
       PREFIX=$bootstrap_dir \
       PATH=$path_var_prependix:$PATH \
-      ./bootstrap.sh 2>&1 | $PV | hsenv_debug -)
+      ./bootstrap.sh 2>&1 | $HSENV_PV | hsenv_debug -)
 )
 
 install_remote_url() (
@@ -317,7 +317,7 @@ install_local() (
       && ($HSENV_MAKE || true) \
       && $HSENV_MAKE install \
       && touch $HSENV_INSTALL_ROOT/ghc.done \
-      ) 2>&1 | $PV | hsenv_debug -
+      ) 2>&1 | $HSENV_PV | hsenv_debug -
   else
     mv $srcdir $HSENV_INSTALL_ROOT/ghc && touch $HSENV_INSTALL_ROOT/ghc.done
   fi

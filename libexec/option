@@ -97,9 +97,9 @@ has_command() (
   which $1 > /dev/null 2> /dev/null
 )
 
-export PV=cat
+export HSENV_PV=cat
 if has_command pv; then
-  HSENV_PV() (
+  HSENV_PV_AND_CLEANUP() (
     pv 2>&$HSENV_RAW_STDERR
     pv_result=$?
     if [ -t $HSENV_RAW_STDERR ]; then
@@ -107,7 +107,7 @@ if has_command pv; then
     fi
     return $pv_result
   )
-  export PV=HSENV_PV
+  export HSENV_PV=HSENV_PV_AND_CLEANUP
 fi
 
 if echo "foo" | grep -E "^foo?$" > /dev/null 2> /dev/null; then

@@ -84,7 +84,7 @@ downloader() (
 execute_downloader_with_pv() (
   file=$1
   shift
-  ($* || rm -f $file) | $PV > $file
+  ($* || rm -f $file) | $HSENV_PV > $file
   test -e $file
 )
 
