@@ -10,8 +10,8 @@ ignorable_tar_error() (
     return 1
   fi
   cat $tar_error | \
-    $EGREP -v "tar: Archive value [0-9]+ is out of [gu]id_t range 0\.\.[0-9]+$" | \
-    $EGREP -v "tar:? Exiting with failure status due to previous errors$" > $tar_error.filtered
+    $HSENV_EGREP -v "tar: Archive value [0-9]+ is out of [gu]id_t range 0\.\.[0-9]+$" | \
+    $HSENV_EGREP -v "tar:? Exiting with failure status due to previous errors$" > $tar_error.filtered
   if [ -n "`cat $tar_error.filtered`" ]; then
     cat $tar_error.filtered | hsenv_error -
     return 1
@@ -22,7 +22,7 @@ ignorable_tar_error() (
 extract_tar() (
   tmp_dir=$1
   tar_error=$HSENV_EXTRACT_ARCHIVE_DIR/$$.error
-  $PV | (cd $tmp_dir && LC_ALL=C $TAR xf -) 2> $tar_error
+  $PV | (cd $tmp_dir && LC_ALL=C $HSENV_TAR xf -) 2> $tar_error
   result=$?
   if test $result -ne 0 && ignorable_tar_error $tar_error; then
     return 0
@@ -38,13 +38,13 @@ extract_archive() (
   rm -fr $tmp_dir
   mkdir -p $tmp_dir
 
-  if echo $1 | $EGREP "\.(xz|txz)$" > /dev/null; then
+  if echo $1 | $HSENV_EGREP "\.(xz|txz)$" > /dev/null; then
     xz -cd $1 | extract_tar $tmp_dir
-  elif echo $1 | $EGREP "\.(bz2|tbz)$" > /dev/null; then
+  elif echo $1 | $HSENV_EGREP "\.(bz2|tbz)$" > /dev/null; then
     bzip2 -cd $1 | extract_tar $tmp_dir
-  elif echo $1 | $EGREP "\.t?gz$" > /dev/null; then
+  elif echo $1 | $HSENV_EGREP "\.t?gz$" > /dev/null; then
     gzip -cd $1 | extract_tar $tmp_dir
-  elif echo $1 | $EGREP "\.tar$" > /dev/null; then
+  elif echo $1 | $HSENV_EGREP "\.tar$" > /dev/null; then
     cat $1 | extract_tar $tmp_dir
   else
     echo "Unsupported archive"

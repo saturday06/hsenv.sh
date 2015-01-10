@@ -11,6 +11,6 @@ else
 fi
 
 is_mingw() (
-  (echo $HSENV_HOST_OS | $EGREP "^mingw" > /dev/null) \
-    || (echo $HSENV_HOST_OS | $EGREP "^msys" > /dev/null)
+  (echo $HSENV_HOST_OS | $HSENV_EGREP "^mingw" > /dev/null) \
+    || (echo $HSENV_HOST_OS | $HSENV_EGREP "^msys" > /dev/null)
 )
