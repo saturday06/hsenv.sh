@@ -85,4 +85,20 @@ test_installation_of() {
   assertEquals "install_local" "`installation_of foo-1.0.tar.xz`"
 }
 
+test_HSENV_TAC_NAWK() {
+  assertEquals "" "`echo | HSENV_TAC_NAWK`"
+  assertEquals "a" "`echo a | HSENV_TAC_NAWK`"
+  assertEquals "\
+a
+
+b
+b\
+" "`cat <<EOF | HSENV_TAC_NAWK
+b
+b
+
+a
+EOF`"
+}
+
 . shunit2/src/shunit2

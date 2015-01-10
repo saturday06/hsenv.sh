@@ -163,3 +163,13 @@ if [ -z "$HSENV_TAR" ]; then
     export HSENV_TAR=gtar
   fi
 fi
+
+if [ -z "$HSENV_TAC" ]; then
+  HSENV_TAC_NAWK() (
+    $HSENV_NAWK '
+      { line[NR] = $0 }
+      END { for (i = NR; i > 0; i--) print line[i] }
+    '
+  )
+  export HSENV_TAC=HSENV_TAC_NAWK
+fi
