@@ -71,6 +71,12 @@ read_option() { # No subshell
         ;;
     esac
   done
+
+  if [ -z "$HSENV_NAME" ]; then
+    export HSENV_INSTALL_ROOT=$HSENV_WORK_DIR/.hsenv
+  else
+    export HSENV_INSTALL_ROOT=$HSENV_WORK_DIR/.hsenv_$HSENV_NAME
+  fi
 }
 
 is_version() (
