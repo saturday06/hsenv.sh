@@ -14,14 +14,15 @@ binary_url() (
   if [ $? -ne 0 ]; then
     error_log_file=/dev/null
   fi
-  for version in `sort_package_version $versions`; do
+  for version in `sort_package_version $versions | $HSENV_TAC`; do
     command=$HSENV_LIBEXEC_DIR/binchecker/versions/$version
-    url_bak=`$command $combo 2>> $error_log_file`
-    if [ -n "$url_bak" ]; then
-      url=$url_bak
+    url=`$command $combo 2>> $error_log_file`
+    if [ -n "$url" ]; then
+      echo $url
+      return
     fi
   done
-  echo $url
+  return 1
 )
 
 url_basename() (
