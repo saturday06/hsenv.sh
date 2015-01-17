@@ -35,11 +35,11 @@ test_downloader() {
   fi
 
   mkdir -p "$dir"
-  assertTrue "downloader http://saturday06.github.io/hsenv-teokure/test/cr_lf.bin $dir/cr_lf.bin"
+  assertTrue "downloader http://saturday06.github.io/hsenv.sh/test/cr_lf.bin $dir/cr_lf.bin"
   assertTrue "cmp $HSENV_TEST_DATA_DIR/cr_lf.bin $dir/cr_lf.bin"
-  assertTrue "downloader http://saturday06.github.io/hsenv-teokure/test/null_0xa5.bin $dir/null_0xa5.bin"
+  assertTrue "downloader http://saturday06.github.io/hsenv.sh/test/null_0xa5.bin $dir/null_0xa5.bin"
   assertTrue "cmp $HSENV_TEST_DATA_DIR/null_0xa5.bin $dir/null_0xa5.bin"
-  assertFalse "downloader http://saturday06.github.io/hsenv-teokure/test/not.found.bin $dir/not.found.bin"
+  assertFalse "downloader http://saturday06.github.io/hsenv.sh/test/not.found.bin $dir/not.found.bin"
 }
 
 test_downloader_tools() {
@@ -60,11 +60,11 @@ test_downloader_tools() {
       dir="$tmp_dir/$tool"
       mkdir -p "$dir"
 
-      assertTrue "$command http://saturday06.github.io/hsenv-teokure/test/cr_lf.bin $dir/cr_lf.bin"
+      assertTrue "$command http://saturday06.github.io/hsenv.sh/test/cr_lf.bin $dir/cr_lf.bin"
       assertTrue "cmp $HSENV_TEST_DATA_DIR/cr_lf.bin $dir/cr_lf.bin"
-      assertTrue "$command http://saturday06.github.io/hsenv-teokure/test/null_0xa5.bin $dir/null_0xa5.bin"
+      assertTrue "$command http://saturday06.github.io/hsenv.sh/test/null_0xa5.bin $dir/null_0xa5.bin"
       assertTrue "cmp $HSENV_TEST_DATA_DIR/null_0xa5.bin $dir/null_0xa5.bin"
-      assertFalse "$command http://saturday06.github.io/hsenv-teokure/test/not.found.bin $dir/not.found.bin"
+      assertFalse "$command http://saturday06.github.io/hsenv.sh/test/not.found.bin $dir/not.found.bin"
     else
       ignored_downloaders="$ignored_downloaders $tool"
     fi
