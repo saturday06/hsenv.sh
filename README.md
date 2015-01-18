@@ -264,21 +264,47 @@ different build directories, so there shouldn't be even any recompilation
 between different environments.
 
 
-**Q: Is it possible to activate an environment upon entering its directory?**
+**Q: Is it possible to activate/deactivate an environment upon entering/leaving its directory?**
 
 A: Yes, if you really know what you're doing. Here's a snippet for bash, which
    will activate both named and unnamed environments:
 
 ```bash
-    function precmd() {
-        if [[ -z $HSENV ]]; then
-            NUMBER_OF_ENVS=$(find . -maxdepth 1 -type d -name ".hsenv*" | wc -l)
-            case ${NUMBER_OF_ENVS} in
-                "0") ;;
-                "1") source .hsenv*/bin/activate;;
-                *) echo multiple environments, manual activaton required;;
-            esac
+precmd() {
+  local search_dir=$PWD
+  while true; do
+    if [ $search_dir = "/" ]; then
+      break
+    fi
+    local number_of_hsenvs=0
+    if [ ! -e $search_dir/.hsenv/bin/hsenv ]; then
+      number_of_hsenvs=`cd $search_dir && find . -maxdepth 1 -type d -name ".hsenv*" | wc -l`
+    fi
+    case $number_of_hsenvs in
+      0)
+      ;;
+      1)
+        if [ -n "$HSENV" -a "$HSENV" != "$search_dir" ]; then
+          deactivate_hsenv
         fi
-    }
-    export PROMPT_COMMAND=precmd
+        if [ -z "$HSENV" ]; then
+          pwd_backup=$PWD
+          cd $search_dir > /dev/null
+          source .hsenv*/bin/activate
+          cd $pwd_backup > /dev/null
+        fi
+        return
+      ;;
+      *)
+        echo multiple environments, manual activaton required
+        return
+      ;;
+    esac
+    search_dir=`cd $search_dir/.. && pwd`
+  done
+  if [ -n "$HSENV" ]; then
+    deactivate_hsenv
+  fi
+}
+export PROMPT_COMMAND=precmd
 ```
