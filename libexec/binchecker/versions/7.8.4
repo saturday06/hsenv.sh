@@ -22,4 +22,14 @@ case $1 in
       echo $base-i386-unknown-linux-centos65.tar.bz2
     fi
   ;;
+  i*86-unknown-freebsd*)
+    if ./ix86-unknown-freebsd8; then
+      echo $base-i386-portbld-freebsd.tar.xz
+    fi
+  ;;
+  x86_64-unknown-freebsd*)
+    if ./x86_64-unknown-freebsd8; then
+      echo $base-x86_64-portbld-freebsd.tar.xz
+    fi
+  ;;
 esac
