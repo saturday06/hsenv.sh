@@ -272,35 +272,30 @@ A: Yes, if you really know what you're doing. Here's a snippet for bash, which
 ```bash
 precmd() {
   local search_dir=$PWD
-  while true; do
-    if [ $search_dir = "/" ]; then
-      break
-    fi
+  while [ $search_dir != "/" ]; do
     local number_of_hsenvs=0
     if [ ! -e $search_dir/.hsenv/bin/hsenv ]; then
       number_of_hsenvs=`cd $search_dir && find . -maxdepth 1 -type d -name ".hsenv*" | wc -l`
     fi
-    case $number_of_hsenvs in
-      0)
-      ;;
-      1)
-        if [ -n "$HSENV" -a "$HSENV" != "$search_dir" ]; then
-          deactivate_hsenv
-        fi
-        if [ -z "$HSENV" ]; then
-          pwd_backup=$PWD
-          cd $search_dir > /dev/null
-          source .hsenv*/bin/activate
-          cd $pwd_backup > /dev/null
-        fi
-        return
-      ;;
-      *)
-        echo multiple environments, manual activaton required
-        return
-      ;;
-    esac
-    search_dir=`cd $search_dir/.. && pwd`
+
+    if [ $number_of_hsenvs = 0 ]; then
+      search_dir=`cd $search_dir/.. && pwd`
+      continue
+    elif [ $number_of_hsenvs != 1 ]; then
+      echo multiple environments, manual activaton required
+      return
+    fi
+
+    if [ -n "$HSENV" -a "$HSENV" != "$search_dir" ]; then
+      deactivate_hsenv
+    fi
+    if [ -z "$HSENV" ]; then
+      pwd_backup=$PWD
+      cd $search_dir > /dev/null
+      source .hsenv*/bin/activate
+      cd $pwd_backup > /dev/null
+    fi
+    return
   done
   if [ -n "$HSENV" ]; then
     deactivate_hsenv
