@@ -291,9 +291,9 @@ precmd() {
     fi
     if [ -z "$HSENV" ]; then
       pwd_backup=$PWD
-      cd $search_dir > /dev/null
+      cd $search_dir
       source .hsenv*/bin/activate
-      cd $pwd_backup > /dev/null
+      cd $pwd_backup
     fi
     return
   done
