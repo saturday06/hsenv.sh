@@ -273,20 +273,20 @@ A: Yes, if you really know what you're doing. Here's a snippet for bash, which
 precmd() {
   local search_dir=$PWD
   while [ $search_dir != "/" ]; do
-    local number_of_hsenvs=0
-    if [ ! -e $search_dir/.hsenv/bin/hsenv ]; then
-      number_of_hsenvs=`cd $search_dir && find . -maxdepth 1 -type d -name ".hsenv*" | wc -l`
-    fi
-
-    if [ $number_of_hsenvs = 0 ]; then
+    local hsenv_found=false
+    for dir in `cd $search_dir && find . -maxdepth 1 -type d -name ".hsenv*"`; do
+      if $hsenv_found; then
+        echo multiple environments in $search_dir , manual activaton required
+        return        
+      elif [ -n "$dir" ] && [ -e $dir/bin/activate ]; then
+        hsenv_found=true
+      fi
+    done
+    if ! $hsenv_found; then
       search_dir=`cd $search_dir/.. && pwd`
       continue
-    elif [ $number_of_hsenvs != 1 ]; then
-      echo multiple environments, manual activaton required
-      return
     fi
-
-    if [ -n "$HSENV" -a "$HSENV" != "$search_dir" ]; then
+    if [ -n "$HSENV" ] && [ "$HSENV" != "$search_dir" ]; then
       deactivate_hsenv
     fi
     if [ -z "$HSENV" ]; then
