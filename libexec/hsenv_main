@@ -300,7 +300,7 @@ install_remote() (
 )
 
 install_local() (
-  file=$1
+  file=$HSENV_GHC
   if [ ! -f $file ]; then
     hsenv_abort Not found
   fi
