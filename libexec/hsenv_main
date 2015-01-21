@@ -283,7 +283,8 @@ install_remote_url() (
   if ! downloader $url $file; then
     hsenv_abort Failed
   fi
-  install_local $file
+  HSENV_GHC=$file
+  install_local
 )
 
 install_with_version() (
