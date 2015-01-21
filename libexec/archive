@@ -38,14 +38,14 @@ extract_archive() (
   rm -fr $tmp_dir
   mkdir -p $tmp_dir
 
-  if echo $1 | $HSENV_EGREP "\.(xz|txz)$" > /dev/null; then
-    xz -cd $1 | extract_tar $tmp_dir
-  elif echo $1 | $HSENV_EGREP "\.(bz2|tbz)$" > /dev/null; then
-    bzip2 -cd $1 | extract_tar $tmp_dir
-  elif echo $1 | $HSENV_EGREP "\.t?gz$" > /dev/null; then
-    gzip -cd $1 | extract_tar $tmp_dir
-  elif echo $1 | $HSENV_EGREP "\.tar$" > /dev/null; then
-    cat $1 | extract_tar $tmp_dir
+  if echo $archive | $HSENV_EGREP "\.(xz|txz)$" > /dev/null; then
+    xz -cd $archive | extract_tar $tmp_dir
+  elif echo $archive | $HSENV_EGREP "\.(bz2|tbz)$" > /dev/null; then
+    bzip2 -cd $archive | extract_tar $tmp_dir
+  elif echo $archive | $HSENV_EGREP "\.t?gz$" > /dev/null; then
+    gzip -cd $archive | extract_tar $tmp_dir
+  elif echo $archive | $HSENV_EGREP "\.tar$" > /dev/null; then
+    cat $archive | extract_tar $tmp_dir
   else
     echo "Unsupported archive"
     return 1
