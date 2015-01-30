@@ -278,7 +278,7 @@ precmd() {
       if $hsenv_found; then
         echo multiple environments in $search_dir , manual activaton required
         return        
-      elif [ -n "$dir" ] && [ -e $dir/bin/activate ]; then
+      elif [ -n "$dir" ] && [ -e $search_dir/$dir/bin/activate ]; then
         hsenv_found=true
       fi
     done
