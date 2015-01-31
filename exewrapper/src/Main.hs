@@ -164,7 +164,8 @@ rehash = do
   shimFiles <- getDirectoryExecutableFiles (hsenvPath </> "usr" </> "bin")
   cabalBinFiles <- getDirectoryExecutableFiles (hsenvPath </> "cabal" </> "bin")
   ghcBinFiles <- getDirectoryExecutableFiles (hsenvPath </> "ghc" </> "bin")
-  realFiles <- return (ghcBinFiles ++ cabalBinFiles)
+  realFiles <- return (ghcBinFiles ++ cabalBinFiles ++ (map (++ exeExt) [
+                        "cabal", "ghc", "ghc-mod", "ghc-pkg", "ghci", "runghc"]))
   mapM (addShim shimFiles) realFiles
   mapM (removeShim realFiles) shimFiles
   putStrLn "rehash!"
