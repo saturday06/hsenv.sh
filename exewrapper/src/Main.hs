@@ -48,7 +48,8 @@ splitByDelimiter delimiter list =
 
 cleanupSearchPath :: [FilePath] -> IO [FilePath]
 cleanupSearchPath searchPath = do
-  cleanSearchPath <- mapM canonicalizePath searchPath
+  foundSearchPath <- filterM doesDirectoryExist searchPath
+  cleanSearchPath <- mapM canonicalizePath foundSearchPath
   return (map (\dir -> dropTrailingPathSeparator dir) cleanSearchPath)
 
 getHsenvPath :: IO FilePath
