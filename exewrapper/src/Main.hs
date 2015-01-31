@@ -190,7 +190,7 @@ main = do
   cleanNewSearchPath <- cleanupSearchPath newSearchPath
   realExecutableSearchPath <-
     return ([cabalBinPath] ++ [ghcBinPath] ++
-            (reverse (dropWhile (== usrBinPath) (reverse cleanNewSearchPath))))
+            (drop 1 (dropWhile (/= usrBinPath) cleanNewSearchPath)))
   realExecutableCandidates <-
     return (map (\dir -> (addTrailingPathSeparator dir) ++ executableFileName) realExecutableSearchPath)
   realExecutables <- filterM (\exe -> doesFileExist exe) realExecutableCandidates
