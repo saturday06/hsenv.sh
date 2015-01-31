@@ -140,7 +140,6 @@ removeShim realFiles shimFile = do
   else do
     shimPath <- getShimPath
     removeFile (shimPath </> shimFile)
-    putStrLn("Remove: " ++ shimFile)
 
 addShim :: [FilePath] -> FilePath -> IO ()
 addShim shimFiles realFile = do
@@ -150,7 +149,6 @@ addShim shimFiles realFile = do
     shimPath <- getShimPath
     shimOriginPath <- getShimOriginPath
     copyFile shimOriginPath (shimPath </> realFile)
-    putStrLn("Add: " ++ realFile)
 
 getDirectoryExecutableFiles :: FilePath -> IO [FilePath]
 getDirectoryExecutableFiles dir = do
@@ -168,7 +166,7 @@ rehash = do
                         "cabal", "ghc", "ghc-mod", "ghc-pkg", "ghci", "runghc"]))
   mapM (addShim shimFiles) realFiles
   mapM (removeShim realFiles) shimFiles
-  putStrLn "rehash!"
+  return ()
 
 main = do
   executablePath <- getExecutablePath
