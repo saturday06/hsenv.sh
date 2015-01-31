@@ -29,8 +29,10 @@ exeExt = if isWindows then ".exe" else ""
 isExecutable :: FilePath -> IO Bool
 isExecutable path =
   if isWindows then do
-    -- TODO: PATHEXT env
-    return (takeExtension(path) == exeExt)
+    extension <- return (map toLower (takeExtension path))
+    pathext <- getEnv("PATHEXT")
+    matches <- return (filter (== extension) (map (\ext -> map toLower ext) (splitByDelimiter searchPathSeparator pathext)))
+    return (length matches > 0)
   else do
     permissions <- getPermissions path
     return (executable permissions)
