@@ -52,7 +52,7 @@ cleanupSearchPath searchPath = do
 getHsenvPath :: IO FilePath
 getHsenvPath = do
   executablePath <- getExecutablePath
-  canonicalizePath (takeDirectory(takeDirectory executablePath))
+  canonicalizePath (takeDirectory(takeDirectory(takeDirectory executablePath)))
 
 isCabalCommand :: String -> Bool
 isCabalCommand arg = length arg == 0 || head arg == '-' || not (any isAlpha arg)
