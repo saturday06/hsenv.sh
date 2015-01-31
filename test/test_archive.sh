@@ -26,6 +26,14 @@ EOF
 tar Exiting with failure status due to previous errors
 EOF
   assertTrue "ignorable_tar_error $f"
+
+  cat <<EOF > $f
+/usr/bin/tar: Archive value 197108 is out of uid_t range 0..65535
+/usr/bin/tar: Archive value 197121 is out of gid_t range 0..65535
+/usr/bin/tar: Archive value 197108 is out of uid_t range 0..65535
+tar: Error exit delayed from previous errors
+EOF
+  assertTrue "ignorable_tar_error $f"
   HSENV_HOST_OS=linux
   assertFalse "ignorable_tar_error $f"
   HSENV_HOST_OS=mingw64
