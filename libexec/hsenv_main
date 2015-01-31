@@ -157,6 +157,16 @@ install_helper_scripts() (
     fi
   fi
 
+  $HSENV_INSTALL_ROOT/ghc/bin/ghc $HSENV_ROOT_DIR/exewrapper/src/Main.hs -o $HSENV_INSTALL_ROOT/shim
+  mkdir -p $HSENV_INSTALL_ROOT/usr/bin
+  if is_mingw; then
+    exeext=.exe
+  else
+    exeext=
+  fi
+  cp $HSENV_INSTALL_ROOT/shim$exeext $HSENV_INSTALL_ROOT/usr/bin/cabal$exeext
+  $HSENV_INSTALL_ROOT/usr/bin/cabal update
+
   touch "$HSENV_INSTALL_ROOT/done"
   hsenv_info Done
   hsenv_info
@@ -201,7 +211,7 @@ install_bootstrap_cabal_mingw() (
 
 install_bootstrap_cabal() (
   hsenv_info Bootstrap cabal-install
-  bootstrap_dir=$HSENV_INSTALL_ROOT/cabal/bootstrap
+  bootstrap_dir=$HSENV_INSTALL_ROOT/cabal
   mkdir -p $bootstrap_dir/bin
   lib_versions=`GHC_PACKAGE_PATH=$hsenv_install_package_db $HSENV_INSTALL_ROOT/ghc/bin/ghc-pkg field Cabal version`
   lib_version=`max_package_version $lib_versions`
