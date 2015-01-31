@@ -57,7 +57,7 @@ getHsenvPath = do
   canonicalizePath (takeDirectory(takeDirectory(takeDirectory executablePath)))
 
 isCabalCommand :: String -> Bool
-isCabalCommand arg = length arg == 0 || head arg == '-' || not (any isAlpha arg)
+isCabalCommand arg = length arg > 0 && head arg /= '-' && not (all (not . isAlpha) arg)
 
 readPackageDbs :: IO [String]
 readPackageDbs = do
