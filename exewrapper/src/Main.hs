@@ -195,7 +195,6 @@ main = do
   realExecutableCandidates <-
     return (map (\dir -> (addTrailingPathSeparator dir) ++ executableFileName) realExecutableSearchPath)
   realExecutables <- filterM (\exe -> doesFileExist exe) realExecutableCandidates
-  rehash
   if (length realExecutables) == 0 then do
     putStrLn (executableFileName ++ " wrapper: Couldn't find real " ++ executableFileName ++ " program")
     exitFailure
