@@ -1,0 +1,7 @@
+notification(:off)
+
+guard :haskell, repl_options: '--builddir=.guard-haskell/build' do
+  watch(%r{test/.+Spec\.l?hs$})
+  watch(%r{.+\.l?hs$})
+  watch(%r{\.cabal$})
+end
