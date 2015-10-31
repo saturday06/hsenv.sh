@@ -1,3 +1,6 @@
+(Deprecated) Please use [stack](https://github.com/commercialhaskell/stack) !
+===================================
+
 hsenv - Virtual Haskell Environment [![Build Status](https://travis-ci.org/saturday06/hsenv.sh.png?branch=master)](https://travis-ci.org/saturday06/hsenv.sh)
 ===================================
 
